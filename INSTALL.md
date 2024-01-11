@@ -6,14 +6,6 @@ cd MMM-OneDrive
 npm install
 ```
 
-If you doubt errors are caused by different `node.JS` version, you can try to compile it by yourself.
-In that case, you need to rebuild some binaries to match with Electron version.
-```sh
-cd ~/MagicMirror/modules/MMM-OneDrive
-npm install --save-dev electron-rebuild
-./node_modules/.bin/electron-rebuild   # It could takes dozens sec.
-```
-
 2. If you are using Docker
 ```sh
 cd ~/magic_mirror/modules
