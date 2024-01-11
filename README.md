@@ -2,9 +2,9 @@
 Display your photos from album of OneDrive on MagicMirror. Inspired by [MMM-GooglePhotos](https://github.com/hermanho/MMM-GooglePhotos)
 
 ## Screenshot
-![](https://raw.githubusercontent.com/hermanho/MMM-OneDrive/master/sc.png)
+![](images/sc.png)
 
-![](https://raw.githubusercontent.com/hermanho/MMM-OneDrive/master/sc2.png)
+![](images/sc2.png)
 
 ## Installation
 [INSTALL.md](INSTALL.md)

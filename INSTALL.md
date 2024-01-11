@@ -26,4 +26,5 @@ docker exec -it -w /opt/magic_mirror/modules/MMM-OneDrive magic_mirror npm insta
 1. Clone this repo in your local pc and execute `npm install`
 2. At first execution, It will open a browser and will ask you to login google account and to consent your allowance.
 3. Authorize it and close the browser
+![](images/authorize.png)
 4. Copy the file `msal/token.json` to the folder `MMM-OneDrive` in the remote device
