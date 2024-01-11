@@ -2,4 +2,7 @@ credentials.json
 token.json
 node_modules/
 cache/*
+!cache/keep.txt
 .idea
+msal/token.json
+.DS_Store
