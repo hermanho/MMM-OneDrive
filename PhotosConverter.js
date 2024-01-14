@@ -2,7 +2,7 @@ const convert = require('heic-convert');
 
 /**
  * 
- * @param {String} url 
+ * @param {string} url 
  */
 const convertHEIC = async (url) => {
   const resp = await fetch(url);
@@ -10,9 +10,9 @@ const convertHEIC = async (url) => {
   const outputBuffer = await convert({
     buffer: inputBuffer, // the HEIC file buffer
     format: 'JPEG',      // output format
-    quality: 0.8           // the jpeg compression quality, between 0 and 1
+    quality: 0.8,           // the jpeg compression quality, between 0 and 1
   });
   return Buffer.from(outputBuffer);
-}
+};
 
-module.exports = { convertHEIC }
+module.exports = { convertHEIC };

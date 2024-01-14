@@ -16,14 +16,15 @@ Module.register("MMM-OneDrive", {
       minHeight: null, // Or 400
       maxHeight: null, // Or 8000
       minWHRatio: null,
-      maxWHRatio: null
+      maxWHRatio: null,
       // WHRatio = Width/Height ratio ( ==1 : Squared Photo,   < 1 : Portraited Photo, > 1 : Landscaped Photo)
     },
     showWidth: 1080, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
     showHeight: 1920,
     timeFormat: "YYYY/MM/DD HH:mm",
-    autoInfoPosition: false
+    autoInfoPosition: false,
   },
+  requiresVersion: "2.24.0",
 
   suspended: false,
 
@@ -169,7 +170,7 @@ Module.register("MMM-OneDrive", {
           [0, "none", "none", 0],
           ["none", "none", 0, 0],
           ["none", 0, 0, "none"],
-          [0, 0, "none", "none"]
+          [0, 0, "none", "none"],
         ];
         return r[q];
       };
@@ -233,5 +234,5 @@ Module.register("MMM-OneDrive", {
 
   resume() {
     this.suspended = false;
-  }
+  },
 });

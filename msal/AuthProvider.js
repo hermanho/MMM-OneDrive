@@ -3,11 +3,11 @@
  * Licensed under the MIT License.
  */
 
-const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require('@azure/msal-node');
-const { shell } = require('electron');
+const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
+const { shell } = require("electron");
 
 class AuthProvider {
-  msalConfig
+  msalConfig;
   clientApplication;
   /** @type {import("@azure/msal-node").AccountInfo} */
   account;
@@ -44,7 +44,7 @@ class AuthProvider {
        * the optional token claim 'login_hint' for this to work as expected. For more information, visit:
        * https://learn.microsoft.com/azure/active-directory/develop/v2-protocols-oidc#send-a-sign-out-request
        */
-      if (this.account.idTokenClaims.hasOwnProperty('login_hint')) {
+      if (this.account.idTokenClaims.hasOwnProperty("login_hint")) {
         await shell.openExternal(`${this.msalConfig.auth.authority}/oauth2/v2.0/logout?logout_hint=${encodeURIComponent(this.account.idTokenClaims.login_hint)}`);
       }
 
@@ -74,11 +74,11 @@ class AuthProvider {
       return await this.clientApplication.acquireTokenSilent(tokenRequest);
     } catch (error) {
       if (error instanceof InteractionRequiredAuthError) {
-        console.log('Silent token acquisition failed, acquiring token interactive');
+        console.log("Silent token acquisition failed, acquiring token interactive");
         return await this.getTokenInteractive(tokenRequest);
       }
-      if (error instanceof ServerError && error.errorCode == 'invalid_grant') {
-        console.log('Silent token acquisition failed, acquiring token interactive');
+      if (error instanceof ServerError && error.errorCode === "invalid_grant") {
+        console.log("Silent token acquisition failed, acquiring token interactive");
         return await this.getTokenInteractive(tokenRequest);
       }
 
@@ -87,22 +87,18 @@ class AuthProvider {
   }
 
   async getTokenInteractive(tokenRequest) {
-    try {
-      const openBrowser = async (url) => {
-        await shell.openExternal(url);
-      };
+    const openBrowser = async (url) => {
+      await shell.openExternal(url);
+    };
 
-      const authResponse = await this.clientApplication.acquireTokenInteractive({
-        ...tokenRequest,
-        openBrowser,
-        successTemplate: '<h1>Successfully signed in!</h1> <p>You can close this window now.</p>',
-        errorTemplate: '<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>',
-      });
+    const authResponse = await this.clientApplication.acquireTokenInteractive({
+      ...tokenRequest,
+      openBrowser,
+      successTemplate: "<h1>Successfully signed in!</h1> <p>You can close this window now.</p>",
+      errorTemplate: "<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>",
+    });
 
-      return authResponse;
-    } catch (error) {
-      throw error;
-    }
+    return authResponse;
   }
 
   /**
@@ -127,13 +123,13 @@ class AuthProvider {
     const currentAccounts = await this.cache.getAllAccounts();
 
     if (!currentAccounts) {
-      console.log('No accounts detected');
+      console.log("No accounts detected");
       return null;
     }
 
     if (currentAccounts.length > 1) {
       // Add choose account code here
-      console.log('Multiple accounts detected, need to add choose account code.');
+      console.log("Multiple accounts detected, need to add choose account code.");
       return currentAccounts[0];
     } else if (currentAccounts.length === 1) {
       return currentAccounts[0];

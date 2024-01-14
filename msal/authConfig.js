@@ -1,6 +1,4 @@
-const {
-  LogLevel,
-} = require("@azure/msal-node");
+const { LogLevel } = require("@azure/msal-node");
 const path = require("path");
 const { cachePlugin } = require("./CachePlugin");
 
@@ -14,7 +12,7 @@ const msalConfig = {
     authority: `${AAD_ENDPOINT_HOST}/consumers`,
   },
   cache: {
-    cachePlugin: cachePlugin(cachePath)
+    cachePlugin: cachePlugin(cachePath),
   },
   system: {
     loggerOptions: {
@@ -23,8 +21,8 @@ const msalConfig = {
       },
       piiLoggingEnabled: false,
       logLevel: LogLevel.Error,
-    }
-  }
+    },
+  },
 };
 
 const GRAPH_ENDPOINT_HOST = "https://graph.microsoft.com/"; // include the trailing slash
@@ -47,13 +45,12 @@ const protectedResources = {
   getThumbnail: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$drive-id$$/items/$$item-id$$/thumbnails`,
   },
-  '$batch': {
+  $batch: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/$batch`,
-  }
+  },
 };
 
 module.exports = {
   msalConfig: msalConfig,
   protectedResources: protectedResources,
 };
-
