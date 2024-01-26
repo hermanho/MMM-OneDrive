@@ -6,7 +6,7 @@
   "author": "hermanho",
   "scripts": {
     "install-prod": "npm install --no-audit --no-fund --no-update-notifier --only=prod --omit=dev",
-    "lint:js": "eslint --config .eslintrc.json --fix  **/*.js *.js"
+    "lint:js": "eslint . --fix"
   },
   "repository": {
     "type": "git",
