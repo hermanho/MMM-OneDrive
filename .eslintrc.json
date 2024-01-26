@@ -6,13 +6,11 @@
     "plugin:jsdoc/recommended-typescript-flavor"
   ],
   "plugins": [
-    "jsdoc",
-    "jest"
+    "jsdoc"
   ],
   "env": {
     "browser": true,
     "es2024": true,
-    "jest/globals": true,
     "node": true
   },
   "globals": {
