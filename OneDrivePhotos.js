@@ -55,16 +55,16 @@ class OneDrivePhotos {
   #graphClient = null;
   /** @type {string} */
   #userId = null;
+  #debug = false;
 
   constructor(options) {
-    this.debug = false;
     this.options = options;
-    this.debug = options.debug ? options.debug : this.debug;
+    this.#debug = options.debug ? options.debug : this.debug;
     this.config = options.config;
   }
 
   debug(...args) {
-    if (this.debug) console.debug("[ONEDRIVE:CORE]", ...args);
+    if (this.#debug) console.debug("[ONEDRIVE:CORE]", ...args);
   }
 
   log(...args) {
@@ -80,24 +80,25 @@ class OneDrivePhotos {
   }
 
   async onAuthReady() {
-    const auth = new Auth(this.debug);
+    const auth = new Auth(this.#debug);
+    const _this = this;
     return new Promise((resolve, reject) => {
       auth.on("ready", async () => {
-        this.log("onAuthReady ready");
+        _this.log("onAuthReady ready");
         const authProvider = auth.AuthProvider;
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
         };
         const tokenResponse = await authProvider.getToken(tokenRequest);
-        this.debug("onAuthReady token responed");
-        this.#graphClient = Client.init({
+        _this.debug("onAuthReady token responed");
+        _this.#graphClient = Client.init({
           authProvider: (done) => {
             done(null, tokenResponse.accessToken);
           },
         });
         const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-        this.#userId = graphResponse.id;
-        this.log("onAuthReady done");
+        _this.#userId = graphResponse.id;
+        _this.log("onAuthReady done");
         resolve();
       });
       auth.on("error", (error) => {
