@@ -22,7 +22,7 @@
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 13,
+    "ecmaVersion": "latest",
     "ecmaFeatures": {
       "globalReturn": true
     }
