@@ -25,7 +25,17 @@ class AuthProvider {
     this.account = null;
   }
 
+  debug(...args) {
+    console.debug("[ONEDRIVE:AuthProvider]", ...args);
+  }
+
+  log(...args) {
+    console.log("[ONEDRIVE:AuthProvider]", ...args);
+  }
+
+
   async login() {
+    this.debug('Request token')
     const authResponse = await this.getToken({
       // If there are scopes that you would like users to consent up front, add them below
       // by default, MSAL will add the OIDC scopes to every token request, so we omit those here

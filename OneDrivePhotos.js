@@ -41,7 +41,7 @@ class Auth extends EventEmitter {
       msalConfig.system.loggerOptions = LogLevel.Verbose;
     }
     this.#authProvider = new AuthProvider(msalConfig);
-    console.log("[ONEDRIVE:CORE] AuthProvider created");
+    console.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
     // this.#msalAccount = await this.#authProvider.login();
     // console.log("[ONEDRIVE:CORE] AuthProvider login done");
   }
@@ -63,8 +63,12 @@ class OneDrivePhotos {
     this.config = options.config;
   }
 
+  debug(...args) {
+    if (this.debug) console.debug("[ONEDRIVE:CORE]", ...args);
+  }
+
   log(...args) {
-    if (this.debug) console.log("[ONEDRIVE:CORE]", ...args);
+    console.log("[ONEDRIVE:CORE]", ...args);
   }
 
   logError(...args) {
@@ -79,12 +83,13 @@ class OneDrivePhotos {
     const auth = new Auth(this.debug);
     return new Promise((resolve, reject) => {
       auth.on("ready", async () => {
-        console.log("onAuthReady ready");
+        this.log("onAuthReady ready");
         const authProvider = auth.AuthProvider;
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
         };
         const tokenResponse = await authProvider.getToken(tokenRequest);
+        this.debug("onAuthReady token responed");
         this.#graphClient = Client.init({
           authProvider: (done) => {
             done(null, tokenResponse.accessToken);
@@ -92,7 +97,7 @@ class OneDrivePhotos {
         });
         const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
         this.#userId = graphResponse.id;
-        console.log("onAuthReady done");
+        this.log("onAuthReady done");
         resolve();
       });
       auth.on("error", (error) => {
@@ -256,7 +261,6 @@ class OneDrivePhotos {
    * @returns items
    */
   async updateTheseMediaItems(items, cachePath) {
-    console.log("updateTheseMediaItems updateTheseMediaItems updateTheseMediaItems");
     if (items.length <= 0) {
       return [];
     }
