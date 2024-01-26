@@ -11,7 +11,7 @@
   ],
   "env": {
     "browser": true,
-    "es6": true,
+    "es2024": true,
     "jest/globals": true,
     "node": true
   },
