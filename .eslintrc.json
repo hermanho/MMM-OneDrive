@@ -6,13 +6,11 @@
     "plugin:jsdoc/recommended-typescript-flavor"
   ],
   "plugins": [
-    "jsdoc",
-    "jest"
+    "jsdoc"
   ],
   "env": {
     "browser": true,
-    "es6": true,
-    "jest/globals": true,
+    "es2023": true,
     "node": true
   },
   "globals": {
@@ -24,7 +22,7 @@
   },
   "parserOptions": {
     "sourceType": "module",
-    "ecmaVersion": 13,
+    "ecmaVersion": "latest",
     "ecmaFeatures": {
       "globalReturn": true
     }
