@@ -19,23 +19,23 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
   module: "MMM-OneDrive",
   position: "top_right",
   config: {
-  albums: [], // Set your album name. like ["My wedding", "family share", "Travle to Paris"]
-  updateInterval: 1000 * 60, // minimum 10 seconds.
-  sort: "new", // "old", "random"
-  condition: {
-   fromDate: null, // Or "2018-03", RFC ... format available
-   toDate: null, // Or "2019-12-25",
-   minWidth: null, // Or 400
-   maxWidth: null, // Or 8000
-   minHeight: null, // Or 400
-   maxHeight: null, // Or 8000
-   minWHRatio: null,
-   maxWHRatio: null,
-   // WHRatio = Width/Height ratio ( ==1 : Squared Photo,   < 1 : Portraited Photo, > 1 : Landscaped Photo)
-  },
-  showWidth: 1080, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
-  showHeight: 1920,
-  timeFormat: "YYYY/MM/DD HH:mm", // Or `relative` can be used.
+    albums: [], // Set your album name. like ["My wedding", "family share", "Travle to Paris"]
+    updateInterval: 1000 * 60, // minimum 10 seconds.
+    sort: "new", // "old", "random"
+    condition: {
+      fromDate: null, // Or "2018-03", RFC ... format available
+      toDate: null, // Or "2019-12-25",
+      minWidth: null, // Or 400
+      maxWidth: null, // Or 8000
+      minHeight: null, // Or 400
+      maxHeight: null, // Or 8000
+      minWHRatio: null,
+      maxWHRatio: null,
+      // WHRatio = Width/Height ratio ( ==1 : Squared Photo,   < 1 : Portraited Photo, > 1 : Landscaped Photo)
+    },
+    showWidth: 1080, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
+    showHeight: 1920,
+    timeFormat: "YYYY/MM/DD HH:mm", // Or `relative` can be used.
   }
 },
 ```
@@ -74,9 +74,9 @@ albums: ["My wedding", "family share", "Travle to Paris", "from Tom"],
 
 ```js
 condition: {
- fromDate: "2018-01-01", // I don't want older photos than this.
- minWidth: 600, // I don't want to display some icons or meme-pictures from my garbage collecting albums.
- maxWHRatio: 1, // I want to display photos which are portrait.
+  fromDate: "2018-01-01", // I don't want older photos than this.
+  minWidth: 600, // I don't want to display some icons or meme-pictures from my garbage collecting albums.
+  maxWHRatio: 1, // I want to display photos which are portrait.
 }
 ```
 
@@ -96,8 +96,8 @@ condition: {
 
 - For preventing LCD burning, Photo info can be relocated by condition.
   - `true` : automatically change position to each corner per 15 minutes.
-    - `false` : not using.
-    - callbackfunction (album, photo) : User can make his own position. It should return `[top, left, bottom, right]`
+  - `false` : not using.
+  - callbackfunction (album, photo) : User can make his own position. It should return `[top, left, bottom, right]`
 
 ```js
 autoInfoPosition: true, // or false
@@ -115,7 +115,7 @@ autoInfoPosition: (album, photo)=> {
 
 ```css
 #ONEDRIVE_PHOTO_INFO {
- display:none;
+  display: none;
 }
 ```
 
@@ -134,7 +134,7 @@ autoInfoPosition: (album, photo)=> {
 
 ```css
 #ONEDRIVE_PHOTO_BACK {
- display:none;
+  display: none;
 }
 ```
 
@@ -142,7 +142,7 @@ autoInfoPosition: (album, photo)=> {
 
 ```css
 #ONEDRIVE_PHOTO_CURRENT {
- background-size:cover;
+  background-size: cover;
 }
 ```
 
@@ -150,7 +150,7 @@ autoInfoPosition: (album, photo)=> {
 
 ```css
 #ONEDRIVE_PHOTO_CURRENT {
- background-size:contain;
+  background-size: contain;
 }
 ```
 
@@ -159,7 +159,7 @@ autoInfoPosition: (album, photo)=> {
 ```css
 .clock {
   padding: 10px;
- background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 }
 ```
 
@@ -184,5 +184,5 @@ autoInfoPosition: (album, photo)=> {
 
 ## Last Tested
 
-- MagicMirror : v2.24.0
-- node.js : required over v16.
+- MagicMirror : v2.26.0
+- node.js : required over v18.
