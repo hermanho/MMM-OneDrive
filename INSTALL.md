@@ -14,7 +14,7 @@
    ```sh
    cd ~/MagicMirror/modules
    git clone https://github.com/hermanho/MMM-OneDrive
-   docker exec -it -w /opt/magic_mirror/module MMM-OneDrive magic_mirror npm run install-prod
+   docker exec -it -w /opt/magic_mirror/modules/MMM-OneDrive magic_mirror npm run install-prod
    ```
 
 1. Add MMM-OneDrive module config in ~/MagicMirror/config/config.js
