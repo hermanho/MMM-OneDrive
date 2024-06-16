@@ -20,7 +20,7 @@
     "OneDrive"
   ],
   "dependencies": {
-    "@azure/msal-node": "^2.6.1",
+    "@azure/msal-node": "^2.9.2",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "heic-convert": "^2.1.0",
     "mkdirp": "^2.1.3",
