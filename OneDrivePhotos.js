@@ -284,6 +284,7 @@ class OneDrivePhotos {
             grp[r.id].baseUrl = r.body.value['@microsoft.graph.downloadUrl'];
           }
           else {
+            console.error(r);
             grp[r.id].baseUrl = null;
           }
         }
