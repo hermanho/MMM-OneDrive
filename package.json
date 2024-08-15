@@ -4,9 +4,9 @@
   "description": "MagicMirror² module to display your photos from OneDrive.",
   "license": "MIT",
   "author": "hermanho",
-	"contributors": [
-		"https://github.com/hermanho/MMM-OneDrive/graphs/contributors"
-	],
+  "contributors": [
+    "https://github.com/hermanho/MMM-OneDrive/graphs/contributors"
+  ],
   "scripts": {
     "install-prod": "npm install --no-audit --no-fund --no-update-notifier --only=prod --omit=dev",
     "lint:js": "eslint . --fix"
@@ -20,15 +20,18 @@
     "OneDrive"
   ],
   "dependencies": {
-    "@azure/msal-node": "^2.9.2",
+    "@azure/msal-node": "^2.13.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "heic-convert": "^2.1.0",
     "moment": "^2.30.1"
   },
   "devDependencies": {
-    "@microsoft/microsoft-graph-types": "^2.40.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-jsdoc": "^48.0.4"
+    "@eslint/eslintrc": "^3.1.0",
+    "@eslint/js": "^9.9.0",
+    "@types/magicmirror-module": "^2.16.5",
+    "eslint": "^9.9.0",
+    "eslint-plugin-jsdoc": "^50.2.2",
+    "globals": "^15.9.0"
   },
   "engines": {
     "node": ">=18"
