@@ -7,7 +7,10 @@ const moment = require("moment");
 const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { Readable } = require("stream");
 const { finished } = require("stream/promises");
+const { RE2 } = require("re2-wasm");
+const { Set } = require('immutable');
 const NodeHelper = require("node_helper");
+const Log = require("logger");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string");
 const sleep = require("./sleep.js");
@@ -22,8 +25,8 @@ module.exports = NodeHelper.create({
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
-    /** @type {import("@microsoft/microsoft-graph-types").DriveItem} */
-    this.albums = [];
+    /** @type {microsoftgraph.DriveItem} */
+    this.selecetedAlbums = [];
     /** @type {OneDriveMediaItem[]} */
     this.localPhotoList = [];
     this.localPhotoPntr = 0;
@@ -31,6 +34,9 @@ module.exports = NodeHelper.create({
     this.queue = null;
     this.uploadAlbumId;
     this.initializeTimer = null;
+
+    this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selecetedAlbumsCache.json");
+    this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -44,49 +50,49 @@ module.exports = NodeHelper.create({
       case "IMAGE_LOAD_FAIL":
         {
           const { url, event, source, lineno, colno, error } = payload;
-          console.error("[ONEDRIVE] hidden.onerror", { event, source, lineno, colno });
+          Log.error("[ONEDRIVE] hidden.onerror", { event, source, lineno, colno });
           if (error) {
-            console.error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
+            Log.error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
           }
-          console.error("Image loading fails. Check your network.:", url);
+          Log.error("Image loading fails. Check your network.:", url);
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
       case "IMAGE_LOADED":
         {
           const { id, index } = payload;
-          this.log("Image loaded:", `${this.lastLocalPhotoPntr} + ${index}`, id, payload);
+          this.log_debug("Image loaded:", `${this.lastLocalPhotoPntr} + ${index}`, id);
         }
         break;
       case "NEED_MORE_PICS":
         {
-          this.log("Used last pic in list");
+          Log.info("Used last pic in list");
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
       case "MODULE_SUSPENDED_SKIP_UPDATE":
-        this.log("Module is suspended so skip the UI update");
+        this.log_debug("Module is suspended so skip the UI update");
         break;
       default:
-        this.log("Unknown notification received", notification);
+        Log.error("Unknown notification received", notification);
     }
   },
 
-  log: function (...args) {
-    if (this.debug) console.log("[ONEDRIVE] [node_helper]", ...args);
+  log_debug: function (...args) {
+    if (this.debug) Log.info("[ONEDRIVE] [node_helper]", ...args);
   },
 
   upload: async function (path) {
     if (!this.uploadAlbumId) {
-      this.log("No uploadable album exists.");
+      Log.info("No uploadable album exists.");
       return;
     }
     let uploadToken = await OneDrivePhoto.upload(path);
     if (uploadToken) {
-      let result = await OneDrivePhoto.create(uploadToken, this.uploadAlbumId);
-      this.log("Upload completed.");
+      await OneDrivePhoto.create(uploadToken, this.uploadAlbumId);
+      Log.info("Upload completed.");
     } else {
-      this.log("Upload Fails.");
+      Log.error("Upload Fails.");
     }
   },
 
@@ -98,6 +104,17 @@ module.exports = NodeHelper.create({
       debug: this.debug,
       config: config,
     });
+
+    this.albumsFilters = [];
+    for (let album of config.albums) {
+      if (album.hasOwnProperty("source") && album.hasOwnProperty("flags")) {
+        this.albumsFilters.push(new RE2(album.source, album.flags + 'u'));
+      } else {
+        this.albumsFilters.push(album);
+      }
+    }
+    delete this.config.albums;
+
     this.tryToIntitialize();
   },
 
@@ -111,55 +128,38 @@ module.exports = NodeHelper.create({
       1 * 60 * 1000,
     );
 
-    this.log("Starting Initialization");
-    this.log("Getting album list");
-    let albums = await this.getAlbums();
-    for (let ta of this.config.albums) {
-      let matched = albums.find((a) => {
-        if (ta === a.name) return true;
-        return false;
-      });
-      let exists = function (albums, album) {
-        return albums.some((expected) => album.id === expected.id);
-      };
-      if (!matched) {
-        this.log(`Can't find "${ta}" in your album list.`);
-      } else if (!exists(this.albums, matched)) {
-        this.albums.push(matched);
+    Log.info("Starting Initialization");
+
+    //load cached album list - if available
+    if (fs.existsSync(this.CACHE_ALBUMNS_PATH)) {
+      try {
+        const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
+        this.selecetedAlbums = JSON.parse(data.toString());
+        this.log_debug("successfully loaded selecetedAlbums");
+        this.sendSocketNotification("UPDATE_ALBUMS", this.selecetedAlbums); // for fast startup
+      } catch (err) {
+        Log.error("unable to load selecetedAlbums cache", err);
       }
     }
-    this.log("Finish Album scanning. Properly scanned :", this.albums.length);
-    for (let a of this.albums) {
-      let url = a.coverPhotoBaseUrl;
-      let fpath = path.join(this.path, "cache", a.id);
-      let file = fs.createWriteStream(fpath);
-      const response = await fetch(url);
-      await finished(Readable.fromWeb(response.body).pipe(file));
-      a.title = a.name;
-    }
-
-    this.log("Initialized");
-    this.sendSocketNotification("INITIALIZED", this.albums);
 
     //load cached list - if available
-    const cacheFilename = this.path + "/cache/photoListCache.json";
-    if (fs.existsSynccacheFilename) {
+    if (fs.existsSync(this.CACHE_PHOTOLIST_PATH)) {
       try {
-        const data = await readFile(cacheFilename, "utf-8");
+        const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
         this.localPhotoList = JSON.parse(data.toString());
         if (this.config.sort === "random") {
           shuffle(this.localPhotoList);
         }
-        this.log("successfully loaded cache of ", this.localPhotoList.length, " photos");
-        await this.prepAndSendChunk(5); //only 5 for extra fast startup
+        this.log_debug("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
+        await this.prepAndSendChunk(5); // only 5 for extra fast startup
       } catch (err) {
-        this.log("unable to load cache", err);
+        Log.error("unable to load photo list cache", err);
       }
     }
 
-    this.log("Initialization complete!");
+    Log.info("Initialization complete!");
     clearTimeout(this.initializeTimer);
-    this.log("Start first scanning.");
+    Log.info("Start first scanning.");
     this.startScanning();
   },
 
@@ -169,7 +169,7 @@ module.exports = NodeHelper.create({
       // await sleep(30000 - (new Date() - this.lastScanTime));
     }
     this.lastScanTime = new Date();
-    this.log("prepAndSendChunk");
+    this.log_debug("prepAndSendChunk");
 
     try {
       //find which ones to refresh
@@ -178,7 +178,7 @@ module.exports = NodeHelper.create({
         this.lastLocalPhotoPntr = 0;
       }
       let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.localPhotoPntr, 20); //20 is api limit
-      this.log("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
 
       const cachePath = this.path + "/cache/";
 
@@ -198,50 +198,101 @@ module.exports = NodeHelper.create({
         // update pointer
         this.lastLocalPhotoPntr = this.localPhotoPntr;
         this.localPhotoPntr = this.localPhotoPntr + list.length;
-        this.log("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+        this.log_debug("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
       } else {
-        this.log("couldn't send ", list.length, " pics");
+        Log.error("couldn't send ", list.length, " pics");
       }
     } catch (err) {
-      this.log("failed to refresh and send chunk: ");
-      this.log(error_to_string(err));
+      Log.error("failed to refresh and send chunk: ");
+      Log.error(error_to_string(err));
     }
   },
 
+  /** @returns {microsoftgraph.DriveItem[]} */
   getAlbums: async function () {
     try {
       let r = await OneDrivePhoto.getAlbums();
+      r.forEach(item => {
+        item.title = item.name;
+      });
       return r;
     } catch (err) {
-      this.log(error_to_string(err));
+      Log.error(error_to_string(err));
     }
   },
 
   startScanning: function () {
+    const fn = () => {
+      const nextScanDt = new Date(Date.now() + this.scanInterval);
+      this.scanJob().then(() => {
+        Log.info("Next scan will be at", nextScanDt);
+      });
+    };
     // set up interval, then 1 fail won't stop future scans
-    this.scanTimer = setInterval(() => {
-      this.scanJob();
-    }, this.scanInterval);
-
+    this.scanTimer = setInterval(fn, this.scanInterval);
     // call for first time
-    this.scanJob();
+    fn();
   },
 
   scanJob: async function () {
-    this.log("Start Album scanning");
+    Log.info("Start Album scanning");
     this.queue = null;
+    await this.getAlbumList();
     try {
-      if (this.albums.length > 0) {
-        await this.getImageList();
+      if (this.selecetedAlbums.length > 0) {
+        this.photos = await this.getImageList();
         return true;
       } else {
-        this.log("There is no album to get photos.");
-        this.sendSocketNotification("ERROR", "There is no album to get photos.");
+        Log.warn("There is no album to get photos.");
+        // this.sendSocketNotification("ERROR", "There is no album to get photos.");
         return false;
       }
     } catch (err) {
-      this.log(error_to_string(err));
+      Log.error(error_to_string(err));
     }
+  },
+  getAlbumList: async function () {
+    Log.info("Getting album list");
+    /**
+     * @type {microsoftgraph.DriveItem[]} 
+     */
+    let albums = await this.getAlbums();
+    /** 
+     * @type {microsoftgraph.DriveItem[]} 
+     */
+    let selecetedAlbums = [];
+    for (let ta of this.albumsFilters) {
+      const matches = albums.filter((a) => {
+        if (ta instanceof RE2) {
+          Log.debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
+          return ta.test(a.title);
+        }
+        else {
+          return ta === a.title;
+        }
+      });
+      if (matches.length === 0) {
+        Log.warn(`Can't find "${ta instanceof RE2 ? ta.source : ta}" in your album list.`);
+      }
+      else {
+        selecetedAlbums.push(...matches);
+      }
+    }
+    selecetedAlbums = Set(selecetedAlbums).toArray();
+    Log.info("Finish Album scanning. Properly scanned :", selecetedAlbums.length);
+    Log.info("Albums:", selecetedAlbums.map((a) => a.title).join(", "));
+    this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selecetedAlbums, null, 4), "Album list cache");
+
+    for (let a of selecetedAlbums) {
+      let url = a.coverPhotoBaseUrl;
+      let fpath = path.join(this.path, "cache", a.id);
+      let file = fs.createWriteStream(fpath);
+      const response = await fetch(url);
+      await finished(Readable.fromWeb(response.body).pipe(file));
+    }
+    this.selecetedAlbums = selecetedAlbums;
+    Log.info("getAlbumList done");
+    this.sendSocketNotification("INITIALIZED", selecetedAlbums);
   },
 
   getImageList: async function () {
@@ -276,13 +327,13 @@ module.exports = NodeHelper.create({
     /** @type {OneDriveMediaItem[]} */
     let photos = [];
     try {
-      for (let album of this.albums) {
-        this.log(`Prepare to get photo list from '${album.title}'`);
+      for (let album of this.selecetedAlbums) {
+        this.log_debug(`Prepare to get photo list from '${album.title}'`);
         let list = await OneDrivePhoto.getImageFromAlbum(album.id, photoCondition);
         list.forEach(i => {
           i._albumTitle = album.title;
         });
-        this.log(`Got ${list.length} photo(s) from '${album.title}'`);
+        this.log_debug(`Got ${list.length} photo(s) from '${album.title}'`);
         photos = photos.concat(list);
       }
       if (photos.length > 0) {
@@ -297,26 +348,29 @@ module.exports = NodeHelper.create({
         } else {
           shuffle(photos);
         }
-        this.log(`Total indexed photos: ${photos.length}`);
+        Log.info(`Total indexed photos: ${photos.length}`);
         this.localPhotoList = [...photos];
         this.localPhotoPntr = 0;
         this.lastLocalPhotoPntr = 0;
         this.prepAndSendChunk(50).then();
-        try {
-          await writeFile(this.path + "/cache/photoListCache.json", JSON.stringify(photos, null, 4));
-          this.log("Photo list cache saved");
-        } catch (err) {
-          this.log(error_to_string(err));
-        }
+        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(photos, null, 4), "Photo list cache");
       }
 
       return photos;
     } catch (err) {
-      this.log(error_to_string(err));
+      Log.error(error_to_string(err));
     }
   },
 
   stop: function () {
     clearInterval(this.scanTimer);
+  },
+  writeFileSafe: async function (filePath, data, fileDescription) {
+    try {
+      await writeFile(filePath, data);
+      this.log_debug(fileDescription + " saved");
+    } catch (err) {
+      Log.error(error_to_string(err));
+    }
   },
 });

@@ -23,11 +23,14 @@
     "@azure/msal-node": "^2.13.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "heic-convert": "^2.1.0",
-    "moment": "^2.30.1"
+    "immutable": "^5.0.0-beta.5",
+    "moment": "^2.30.1",
+    "re2-wasm": "^1.0.2"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.1.0",
     "@eslint/js": "^9.9.0",
+    "@microsoft/microsoft-graph-types": "^2.40.0",
     "@types/magicmirror-module": "^2.16.5",
     "eslint": "^9.9.0",
     "eslint-plugin-jsdoc": "^50.2.2",
