@@ -182,7 +182,10 @@ module.exports = NodeHelper.create({
 
       const cachePath = this.path + "/cache/";
 
-      // refresh them
+      /**
+       * refresh them
+       * @type {OneDriveMediaItem[]}
+       */
       let list = [];
       if (numItemsToRefresh > 0) {
         list = await OneDrivePhoto.updateTheseMediaItems(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);

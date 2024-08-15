@@ -242,8 +242,8 @@ class OneDrivePhotos {
           return list; // empty
         }
       } catch (err) {
-        this.log(".getImageFromAlbum()", err.toString());
-        this.log(err);
+        this.logError(".getImageFromAlbum()", err.toString());
+        this.logError(err);
         throw err;
       }
     };
@@ -254,7 +254,7 @@ class OneDrivePhotos {
    * 
    * @param {OneDriveMediaItem[]} items
    * @param {string} cachePath
-   * @returns items
+   * @returns {OneDriveMediaItem[]} items
    */
   async updateTheseMediaItems(items, cachePath) {
     if (items.length <= 0) {
@@ -283,11 +283,14 @@ class OneDrivePhotos {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value['@microsoft.graph.downloadUrl'];
           }
+          else {
+            grp[r.id].baseUrl = null;
+          }
         }
       }
     }
 
-    const heicPhotos = items.filter(i => i.mimeType === "image/heic");
+    const heicPhotos = items.filter(i => i.mimeType === "image/heic" && i.baseUrl);
     for (let photo of heicPhotos) {
       const buf = await convertHEIC(photo.baseUrl);
       const cacheFilename = encodeURI(path.join(cachePath, photo.id + "-convert.jpg"));

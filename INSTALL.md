@@ -2,9 +2,10 @@
 
 1. Install Module
 
+   Run the following command. For example, the Magic Mirror directory is `~/MagicMirror`.
    ```sh
    cd ~/MagicMirror/modules
-   git clone https://github.com/hermanho/MMM-OneDrive
+   git clone https://github.com/hermanho/MMM-OneDrive.git
    cd MMM-OneDrive
    npm run install-prod
    ```
@@ -13,11 +14,20 @@
 
    ```sh
    cd ~/MagicMirror/modules
-   git clone https://github.com/hermanho/MMM-OneDrive
+   git clone https://github.com/hermanho/MMM-OneDrive.git
    docker exec -it -w /opt/magic_mirror/modules/MMM-OneDrive magic_mirror npm run install-prod
    ```
 
 1. Add MMM-OneDrive module config in ~/MagicMirror/config/config.js
+
+## Upgrade
+
+  Run the following command. For example, the Magic Mirror directory is `~/MagicMirror`.
+  ```sh
+  cd ~/MagicMirror/modules/MMM-OneDrive
+  git pull
+  npm run install-prod
+  ```
 
 ## Authorise OAuth Token
 
