@@ -19,8 +19,6 @@ const chunk = (arr, size) =>
 
 class Auth extends EventEmitter {
   #debug = {};
-  /** @type {import("@azure/msal-node").AccountInfo} */
-  #msalAccount = null;
   /** @type {AuthProvider} */
   #authProvider = null;
 
@@ -42,12 +40,9 @@ class Auth extends EventEmitter {
     }
     this.#authProvider = new AuthProvider(msalConfig);
     console.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
-    // this.#msalAccount = await this.#authProvider.login();
-    // console.log("[ONEDRIVE:CORE] AuthProvider login done");
   }
 
   get AuthProvider() { return this.#authProvider; }
-  // get AccountInfo() { return this.#msalAccount };
 }
 
 class OneDrivePhotos {
@@ -129,13 +124,13 @@ class OneDrivePhotos {
   async getAlbumType() {
     await this.onAuthReady();
     let url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
-    /** @type {import("@microsoft/microsoft-graph-types").DriveItem[]} */
+    /** @type {microsoftgraph.DriveItem[]} */
     let list = [];
     let found = 0;
     /**
      * 
      * @param {string} pageUrl 
-     * @returns {import("@microsoft/microsoft-graph-types").DriveItem[]} DriveItem
+     * @returns {microsoftgraph.DriveItem[]} DriveItem
      */
     const getAlbum = async (pageUrl) => {
       this.log("Getting Album info chunks.");
@@ -191,7 +186,7 @@ class OneDrivePhotos {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
         let response = await this.request(pageUrl, "get");
         if (Array.isArray(response.value)) {
-          /** @type {import("@microsoft/microsoft-graph-types").DriveItem[]} */
+          /** @type {microsoftgraph.DriveItem[]} */
           const childrenItems = response.value;
           for (let item of childrenItems) {
             /** @type {OneDriveMediaItem} */
@@ -247,8 +242,8 @@ class OneDrivePhotos {
           return list; // empty
         }
       } catch (err) {
-        this.log(".getImageFromAlbum()", err.toString());
-        this.log(err);
+        this.logError(".getImageFromAlbum()", err.toString());
+        this.logError(err);
         throw err;
       }
     };
@@ -259,7 +254,7 @@ class OneDrivePhotos {
    * 
    * @param {OneDriveMediaItem[]} items
    * @param {string} cachePath
-   * @returns items
+   * @returns {OneDriveMediaItem[]} items
    */
   async updateTheseMediaItems(items, cachePath) {
     if (items.length <= 0) {
@@ -288,11 +283,15 @@ class OneDrivePhotos {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value['@microsoft.graph.downloadUrl'];
           }
+          else {
+            console.error(r);
+            grp[r.id].baseUrl = null;
+          }
         }
       }
     }
 
-    const heicPhotos = items.filter(i => i.mimeType === "image/heic");
+    const heicPhotos = items.filter(i => i.mimeType === "image/heic" && i.baseUrl);
     for (let photo of heicPhotos) {
       const buf = await convertHEIC(photo.baseUrl);
       const cacheFilename = encodeURI(path.join(cachePath, photo.id + "-convert.jpg"));
