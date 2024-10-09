@@ -4,7 +4,6 @@
  */
 
 const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
-const { shell } = require("electron");
 
 class AuthProvider {
   msalConfig;
@@ -55,6 +54,7 @@ class AuthProvider {
        * https://learn.microsoft.com/azure/active-directory/develop/v2-protocols-oidc#send-a-sign-out-request
        */
       if (this.account.idTokenClaims.hasOwnProperty("login_hint")) {
+        const { shell } = require("electron");
         await shell.openExternal(`${this.msalConfig.auth.authority}/oauth2/v2.0/logout?logout_hint=${encodeURIComponent(this.account.idTokenClaims.login_hint)}`);
       }
 
@@ -98,7 +98,13 @@ class AuthProvider {
 
   async getTokenInteractive(tokenRequest) {
     const openBrowser = async (url) => {
-      await shell.openExternal(url);
+      try {
+        const { shell } = require("electron");
+        await shell.openExternal(url);
+      } catch (e) {
+        console.error("Unable to open external browser. Please run the module with a screen UI environment ", e);
+        throw e;
+      }
     };
 
     const authResponse = await this.clientApplication.acquireTokenInteractive({
