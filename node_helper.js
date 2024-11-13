@@ -196,7 +196,7 @@ const NodeHeleprObject = {
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await OneDrivePhoto.updateTheseMediaItems(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
+        list = await OneDrivePhoto.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
       }
 
       if (list.length > 0) {

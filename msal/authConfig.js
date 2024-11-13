@@ -34,7 +34,7 @@ const protectedResources = {
     // scopes: ["User.Read"],
   },
   listAllAlbums: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/items/$$userId$$!0:/SkyDriveCache/Albums:/children`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/bundles?filter=${encodeURIComponent('bundle/album ne null')}`,
   },
   getChildrenInAlbum: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children`,

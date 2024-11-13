@@ -24,7 +24,7 @@ class AuthProvider {
     this.account = null;
   }
 
-  debug(...args) {
+  logDebug(...args) {
     console.debug("[ONEDRIVE:AuthProvider]", ...args);
   }
 
@@ -32,9 +32,12 @@ class AuthProvider {
     console.log("[ONEDRIVE:AuthProvider]", ...args);
   }
 
+  logError(...args) {
+    console.error("[ONEDRIVE:AuthProvider]", ...args);
+  }
 
   async login() {
-    this.debug('Request token');
+    this.logDebug('Request token');
     const authResponse = await this.getToken({
       // If there are scopes that you would like users to consent up front, add them below
       // by default, MSAL will add the OIDC scopes to every token request, so we omit those here
@@ -61,7 +64,7 @@ class AuthProvider {
       await this.cache.removeAccount(this.account);
       this.account = null;
     } catch (error) {
-      console.log(error);
+      this.logError(error);
     }
   }
 
@@ -83,16 +86,15 @@ class AuthProvider {
     try {
       return await this.clientApplication.acquireTokenSilent(tokenRequest);
     } catch (error) {
+      this.logError(error);
       if (error instanceof InteractionRequiredAuthError) {
-        console.log("Silent token acquisition failed, acquiring token interactive");
+        this.logError("Silent token acquisition failed, acquiring token interactive");
         return await this.getTokenInteractive(tokenRequest);
       }
       if (error instanceof ServerError && error.errorCode === "invalid_grant") {
-        console.log("Silent token acquisition failed, acquiring token interactive");
+        this.logError("Silent token acquisition failed, acquiring token interactive");
         return await this.getTokenInteractive(tokenRequest);
       }
-
-      console.log(error);
     }
   }
 
@@ -102,7 +104,7 @@ class AuthProvider {
         const { shell } = require("electron");
         await shell.openExternal(url);
       } catch (e) {
-        console.error("Unable to open external browser. Please run the module with a screen UI environment ", e);
+        this.logError("Unable to open external browser. Please run the module with a screen UI environment ", e);
         throw e;
       }
     };
@@ -139,7 +141,7 @@ class AuthProvider {
     const currentAccounts = await this.cache.getAllAccounts();
 
     if (!currentAccounts) {
-      console.log("No accounts detected");
+      this.logError("No accounts detected");
       return null;
     }
 

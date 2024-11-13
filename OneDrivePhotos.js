@@ -6,6 +6,7 @@ const moment = require("moment");
 const { Client } = require('@microsoft/microsoft-graph-client');
 const { LogLevel } = require("@azure/msal-node");
 const path = require("path");
+const Log = require("logger");
 const { error_to_string } = require("./error_to_string");
 const { msalConfig, protectedResources } = require("./msal/authConfig");
 const AuthProvider = require("./msal/AuthProvider");
@@ -39,7 +40,7 @@ class Auth extends EventEmitter {
       msalConfig.system.loggerOptions = LogLevel.Verbose;
     }
     this.#authProvider = new AuthProvider(msalConfig);
-    console.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
+    Log.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
   }
 
   get AuthProvider() { return this.#authProvider; }
@@ -58,20 +59,12 @@ class OneDrivePhotos {
     this.config = options.config;
   }
 
-  debug(...args) {
-    if (this.#debug) console.debug("[ONEDRIVE:CORE]", ...args);
-  }
-
   log(...args) {
-    console.log("[ONEDRIVE:CORE]", ...args);
+    Log.log("[ONEDRIVE:CORE]", ...args);
   }
 
   logError(...args) {
-    console.error("[ONEDRIVE:CORE]", ...args);
-  }
-
-  logTrace(...args) {
-    console.trace("[ONEDRIVE:CORE]", ...args);
+    Log.error("[ONEDRIVE:CORE]", ...args);
   }
 
   async onAuthReady() {
@@ -85,7 +78,7 @@ class OneDrivePhotos {
           scopes: protectedResources.graphMe.scopes,
         };
         const tokenResponse = await authProvider.getToken(tokenRequest);
-        _this.debug("onAuthReady token responed");
+        _this.log("onAuthReady token responed");
         _this.#graphClient = Client.init({
           authProvider: (done) => {
             done(null, tokenResponse.accessToken);
@@ -104,13 +97,13 @@ class OneDrivePhotos {
 
   }
 
-  async request(url = "", method = "get", data = null) {
+  async request(logContext, url, method = "get", data = null) {
     try {
       const ret = await this.#graphClient.api(url)[method](data);
       return ret;
     } catch (error) {
-      this.logTrace("request fail with URL", url);
-      this.logTrace("data", JSON.stringify(data));
+      this.logError((logContext ? `[${logContext}]` : '') + `request fail ${method} URL: ${url}`);
+      this.logError((logContext ? `[${logContext}]` : '') + "data: ", JSON.stringify(data));
       this.logError(error_to_string(error));
       throw error;
     }
@@ -136,7 +129,7 @@ class OneDrivePhotos {
       this.log("Getting Album info chunks.");
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request(pageUrl, "get");
+        let response = await this.request('getAlbum', pageUrl, "get", null);
         if (Array.isArray(response.value)) {
           found += response.value.length;
           list = list.concat(response.value);
@@ -151,7 +144,8 @@ class OneDrivePhotos {
           return list;
         }
       } catch (err) {
-        this.log(err.toString());
+        this.logError(`Error in getAlbum() ${err.toString()}`);
+        this.logError(err.toString());
         throw err;
       }
     };
@@ -159,8 +153,8 @@ class OneDrivePhotos {
   }
 
   async getAlbumThumbnail(album) {
-    const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$drive-id$$", album.parentReference.driveId).replace('$$item-id$$', album.id) + "?select=mediumSquare";
-    let response2 = await this.request(thumbnailUrl, "get");
+    const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$drive-id$$", album.parentReference.driveId).replace('$$item-id$$', album.id) + "?$select=mediumSquare";
+    let response2 = await this.request('getAlbumThumbnail', thumbnailUrl, "get", null);
     if (Array.isArray(response2.value) && response2.value.length > 0) {
       const thumbnail = response2.value[0];
       return thumbnail.mediumSquare?.url;
@@ -184,7 +178,7 @@ class OneDrivePhotos {
       this.log("Indexing photos now. total: ", list.length);
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request(pageUrl, "get");
+        let response = await this.request('getImage', pageUrl, "get");
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const childrenItems = response.value;
@@ -256,7 +250,7 @@ class OneDrivePhotos {
    * @param {string} cachePath
    * @returns {OneDriveMediaItem[]} items
    */
-  async updateTheseMediaItems(items, cachePath) {
+  async batchRequestRefresh(items, cachePath) {
     if (items.length <= 0) {
       return [];
     }
@@ -278,7 +272,7 @@ class OneDrivePhotos {
         const requestsPayload = {
           "requests": requestsValue,
         };
-        const response = await this.request(protectedResources.$batch.endpoint, "post", requestsPayload);
+        const response = await this.request('batchRequestRefresh', protectedResources.$batch.endpoint, "post", requestsPayload);
         for (let r of response.response) {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value['@microsoft.graph.downloadUrl'];
