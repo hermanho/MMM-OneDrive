@@ -36,17 +36,6 @@ class AuthProvider {
     console.error("[ONEDRIVE:AuthProvider]", ...args);
   }
 
-  async login() {
-    this.logDebug('Request token');
-    const authResponse = await this.getToken({
-      // If there are scopes that you would like users to consent up front, add them below
-      // by default, MSAL will add the OIDC scopes to every token request, so we omit those here
-      scopes: [],
-    });
-
-    return this.handleResponse(authResponse);
-  }
-
   async logout() {
     if (!this.account) return;
 
@@ -75,9 +64,15 @@ class AuthProvider {
     if (account) {
       tokenRequest.account = account;
       authResponse = await this.getTokenSilent(tokenRequest);
-    } else {
+    }
+    if (!authResponse) {
       authResponse = await this.getTokenInteractive(tokenRequest);
     }
+
+    if (authResponse) {
+      this.account = authResponse.account;
+    }
+    this.log('getToken done');
 
     return authResponse || null;
   }
@@ -89,12 +84,14 @@ class AuthProvider {
       this.logError(error);
       if (error instanceof InteractionRequiredAuthError) {
         this.logError("Silent token acquisition failed, acquiring token interactive");
-        return await this.getTokenInteractive(tokenRequest);
       }
       if (error instanceof ServerError && error.errorCode === "invalid_grant") {
         this.logError("Silent token acquisition failed, acquiring token interactive");
-        return await this.getTokenInteractive(tokenRequest);
       }
+      return undefined;
+    }
+    finally {
+      this.log('getTokenSilent done');
     }
   }
 
@@ -115,23 +112,14 @@ class AuthProvider {
       successTemplate: "<h1>Successfully signed in!</h1> <p>You can close this window now.</p>",
       errorTemplate: "<h1>Oops! Something went wrong</h1> <p>Check the console for more information.</p>",
     });
+    if (authResponse) {
+      this.account = authResponse.account;
+    }
+    this.log('getTokenInteractive done');
 
     return authResponse;
   }
 
-  /**
-   * Handles the response from a popup or redirect. If response is null, will check if we have any accounts and attempt to sign in.
-   * @param {import('@azure/msal-node').AuthenticationResult} response
-   */
-  async handleResponse(response) {
-    if (response !== null) {
-      this.account = response.account;
-    } else {
-      this.account = await this.getAccount();
-    }
-
-    return this.account;
-  }
 
   /**
    * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.

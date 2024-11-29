@@ -67,6 +67,12 @@ class OneDrivePhotos {
     Log.error("[ONEDRIVE:CORE]", ...args);
   }
 
+  logDebug(...args) {
+    if (this.#debug) {
+      Log.debug("[ONEDRIVE:CORE]", ...args);
+    }
+  }
+
   async onAuthReady() {
     const auth = new Auth(this.#debug);
     const _this = this;
@@ -77,33 +83,37 @@ class OneDrivePhotos {
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
         };
-        const tokenResponse = await authProvider.getToken(tokenRequest);
-        _this.log("onAuthReady token responed");
-        _this.#graphClient = Client.init({
-          authProvider: (done) => {
-            done(null, tokenResponse.accessToken);
-          },
-        });
-        const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-        _this.#userId = graphResponse.id;
-        _this.log("onAuthReady done");
-        resolve();
+        try {
+          const tokenResponse = await authProvider.getToken(tokenRequest);
+          _this.log("onAuthReady token responed");
+          _this.#graphClient = Client.init({
+            authProvider: (done) => {
+              done(null, tokenResponse.accessToken);
+            },
+          });
+          const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
+          _this.#userId = graphResponse.id;
+          _this.log("onAuthReady done");
+          resolve();
+        } catch (err) {
+          _this.logError("onAuthReady error", err);
+          reject(err);
+        }
       });
       auth.on("error", (error) => {
         reject(error);
       });
     });
-
-
   }
 
   async request(logContext, url, method = "get", data = null) {
+    this.logDebug((logContext ? `[${logContext}]` : '') + ` request ${method} URL: ${url}`);
     try {
       const ret = await this.#graphClient.api(url)[method](data);
       return ret;
     } catch (error) {
-      this.logError((logContext ? `[${logContext}]` : '') + `request fail ${method} URL: ${url}`);
-      this.logError((logContext ? `[${logContext}]` : '') + "data: ", JSON.stringify(data));
+      this.logError((logContext ? `[${logContext}]` : '') + ` request fail ${method} URL: ${url}`);
+      this.logError((logContext ? `[${logContext}]` : '') + " data: ", JSON.stringify(data));
       this.logError(error_to_string(error));
       throw error;
     }
@@ -131,9 +141,14 @@ class OneDrivePhotos {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
         let response = await this.request('getAlbum', pageUrl, "get", null);
         if (Array.isArray(response.value)) {
-          found += response.value.length;
-          list = list.concat(response.value);
-          for (let album of response.value) {
+          /** @type {microsoftgraph.DriveItem[]} */
+          const arrayValue = response.value;
+          this.logDebug("found album:");
+          this.logDebug("name\t\tid");
+          arrayValue.map(a => `${a.name}\t${a.id}`).forEach(s => this.logDebug(s));
+          found += arrayValue.length;
+          list = list.concat(arrayValue);
+          for (let album of arrayValue) {
             album.coverPhotoBaseUrl = await this.getAlbumThumbnail(album);
           }
         }
@@ -152,12 +167,27 @@ class OneDrivePhotos {
     return getAlbum(url);
   }
 
+  /**
+   * 
+   * @param {microsoftgraph.DriveItem} album 
+   * @returns {Promise<string | null>}
+   */
   async getAlbumThumbnail(album) {
-    const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$drive-id$$", album.parentReference.driveId).replace('$$item-id$$', album.id) + "?$select=mediumSquare";
-    let response2 = await this.request('getAlbumThumbnail', thumbnailUrl, "get", null);
-    if (Array.isArray(response2.value) && response2.value.length > 0) {
-      const thumbnail = response2.value[0];
-      return thumbnail.mediumSquare?.url;
+    if (!album?.bundle?.album?.coverImageItemId) {
+      return null;
+    }
+    try {
+      const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace('$$item-id$$', album.bundle.album.coverImageItemId);
+      let response2 = await this.request('getAlbumThumbnail', thumbnailUrl, "get", null);
+      if (Array.isArray(response2.value) && response2.value.length > 0) {
+        const thumbnail = response2.value[0];
+        const thumbnailUrl = thumbnail.mediumSquare?.url || thumbnail.medium?.url;
+        this.logDebug("thumbnail found: ", album.bundle.album.coverImageItemId, (thumbnail.mediumSquare ? "mediumSquare" : (thumbnail.medium ? "medium" : "<null>")));
+        return thumbnailUrl;
+      }
+    } catch (err) {
+      this.logError("Error in getAlbumThumbnail(), ignore", err);
+      return null;
     }
   }
 
