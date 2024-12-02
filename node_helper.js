@@ -449,7 +449,7 @@ const NodeHeleprObject = {
     try {
       let config = {};
       const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache Config");
-      config = JSON.parse(configStr || null);
+      config = JSON.parse(configStr || null) || {};
       config[key] = value;
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache Config");
       this.log_debug("Cache Config saved");
