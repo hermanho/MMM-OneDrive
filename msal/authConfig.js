@@ -34,7 +34,7 @@ const protectedResources = {
     // scopes: ["User.Read"],
   },
   listAllAlbums: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/items/$$userId$$!0:/SkyDriveCache/Albums:/children`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/bundles?filter=${encodeURIComponent('bundle/album ne null')}`,
   },
   getChildrenInAlbum: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children`,
@@ -43,7 +43,7 @@ const protectedResources = {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$drive-id$$/items/$$item-id$$`,
   },
   getThumbnail: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$drive-id$$/items/$$item-id$$/thumbnails`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drive/items/$$item-id$$/thumbnails`,
   },
   $batch: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/$batch`,
@@ -52,5 +52,6 @@ const protectedResources = {
 
 module.exports = {
   msalConfig: msalConfig,
+  cachePath: cachePath,
   protectedResources: protectedResources,
 };

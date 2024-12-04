@@ -85,13 +85,30 @@ Module.register("MMM-OneDrive", {
     }
     if (noti === "ERROR") {
       const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+      current.textContent = "";
+      const errMsgContainer = document.createElement("div");
+      Object.assign(errMsgContainer.style, {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100%",
+      });
       const errMsgDiv = document.createElement("div");
-      errMsgDiv.style.textAlign = "center";
-      errMsgDiv.style.lineHeight = "80vh";
-      errMsgDiv.style.fontSize = "1.5em";
-      errMsgDiv.style.verticalAlign = "middle";
+      Object.assign(errMsgDiv.style, {
+        maxWidth: "70vw",
+        fontSize: "1.5em",
+      });
       errMsgDiv.textContent = payload;
-      current.appendChild(errMsgDiv);
+      errMsgContainer.appendChild(errMsgDiv);
+      current.appendChild(errMsgContainer);
+    }
+    if (noti === "CLEAR_ERROR") {
+      const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+      current.textContent = "";
+    }
+    if (noti === "UPDATE_STATUS") {
+      let info = document.getElementById("ONEDRIVE_PHOTO_INFO");
+      info.innerHTML = String(payload);
     }
   },
 

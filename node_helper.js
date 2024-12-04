@@ -11,8 +11,10 @@ const { RE2 } = require("re2-wasm");
 const { Set } = require('immutable');
 const NodeHelper = require("node_helper");
 const Log = require("logger");
+const crypto = require("crypto");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string");
+const { cachePath } = require("./msal/authConfig.js");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
@@ -115,7 +117,6 @@ const NodeHeleprObject = {
         this.albumsFilters.push(album);
       }
     }
-    delete this.config.albums;
 
     this.tryToIntitialize();
   },
@@ -131,6 +132,30 @@ const NodeHeleprObject = {
     );
 
     Log.info("Starting Initialization");
+    await this.loadCache();
+
+    Log.info("Initialization complete!");
+    clearTimeout(this.initializeTimer);
+    Log.info("Start first scanning.");
+    this.startScanning();
+  },
+
+  calculateConfigHash: async function () {
+    const tokenStr = await this.readFileSafe(cachePath, "MSAL Token");
+    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + '\n' + tokenStr).digest("hex");
+    return hash;
+  },
+
+  loadCache: async function () {
+    const cacheHash = await this.readCacheConfig("CACHE_HASH");
+    const configHash = await this.calculateConfigHash();
+    if (!cacheHash || cacheHash !== configHash) {
+      Log.info("Config or token has changed. Ignore cache");
+      this.sendSocketNotification("UPDATE_STATUS", "Loading from OneDrive...");
+      return;
+    }
+    Log.info("Loading cache data");
+    this.sendSocketNotification("UPDATE_STATUS", "Loading from cache");
 
     //load cached album list - if available
     const cacheAlbumDt = new Date(await this.readCacheConfig("CACHE_ALBUMNS_PATH"));
@@ -165,10 +190,6 @@ const NodeHeleprObject = {
       }
     }
 
-    Log.info("Initialization complete!");
-    clearTimeout(this.initializeTimer);
-    Log.info("Start first scanning.");
-    this.startScanning();
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
@@ -196,7 +217,7 @@ const NodeHeleprObject = {
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await OneDrivePhoto.updateTheseMediaItems(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
+        list = await OneDrivePhoto.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
       }
 
       if (list.length > 0) {
@@ -219,13 +240,15 @@ const NodeHeleprObject = {
     }
   },
 
-  /** @returns {microsoftgraph.DriveItem[]} */
+  /** @returns {microsoftgraph.DriveItem[]} album */
   getAlbums: async function () {
     try {
       let r = await OneDrivePhoto.getAlbums();
       r.forEach(item => {
         item.title = item.name;
       });
+      const configHash = await this.calculateConfigHash();
+      await this.saveCacheConfig("CACHE_HASH", configHash);
       return r;
     } catch (err) {
       Log.error(error_to_string(err));
@@ -275,7 +298,7 @@ const NodeHeleprObject = {
     for (let ta of this.albumsFilters) {
       const matches = albums.filter((a) => {
         if (ta instanceof RE2) {
-          Log.debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
+          this.log_debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
           return ta.test(a.title);
         }
         else {
@@ -296,11 +319,13 @@ const NodeHeleprObject = {
     this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
     for (let a of selecetedAlbums) {
-      let url = a.coverPhotoBaseUrl;
-      let fpath = path.join(this.path, "cache", a.id);
-      let file = fs.createWriteStream(fpath);
-      const response = await fetch(url);
-      await finished(Readable.fromWeb(response.body).pipe(file));
+      if (a.coverPhotoBaseUrl) {
+        let url = a.coverPhotoBaseUrl;
+        let fpath = path.join(this.path, "cache", a.id);
+        let file = fs.createWriteStream(fpath);
+        const response = await fetch(url);
+        await finished(Readable.fromWeb(response.body).pipe(file));
+      }
     }
     this.selecetedAlbums = selecetedAlbums;
     Log.info("getAlbumList done");
@@ -380,6 +405,10 @@ const NodeHeleprObject = {
   },
 
   readFileSafe: async function (filePath, fileDescription) {
+    if (!fs.existsSync(filePath)) {
+      Log.warn(`${fileDescription} does not exist: ${filePath}`);
+      return null;
+    }
     try {
       const data = await readFile(filePath, "utf-8");
       return data.toString();
@@ -402,10 +431,8 @@ const NodeHeleprObject = {
   readCacheConfig: async function (key) {
     try {
       let config = {};
-      if (fs.existsSync(this.CACHE_CONFIG)) {
-        const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache Config");
-        config = JSON.parse(configStr);
-      }
+      const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache Config");
+      config = JSON.parse(configStr || null);
       if (Object(config).hasOwnProperty(key)) {
         return config[key];
       }
@@ -421,10 +448,8 @@ const NodeHeleprObject = {
   saveCacheConfig: async function (key, value) {
     try {
       let config = {};
-      if (fs.existsSync(this.CACHE_CONFIG)) {
-        const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache Config");
-        config = JSON.parse(configStr);
-      }
+      const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache Config");
+      config = JSON.parse(configStr || null) || {};
       config[key] = value;
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache Config");
       this.log_debug("Cache Config saved");
