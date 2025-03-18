@@ -46,7 +46,7 @@ class Auth extends EventEmitter {
   get AuthProvider() { return this.#authProvider; }
 }
 
-class OneDrivePhotos {
+class OneDrivePhotos extends EventEmitter {
   /** @type {Client} */
   #graphClient = null;
   /** @type {string} */
@@ -54,6 +54,7 @@ class OneDrivePhotos {
   #debug = false;
 
   constructor(options) {
+    super();
     this.options = options;
     this.#debug = options.debug ? options.debug : this.debug;
     this.config = options.config;
@@ -73,6 +74,14 @@ class OneDrivePhotos {
     }
   }
 
+  /**
+   * 
+   * @param {import("@azure/msal-common").DeviceCodeResponse} response
+   */
+  deviceCodeCallback(response) {
+    this.emit("receiveDeviceCode", response);
+  }
+
   async onAuthReady() {
     const auth = new Auth(this.#debug);
     const _this = this;
@@ -84,8 +93,9 @@ class OneDrivePhotos {
           scopes: protectedResources.graphMe.scopes,
         };
         try {
-          const tokenResponse = await authProvider.getToken(tokenRequest);
+          const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceDeviceCode, (r) => this.deviceCodeCallback(r));
           _this.log("onAuthReady token responed");
+          this.emit("authSuccess");
           _this.#graphClient = Client.init({
             authProvider: (done) => {
               done(null, tokenResponse.accessToken);

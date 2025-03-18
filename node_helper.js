@@ -108,6 +108,13 @@ const NodeHeleprObject = {
       debug: this.debug,
       config: config,
     });
+    OneDrivePhoto.on("receiveDeviceCode", (respone) => {
+      const expireDt = new Date(Date.now() + respone.expiresIn * 1000);
+      this.sendSocketNotification("ERROR", respone.message + `\nToken will be expired at ${expireDt.toLocaleTimeString(undefined, { hour12: true })}.`);
+    });
+    OneDrivePhoto.on("authSuccess", () => {
+      this.sendSocketNotification("CLEAR_ERROR");
+    });
 
     this.albumsFilters = [];
     for (let album of config.albums) {
@@ -142,6 +149,9 @@ const NodeHeleprObject = {
 
   calculateConfigHash: async function () {
     const tokenStr = await this.readFileSafe(cachePath, "MSAL Token");
+    if (!tokenStr) {
+      return undefined;
+    }
     const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + '\n' + tokenStr).digest("hex");
     return hash;
   },
@@ -248,7 +258,9 @@ const NodeHeleprObject = {
         item.title = item.name;
       });
       const configHash = await this.calculateConfigHash();
-      await this.saveCacheConfig("CACHE_HASH", configHash);
+      if (configHash) {
+        await this.saveCacheConfig("CACHE_HASH", configHash);
+      }
       return r;
     } catch (err) {
       Log.error(error_to_string(err));

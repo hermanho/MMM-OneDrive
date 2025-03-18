@@ -5,6 +5,17 @@
 
 const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
 
+/**
+ * A function to check shell.openExternal is available
+ */
+function CanOpenExternal() {
+  const { shell } = require("electron");
+  if (shell && typeof shell.openExternal === 'function') {
+    return true;
+  }
+  return false;
+}
+
 class AuthProvider {
   msalConfig;
   clientApplication;
@@ -57,7 +68,15 @@ class AuthProvider {
     }
   }
 
-  async getToken(tokenRequest) {
+  /**
+   * @param {any} tokenRequest
+   * @param {boolean} forceDeviceCode
+   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} deviceCodeCallback 
+   */
+  async getToken(tokenRequest, forceDeviceCode, deviceCodeCallback = null) {
+    /**
+     * @type {import("@azure/msal-node").AuthenticationResult}
+     */
     let authResponse;
     const account = this.account || (await this.getAccount());
 
@@ -66,7 +85,15 @@ class AuthProvider {
       authResponse = await this.getTokenSilent(tokenRequest);
     }
     if (!authResponse) {
-      authResponse = await this.getTokenInteractive(tokenRequest);
+      if (forceDeviceCode || !CanOpenExternal()) {
+        authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+      } else {
+        try {
+          authResponse = await this.getTokenInteractive(tokenRequest);
+        } catch (e) {
+          authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+        }
+      }
     }
 
     if (authResponse) {
@@ -106,6 +133,7 @@ class AuthProvider {
       }
     };
 
+    this.log('Requesting a token interactively via the browser');
     const authResponse = await this.clientApplication.acquireTokenInteractive({
       ...tokenRequest,
       openBrowser,
@@ -120,6 +148,33 @@ class AuthProvider {
     return authResponse;
   }
 
+  /**
+   * 
+   * @param {any} tokenRequest 
+   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} callback 
+   */
+  async getTokenDeviceCode(tokenRequest, callback = null) {
+    /**
+     * @type {import("@azure/msal-node").DeviceCodeRequest} 
+     */
+    const deviceCodeRequest = {
+      ...tokenRequest,
+      deviceCodeCallback: (response) => {
+        this.log(response.message);
+        if (callback) {
+          callback(response);
+        }
+      },
+    };
+    this.log('Requesting a token using OAuth2.0 device code flow');
+    const authResponse = await this.clientApplication
+      .acquireTokenByDeviceCode(deviceCodeRequest);
+    if (authResponse) {
+      this.account = authResponse.account;
+    }
+    this.log('getTokenDeviceCode done');
+    return authResponse;
+  }
 
   /**
    * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.
