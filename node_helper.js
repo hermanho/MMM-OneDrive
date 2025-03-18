@@ -120,9 +120,8 @@ const NodeHeleprObject = {
       debug: this.debug,
       config: config,
     });
-    OneDrivePhoto.on("receiveDeviceCode", (respone) => {
-      const expireDt = new Date(Date.now() + respone.expiresIn * 1000);
-      this.sendSocketNotification("ERROR", respone.message + `\nToken will be expired at ${expireDt.toLocaleTimeString(undefined, { hour12: true })}.`);
+    OneDrivePhoto.on("errorMessage", (message) => {
+      this.sendSocketNotification("ERROR", message);
     });
     OneDrivePhoto.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");

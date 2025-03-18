@@ -6,15 +6,9 @@
 const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
 
 /**
- * A function to check shell.openExternal is available
+ * @typedef {object} TokenRequestCommon
+ * @property {string} scopes - The scopes requested for the token.
  */
-function CanOpenExternal() {
-  const { shell } = require("electron");
-  if (shell && typeof shell.openExternal === 'function') {
-    return true;
-  }
-  return false;
-}
 
 class AuthProvider {
   msalConfig;
@@ -39,8 +33,8 @@ class AuthProvider {
     console.debug("[ONEDRIVE:AuthProvider]", ...args);
   }
 
-  log(...args) {
-    console.log("[ONEDRIVE:AuthProvider]", ...args);
+  logInfo(...args) {
+    console.info("[ONEDRIVE:AuthProvider]", ...args);
   }
 
   logError(...args) {
@@ -69,11 +63,12 @@ class AuthProvider {
   }
 
   /**
-   * @param {any} tokenRequest
-   * @param {boolean} forceDeviceCode
+   * @param {TokenRequestCommon} tokenRequest
+   * @param {boolean} forceAuthInteractive
    * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} deviceCodeCallback 
+   * @param {(message: string) => void} waitInteractiveCallback
    */
-  async getToken(tokenRequest, forceDeviceCode, deviceCodeCallback = null) {
+  async getToken(tokenRequest, forceAuthInteractive, deviceCodeCallback = null, waitInteractiveCallback = null) {
     /**
      * @type {import("@azure/msal-node").AuthenticationResult}
      */
@@ -85,13 +80,15 @@ class AuthProvider {
       authResponse = await this.getTokenSilent(tokenRequest);
     }
     if (!authResponse) {
-      if (forceDeviceCode || !CanOpenExternal()) {
-        authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+      if (forceAuthInteractive) {
+        waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
+        authResponse = await this.getTokenInteractive(tokenRequest);
       } else {
         try {
-          authResponse = await this.getTokenInteractive(tokenRequest);
-        } catch (e) {
           authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+        } catch (e) {
+          waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
+          authResponse = await this.getTokenInteractive(tokenRequest);
         }
       }
     }
@@ -99,11 +96,15 @@ class AuthProvider {
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.log('getToken done');
+    this.logInfo('getToken done');
 
     return authResponse || null;
   }
 
+  /**
+   * 
+   * @param {Partial<import("@azure/msal-node").SilentFlowRequest> & TokenRequestCommon} tokenRequest 
+   */
   async getTokenSilent(tokenRequest) {
     try {
       return await this.clientApplication.acquireTokenSilent(tokenRequest);
@@ -118,10 +119,14 @@ class AuthProvider {
       return undefined;
     }
     finally {
-      this.log('getTokenSilent done');
+      this.logInfo('getTokenSilent done');
     }
   }
 
+  /**
+   * 
+   * @param {Partial<import("@azure/msal-node").InteractiveRequest> & TokenRequestCommon} tokenRequest 
+   */
   async getTokenInteractive(tokenRequest) {
     const openBrowser = async (url) => {
       try {
@@ -133,7 +138,7 @@ class AuthProvider {
       }
     };
 
-    this.log('Requesting a token interactively via the browser');
+    this.logInfo('Requesting a token interactively via the browser');
     const authResponse = await this.clientApplication.acquireTokenInteractive({
       ...tokenRequest,
       openBrowser,
@@ -143,14 +148,14 @@ class AuthProvider {
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.log('getTokenInteractive done');
+    this.logInfo('getTokenInteractive done');
 
     return authResponse;
   }
 
   /**
    * 
-   * @param {any} tokenRequest 
+   * @param {Partial<import("@azure/msal-node").DeviceCodeRequest> & TokenRequestCommon} tokenRequest 
    * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} callback 
    */
   async getTokenDeviceCode(tokenRequest, callback = null) {
@@ -160,19 +165,19 @@ class AuthProvider {
     const deviceCodeRequest = {
       ...tokenRequest,
       deviceCodeCallback: (response) => {
-        this.log(response.message);
+        this.logInfo(response.message);
         if (callback) {
           callback(response);
         }
       },
     };
-    this.log('Requesting a token using OAuth2.0 device code flow');
+    this.logInfo('Requesting a token using OAuth2.0 device code flow');
     const authResponse = await this.clientApplication
       .acquireTokenByDeviceCode(deviceCodeRequest);
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.log('getTokenDeviceCode done');
+    this.logInfo('getTokenDeviceCode done');
     return authResponse;
   }
 

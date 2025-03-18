@@ -2,7 +2,7 @@
 
 const EventEmitter = require("events");
 const { writeFile } = require("fs/promises");
-const moment = require("moment");
+const crypto = require("crypto");
 const { Client } = require('@microsoft/microsoft-graph-client');
 const { LogLevel } = require("@azure/msal-node");
 const path = require("path");
@@ -37,10 +37,10 @@ class Auth extends EventEmitter {
 
   async init() {
     if (this.#debug) {
-      msalConfig.system.loggerOptions = LogLevel.Verbose;
+      msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
     }
     this.#authProvider = new AuthProvider(msalConfig);
-    Log.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
+    Log.info("[ONEDRIVE:CORE] Auth -> AuthProvider created");
   }
 
   get AuthProvider() { return this.#authProvider; }
@@ -69,9 +69,7 @@ class OneDrivePhotos extends EventEmitter {
   }
 
   logDebug(...args) {
-    if (this.#debug) {
-      Log.debug("[ONEDRIVE:CORE]", ...args);
-    }
+    Log.debug("[ONEDRIVE:CORE]", ...args);
   }
 
   /**
@@ -79,7 +77,9 @@ class OneDrivePhotos extends EventEmitter {
    * @param {import("@azure/msal-common").DeviceCodeResponse} response
    */
   deviceCodeCallback(response) {
-    this.emit("receiveDeviceCode", response);
+    const expireDt = new Date(Date.now() + response.expiresIn * 1000);
+    const message = response.message + `\nToken will be expired at ${expireDt.toLocaleTimeString(undefined, { hour12: true })}.`;
+    this.emit("errorMessage", message);
   }
 
   async onAuthReady() {
@@ -91,10 +91,11 @@ class OneDrivePhotos extends EventEmitter {
         const authProvider = auth.AuthProvider;
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
+          correlationId: crypto.randomUUID(),
         };
         try {
-          const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceDeviceCode, (r) => this.deviceCodeCallback(r));
-          _this.log("onAuthReady token responed");
+          const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+          _this.log("onAuthReady token responded");
           this.emit("authSuccess");
           _this.#graphClient = Client.init({
             authProvider: (done) => {
