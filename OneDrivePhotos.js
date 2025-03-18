@@ -2,7 +2,7 @@
 
 const EventEmitter = require("events");
 const { writeFile } = require("fs/promises");
-const moment = require("moment");
+const crypto = require("crypto");
 const { Client } = require('@microsoft/microsoft-graph-client');
 const { LogLevel } = require("@azure/msal-node");
 const path = require("path");
@@ -37,16 +37,16 @@ class Auth extends EventEmitter {
 
   async init() {
     if (this.#debug) {
-      msalConfig.system.loggerOptions = LogLevel.Verbose;
+      msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
     }
     this.#authProvider = new AuthProvider(msalConfig);
-    Log.log("[ONEDRIVE:CORE] Auth -> AuthProvider created");
+    Log.info("[ONEDRIVE:CORE] Auth -> AuthProvider created");
   }
 
   get AuthProvider() { return this.#authProvider; }
 }
 
-class OneDrivePhotos {
+class OneDrivePhotos extends EventEmitter {
   /** @type {Client} */
   #graphClient = null;
   /** @type {string} */
@@ -54,13 +54,14 @@ class OneDrivePhotos {
   #debug = false;
 
   constructor(options) {
+    super();
     this.options = options;
     this.#debug = options.debug ? options.debug : this.debug;
     this.config = options.config;
   }
 
   log(...args) {
-    Log.log("[ONEDRIVE:CORE]", ...args);
+    Log.info("[ONEDRIVE:CORE]", ...args);
   }
 
   logError(...args) {
@@ -68,9 +69,17 @@ class OneDrivePhotos {
   }
 
   logDebug(...args) {
-    if (this.#debug) {
-      Log.debug("[ONEDRIVE:CORE]", ...args);
-    }
+    Log.debug("[ONEDRIVE:CORE]", ...args);
+  }
+
+  /**
+   * 
+   * @param {import("@azure/msal-common").DeviceCodeResponse} response
+   */
+  deviceCodeCallback(response) {
+    const expireDt = new Date(Date.now() + response.expiresIn * 1000);
+    const message = response.message + `\nToken will be expired at ${expireDt.toLocaleTimeString(undefined, { hour12: true })}.`;
+    this.emit("errorMessage", message);
   }
 
   async onAuthReady() {
@@ -82,10 +91,12 @@ class OneDrivePhotos {
         const authProvider = auth.AuthProvider;
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
+          correlationId: crypto.randomUUID(),
         };
         try {
-          const tokenResponse = await authProvider.getToken(tokenRequest);
-          _this.log("onAuthReady token responed");
+          const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+          _this.log("onAuthReady token responded");
+          this.emit("authSuccess");
           _this.#graphClient = Client.init({
             authProvider: (done) => {
               done(null, tokenResponse.accessToken);

@@ -26,6 +26,8 @@ const cachePlugin = (CACHE_LOCATION) => {
         fs.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize(), (err) => {
           if (err) {
             reject();
+          } else {
+            resolve();
           }
         });
       }

@@ -5,6 +5,11 @@
 
 const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
 
+/**
+ * @typedef {object} TokenRequestCommon
+ * @property {string} scopes - The scopes requested for the token.
+ */
+
 class AuthProvider {
   msalConfig;
   clientApplication;
@@ -28,8 +33,8 @@ class AuthProvider {
     console.debug("[ONEDRIVE:AuthProvider]", ...args);
   }
 
-  log(...args) {
-    console.log("[ONEDRIVE:AuthProvider]", ...args);
+  logInfo(...args) {
+    console.info("[ONEDRIVE:AuthProvider]", ...args);
   }
 
   logError(...args) {
@@ -57,7 +62,16 @@ class AuthProvider {
     }
   }
 
-  async getToken(tokenRequest) {
+  /**
+   * @param {TokenRequestCommon} tokenRequest
+   * @param {boolean} forceAuthInteractive
+   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} deviceCodeCallback 
+   * @param {(message: string) => void} waitInteractiveCallback
+   */
+  async getToken(tokenRequest, forceAuthInteractive, deviceCodeCallback = null, waitInteractiveCallback = null) {
+    /**
+     * @type {import("@azure/msal-node").AuthenticationResult}
+     */
     let authResponse;
     const account = this.account || (await this.getAccount());
 
@@ -66,17 +80,31 @@ class AuthProvider {
       authResponse = await this.getTokenSilent(tokenRequest);
     }
     if (!authResponse) {
-      authResponse = await this.getTokenInteractive(tokenRequest);
+      if (forceAuthInteractive) {
+        waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
+        authResponse = await this.getTokenInteractive(tokenRequest);
+      } else {
+        try {
+          authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+        } catch (e) {
+          waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
+          authResponse = await this.getTokenInteractive(tokenRequest);
+        }
+      }
     }
 
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.log('getToken done');
+    this.logInfo('getToken done');
 
     return authResponse || null;
   }
 
+  /**
+   * 
+   * @param {Partial<import("@azure/msal-node").SilentFlowRequest> & TokenRequestCommon} tokenRequest 
+   */
   async getTokenSilent(tokenRequest) {
     try {
       return await this.clientApplication.acquireTokenSilent(tokenRequest);
@@ -91,10 +119,14 @@ class AuthProvider {
       return undefined;
     }
     finally {
-      this.log('getTokenSilent done');
+      this.logInfo('getTokenSilent done');
     }
   }
 
+  /**
+   * 
+   * @param {Partial<import("@azure/msal-node").InteractiveRequest> & TokenRequestCommon} tokenRequest 
+   */
   async getTokenInteractive(tokenRequest) {
     const openBrowser = async (url) => {
       try {
@@ -106,6 +138,7 @@ class AuthProvider {
       }
     };
 
+    this.logInfo('Requesting a token interactively via the browser');
     const authResponse = await this.clientApplication.acquireTokenInteractive({
       ...tokenRequest,
       openBrowser,
@@ -115,11 +148,38 @@ class AuthProvider {
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.log('getTokenInteractive done');
+    this.logInfo('getTokenInteractive done');
 
     return authResponse;
   }
 
+  /**
+   * 
+   * @param {Partial<import("@azure/msal-node").DeviceCodeRequest> & TokenRequestCommon} tokenRequest 
+   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} callback 
+   */
+  async getTokenDeviceCode(tokenRequest, callback = null) {
+    /**
+     * @type {import("@azure/msal-node").DeviceCodeRequest} 
+     */
+    const deviceCodeRequest = {
+      ...tokenRequest,
+      deviceCodeCallback: (response) => {
+        this.logInfo(response.message);
+        if (callback) {
+          callback(response);
+        }
+      },
+    };
+    this.logInfo('Requesting a token using OAuth2.0 device code flow');
+    const authResponse = await this.clientApplication
+      .acquireTokenByDeviceCode(deviceCodeRequest);
+    if (authResponse) {
+      this.account = authResponse.account;
+    }
+    this.logInfo('getTokenDeviceCode done');
+    return authResponse;
+  }
 
   /**
    * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.
