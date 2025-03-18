@@ -36,7 +36,7 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
     showWidth: 1080, // These values will be used for quality of downloaded photos to show. real size to show in your MagicMirror region is recommended.
     showHeight: 1920,
     timeFormat: "YYYY/MM/DD HH:mm", // Or `relative` can be used.
-    forceDeviceCode: true, // Force OneDrive authentication using OAuth2.0 device code flow
+    forceAuthInteractive: false, // Force interactive authorization
   }
 },
 ```
