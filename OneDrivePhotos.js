@@ -61,7 +61,7 @@ class OneDrivePhotos extends EventEmitter {
   }
 
   log(...args) {
-    Log.log("[ONEDRIVE:CORE]", ...args);
+    Log.info("[ONEDRIVE:CORE]", ...args);
   }
 
   logError(...args) {
