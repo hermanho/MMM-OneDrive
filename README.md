@@ -4,9 +4,7 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
 
 ## Screenshot
 
-![screenshot](images/screenshot.png)
-
-![screenshot](images/screenshot2.png)
+![screenshot](images/screenshot.jpg)
 
 ## Installation & Upgrade
 
