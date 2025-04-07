@@ -1,7 +1,7 @@
 "use strict";
 
 const fs = require("fs");
-const { writeFile, readFile } = require("fs/promises");
+const { writeFile, readFile, mkdir } = require("fs/promises");
 const path = require("path");
 const moment = require("moment");
 const OneDrivePhotos = require("./OneDrivePhotos.js");
@@ -449,6 +449,10 @@ const NodeHeleprObject = {
 
   writeFileSafe: async function (filePath, data, fileDescription) {
     try {
+      const dirname = path.dirname(filePath);
+      if (!fs.existsSync(dirname)) {
+        await mkdir(dirname, { recursive: true });
+      }
       await writeFile(filePath, data);
       this.log_debug(fileDescription + " saved");
     } catch (err) {

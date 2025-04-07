@@ -28,6 +28,9 @@ Module.register("MMM-OneDrive", {
 
   suspended: false,
 
+  getScripts() {
+    return ["moment.js"];
+  },
   getStyles: function () {
     return ["MMM-OneDrive.css"];
   },
