@@ -200,14 +200,14 @@ const NodeHeleprObject = {
     const notExpiredCachePhotoList = cachePhotoListDt && (Date.now() - cachePhotoListDt.getTime() < ONE_DAY);
     this.log_debug("notExpiredCachePhotoList", { cachePhotoListDt, notExpiredCachePhotoList });
     if (notExpiredCachePhotoList && fs.existsSync(this.CACHE_PHOTOLIST_PATH)) {
-      this.log_info("Loading cached albumns list");
+      this.log_info("Loading cached list");
       try {
         const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
         this.localPhotoList = JSON.parse(data.toString());
         if (this.config.sort === "random") {
           shuffle(this.localPhotoList);
         }
-        this.log_debug("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
+        this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
         await this.prepAndSendChunk(5); // only 5 for extra fast startup
       } catch (err) {
         this.log_error("unable to load photo list cache", err);
@@ -217,11 +217,10 @@ const NodeHeleprObject = {
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
-    if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
-      return;
-      // await sleep(30000 - (new Date() - this.lastScanTime));
-    }
-    this.lastScanTime = new Date();
+    // if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
+    //   return;
+    // }
+    // this.lastScanTime = new Date();
     this.log_debug("prepAndSendChunk");
 
     try {
@@ -258,6 +257,7 @@ const NodeHeleprObject = {
       } else {
         this.log_error("couldn't send ", list.length, " pics");
       }
+    this.log_info("prepAndSendChunk done");
     } catch (err) {
       this.log_error("failed to refresh and send chunk: ");
       this.log_error(error_to_string(err));

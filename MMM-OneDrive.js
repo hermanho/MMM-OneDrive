@@ -149,6 +149,9 @@ Module.register("MMM-OneDrive", {
     let target = this.scanned[this.index];
     switch (target.mimeType) {
       case "image/heic": {
+        if (!target._bufferFilename) {
+          throw new Error("Failed to process HEIC image");
+        }
         const url = `modules/MMM-OneDrive/cache/${target._bufferFilename}`;
         this.render(url, target);
         // let url = target._buffer;
@@ -176,8 +179,8 @@ Module.register("MMM-OneDrive", {
     let hidden = document.createElement("img");
     const _this = this;
     hidden.onerror = (event, source, lineno, colno, error) => {
-      console.error("[MMM-OneDrive] hidden.onerror", event);
       const errObj = { url, event, source, lineno, colno, error };
+      console.error("[MMM-OneDrive] hidden.onerror", errObj);
       this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
     };
     hidden.onload = () => {

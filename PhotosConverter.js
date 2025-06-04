@@ -2,9 +2,9 @@ const convert = require('heic-convert');
 
 /**
  * 
- * @param {string} url 
+ * @param {{id: string, filename: string, url: string}} param0
  */
-const convertHEIC = async (url) => {
+const convertHEIC = async ({ id, filename, url }) => {
   try {
     const resp = await fetch(url);
     const inputBuffer = Buffer.from(await resp.arrayBuffer());
@@ -15,9 +15,9 @@ const convertHEIC = async (url) => {
     });
     return Buffer.from(outputBuffer);
   } catch (err) {
-    console.error("Error in convertHEIC for url: ", url);
+    console.error('Error in convertHEIC', { id, filename, url });
     console.error(err?.stack || err);
-    throw err;;
+    throw err;
   }
 };
 

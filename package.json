@@ -38,5 +38,10 @@
   },
   "engines": {
     "node": ">=18"
+  },
+  "overrides": {
+    "heic-decode": {
+      "libheif-js": "^1.18.2"
+    }
   }
 }
