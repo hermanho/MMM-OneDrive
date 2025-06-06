@@ -1,9 +1,7 @@
-import { Config, ConfigTransformed } from "../types/config";
+import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import { convertHEIC } from "./photosConverter";
-import type momentLib from "moment";
-
-declare const Log: any
-declare const moment: (m: momentLib.MomentInput) => momentLib.Moment;
+import moment from "moment";
+import * as Log from 'logger';
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -113,12 +111,12 @@ Module.register<Config>("MMM-OneDrive", {
       current.textContent = "";
     }
     if (noti === "UPDATE_STATUS") {
-      let info = document.getElementById("ONEDRIVE_PHOTO_INFO");
+      const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
       info.innerHTML = String(payload);
     }
   },
 
-  notificationReceived: function (noti, payload, sender) {
+  notificationReceived: function (noti, payload, _sender) {
     if (noti === "ONEDRIVE_PHOTO_NEXT") {
       this.updatePhotos();
     }
@@ -140,7 +138,7 @@ Module.register<Config>("MMM-OneDrive", {
     }
     if (this.suspended) {
       this.sendSocketNotification("MODULE_SUSPENDED_SKIP_UPDATE", undefined);
-      let info = document.getElementById("ONEDRIVE_PHOTO_INFO");
+      const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
       info.innerHTML = "";
       return;
     }
@@ -149,7 +147,7 @@ Module.register<Config>("MMM-OneDrive", {
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    let target = this.scanned[this.index];
+    const target = this.scanned[this.index];
     switch (target.mimeType) {
       case "image/heic": {
         convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
@@ -160,7 +158,7 @@ Module.register<Config>("MMM-OneDrive", {
         break;
       }
       default: {
-        let url = target.baseUrl;
+        const url = target.baseUrl;
         this.ready(url, target);
       }
     }
@@ -177,22 +175,21 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   ready: function (url, target) {
-    let hidden = document.createElement("img");
-    const _this = this;
+    const hidden = document.createElement("img");
     hidden.onerror = (event, source, lineno, colno, error) => {
       const errObj = { url, event, source, lineno, colno, error };
       console.error("[MMM-OneDrive] hidden.onerror", errObj);
       this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
     };
     hidden.onload = () => {
-      _this.render(url, target);
+      this.render(url, target);
     };
     hidden.src = url;
   },
 
   render: function (url, target) {
-    let back = document.getElementById("ONEDRIVE_PHOTO_BACK");
-    let current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+    const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
+    const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
@@ -200,10 +197,10 @@ Module.register<Config>("MMM-OneDrive", {
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     const album = this.albums.find((a) => a.id === target._albumId);
     if (this.config.autoInfoPosition) {
-      let op = (album, target) => {
-        let now = new Date();
-        let q = Math.floor(now.getMinutes() / 15);
-        let r = [
+      let op: AutoInfoPositionFunction = (_album, _target) => {
+        const now = new Date();
+        const q = Math.floor(now.getMinutes() / 15);
+        const r = [
           [0, "none", "none", 0],
           ["none", "none", 0, 0],
           ["none", 0, 0, "none"],
@@ -221,16 +218,16 @@ Module.register<Config>("MMM-OneDrive", {
       info.style.setProperty("--right", String(right));
     }
     info.innerHTML = "";
-    let albumCover = document.createElement("div");
+    const albumCover = document.createElement("div");
     albumCover.classList.add("albumCover");
     albumCover.style.backgroundImage = `url(modules/MMM-OneDrive/cache/${album.id})`;
-    let albumTitle = document.createElement("div");
+    const albumTitle = document.createElement("div");
     albumTitle.classList.add("albumTitle");
     albumTitle.innerHTML = album.title;
-    let photoTime = document.createElement("div");
+    const photoTime = document.createElement("div");
     photoTime.classList.add("photoTime");
-    photoTime.innerHTML = this.config.timeFormat === "relative" ? moment(target.mediaMetadata.creationTime).fromNow() : moment(target.mediaMetadata.creationTime).format(this.config.timeFormat);
-    let infoText = document.createElement("div");
+    photoTime.innerHTML = this.config.timeFormat === "relative" ? moment(target.mediaMetadata.dateTimeOriginal).fromNow() : moment(target.mediaMetadata.dateTimeOriginal).format(this.config.timeFormat);
+    const infoText = document.createElement("div");
     infoText.classList.add("infoText");
 
     info.appendChild(albumCover);
@@ -241,11 +238,11 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   getDom: function () {
-    let wrapper = document.createElement("div");
+    const wrapper = document.createElement("div");
     wrapper.id = "ONEDRIVE_PHOTO";
-    let back = document.createElement("div");
+    const back = document.createElement("div");
     back.id = "ONEDRIVE_PHOTO_BACK";
-    let current = document.createElement("div");
+    const current = document.createElement("div");
     current.id = "ONEDRIVE_PHOTO_CURRENT";
     if (this.data.position.search("fullscreen") === -1) {
       if (this.config.showWidth) wrapper.style.width = this.config.showWidth + "px";
@@ -254,7 +251,7 @@ Module.register<Config>("MMM-OneDrive", {
     current.addEventListener("animationend", () => {
       current.classList.remove("animated");
     });
-    let info = document.createElement("div");
+    const info = document.createElement("div");
     info.id = "ONEDRIVE_PHOTO_INFO";
     info.innerHTML = "Loading...";
     wrapper.appendChild(back);

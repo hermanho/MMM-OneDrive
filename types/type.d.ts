@@ -3,7 +3,7 @@ interface OneDriveMediaItem {
   baseUrl: string;
   mimeType: string;
   mediaMetadata: {
-    creationTime: string;
+    dateTimeOriginal: string;
     width: string;
     height: string;
     photo: {

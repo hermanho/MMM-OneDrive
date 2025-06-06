@@ -1,3 +1,4 @@
+export type AutoInfoPositionFunction = boolean | ((album: string, target: string) => (number | string)[]) | null;
 export type Config = {
   albums: (string | RegExp)[];
   updateInterval: number;

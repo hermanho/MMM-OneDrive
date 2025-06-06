@@ -1,11 +1,10 @@
 "use strict";
 
 const EventEmitter = require("events");
-const { writeFile } = require("fs/promises");
 const crypto = require("crypto");
 const { Client } = require('@microsoft/microsoft-graph-client');
 const { LogLevel } = require("@azure/msal-node");
-const path = require("path");
+const ExifReader = require('exifreader');
 const Log = require("logger");
 const { error_to_string } = require("./error_to_string");
 const { msalConfig, protectedResources } = require("./msal/authConfig");
@@ -83,10 +82,9 @@ class OneDrivePhotos extends EventEmitter {
 
   async onAuthReady() {
     const auth = new Auth(this.#debug);
-    const _this = this;
     return new Promise((resolve, reject) => {
       auth.on("ready", async () => {
-        _this.log("onAuthReady ready");
+        this.log("onAuthReady ready");
         const authProvider = auth.AuthProvider;
         const tokenRequest = {
           scopes: protectedResources.graphMe.scopes,
@@ -94,19 +92,19 @@ class OneDrivePhotos extends EventEmitter {
         };
         try {
           const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
-          _this.log("onAuthReady token responded");
+          this.log("onAuthReady token responded");
           this.emit("authSuccess");
-          _this.#graphClient = Client.init({
+          this.#graphClient = Client.init({
             authProvider: (done) => {
               done(null, tokenResponse.accessToken);
             },
           });
           const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-          _this.#userId = graphResponse.id;
-          _this.log("onAuthReady done");
+          this.#userId = graphResponse.id;
+          this.log("onAuthReady done");
           resolve();
         } catch (err) {
-          _this.logError("onAuthReady error", err);
+          this.logError("onAuthReady error", err);
           reject(err);
         }
       });
@@ -166,6 +164,7 @@ class OneDrivePhotos extends EventEmitter {
           await sleep(500);
           return await getAlbum(response["@odata.nextLink"]);
         } else {
+          this.logDebug("founded albums: ", found);
           return list;
         }
       } catch (err) {
@@ -201,6 +200,23 @@ class OneDrivePhotos extends EventEmitter {
     }
   }
 
+  /**
+   * @param {string} imageUrl
+   * @returns {Promise<ExifReader.Tags>} EXIF data
+   */
+  async getEXIF(imageUrl) {
+    try {
+      const response = await fetch(imageUrl);
+      if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
+      const buffer = Buffer.from(await response.arrayBuffer());
+      const exifTags = ExifReader.load(buffer);
+      return exifTags;
+    } catch (err) {
+      this.logError("getEXIF error:", err);
+      return {};
+    }
+  }
+
   async getImageFromAlbum(albumId, isValid = null, maxNum = 99999) {
     await this.onAuthReady();
     let url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
@@ -214,7 +230,7 @@ class OneDrivePhotos extends EventEmitter {
      * @param {string} pageUrl
      * @returns {Promise<OneDriveMediaItem[]>} DriveItem
      */
-    const getImage = async (pageUrl) => {
+    const getImages = async (pageUrl) => {
       this.log("Indexing photos now. total: ", list.length);
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
@@ -230,12 +246,15 @@ class OneDrivePhotos extends EventEmitter {
               mimeType: item.file?.mimeType,
               baseUrl: item['@microsoft.graph.downloadUrl'],
               filename: item.name,
-              mediaMetadata: {},
+              mediaMetadata: {
+                dateTimeOriginal: item.photo?.takenDateTime
+                  || item.fileSystemInfo?.createdDateTime
+                  || item.fileSystemInfo?.lastModifiedDateTime,
+              },
               parentReference: item.parentReference,
             };
             if (list.length < maxNum) {
               if (item.image) {
-                itemVal.mediaMetadata.creationTime = item.fileSystemInfo?.createdDateTime;
                 itemVal.mediaMetadata.width = item.image.width;
                 itemVal.mediaMetadata.height = item.image.height;
               }
@@ -250,11 +269,23 @@ class OneDrivePhotos extends EventEmitter {
                 };
               }
               if (item.video) {
-                itemVal.mediaMetadata.creationTime = item.fileSystemInfo?.createdDateTime;
                 itemVal.mediaMetadata.width = item.video.width;
                 itemVal.mediaMetadata.height = item.video.height;
                 itemVal.mediaMetadata.video = item.video;
               }
+
+              if (!item.photo?.takenDateTime) {
+                const exifTags = await this.getEXIF(itemVal.baseUrl);
+                if (exifTags && exifTags['DateTimeOriginal']) {
+                  let dt = exifTags['DateTimeOriginal'].description;
+                  // Convert 'YYYY:MM:DD HH:mm:ss' to ISO 8601 'YYYY-MM-DDTHH:mm:ss'
+                  if (typeof dt === 'string' && dt.length > 0 && /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)) {
+                    dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, '$1-$2-$3T$4');
+                  }
+                  itemVal.mediaMetadata.dateTimeOriginal = dt;
+                }
+              }
+
               if (typeof isValid === "function") {
                 if (isValid(itemVal)) list.push(itemVal);
               } else {
@@ -267,7 +298,7 @@ class OneDrivePhotos extends EventEmitter {
           } else {
             if (response["@odata.nextLink"]) {
               await sleep(500);
-              return getImage(response["@odata.nextLink"]);
+              return getImages(response["@odata.nextLink"]);
             } else {
               return list; // all found but lesser than maxNum
             }
@@ -281,16 +312,15 @@ class OneDrivePhotos extends EventEmitter {
         throw err;
       }
     };
-    return getImage(url);
+    return getImages(url);
   }
 
   /**
    * 
    * @param {OneDriveMediaItem[]} items
-   * @param {string} cachePath
    * @returns {OneDriveMediaItem[]} items
    */
-  async batchRequestRefresh(items, cachePath) {
+  async batchRequestRefresh(items) {
     if (items.length <= 0) {
       return [];
     }
@@ -302,7 +332,7 @@ class OneDrivePhotos extends EventEmitter {
      * @type {[OneDriveMediaItem[]]}
      */
     const chunkGroups = chunk(items, 20);
-    for (let grp of chunkGroups) {
+    for (const grp of chunkGroups) {
       const requestsValue = grp.filter(i => i.item?.parentReference).map((item, i) => ({
         id: i,
         method: "GET",

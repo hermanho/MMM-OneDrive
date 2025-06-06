@@ -35,7 +35,6 @@ const NodeHeleprObject = {
     this.localPhotoPntr = 0;
     this.lastLocalPhotoPntr = 0;
     this.queue = null;
-    this.uploadAlbumId;
     this.initializeTimer = null;
 
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selecetedAlbumsCache.json");
@@ -47,9 +46,6 @@ const NodeHeleprObject = {
     switch (notification) {
       case "INIT":
         this.initializeAfterLoading(payload);
-        break;
-      case "UPLOAD":
-        this.upload(payload);
         break;
       case "IMAGE_LOAD_FAIL":
         {
@@ -96,20 +92,6 @@ const NodeHeleprObject = {
 
   log_warn: function (...args) {
     Log.warn("[ONEDRIVE] [node_helper]", ...args);
-  },
-
-  upload: async function (path) {
-    if (!this.uploadAlbumId) {
-      this.log_info("No uploadable album exists.");
-      return;
-    }
-    let uploadToken = await oneDrivePhotosInstance.upload(path);
-    if (uploadToken) {
-      await oneDrivePhotosInstance.create(uploadToken, this.uploadAlbumId);
-      this.log_info("Upload completed.");
-    } else {
-      this.log_error("Upload Fails.");
-    }
   },
 
   initializeAfterLoading: function (config) {
@@ -232,15 +214,13 @@ const NodeHeleprObject = {
       let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.localPhotoPntr, 20); //20 is api limit
       this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
 
-      const cachePath = this.path + "/cache/";
-
       /**
        * refresh them
        * @type {OneDriveMediaItem[]}
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
+        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh));
       }
 
       if (list.length > 0) {
@@ -372,7 +352,7 @@ const NodeHeleprObject = {
       let data = photo.mediaMetadata;
       if (data.hasOwnProperty("video")) return false;
       if (!data.hasOwnProperty("photo")) return false;
-      let ct = moment(data.creationTime);
+      let ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
       if (condition.minWidth && Number(condition.minWidth) > Number(data.width)) return false;
@@ -384,17 +364,10 @@ const NodeHeleprObject = {
       if (condition.maxWHRatio && Number(condition.maxWHRatio) < whr) return false;
       return true;
     };
-    // let sort = (a, b) => {
-    //   let at = moment(a.mediaMetadata.creationTime);
-    //   let bt = moment(b.mediaMetadata.creationTime);
-    //   if (at.isBefore(bt) && this.config.sort === "new") return 1;
-    //   if (at.isAfter(bt) && this.config.sort === "old") return 1;
-    //   return -1;
-    // };
     /** @type {OneDriveMediaItem[]} */
     let photos = [];
     try {
-      for (let album of this.selecetedAlbums) {
+      for (const album of this.selecetedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
         let list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
         list.forEach((i) => {
@@ -406,8 +379,8 @@ const NodeHeleprObject = {
       if (photos.length > 0) {
         if (this.config.sort === "new" || this.config.sort === "old") {
           photos.sort((a, b) => {
-            let at = moment(a.mediaMetadata.creationTime);
-            let bt = moment(b.mediaMetadata.creationTime);
+            let at = moment(a.mediaMetadata.dateTimeOriginal);
+            let bt = moment(b.mediaMetadata.dateTimeOriginal);
             if (at.isBefore(bt) && this.config.sort === "new") return 1;
             if (at.isAfter(bt) && this.config.sort === "old") return 1;
             return -1;
