@@ -257,7 +257,7 @@ const NodeHeleprObject = {
       } else {
         this.log_error("couldn't send ", list.length, " pics");
       }
-    this.log_info("prepAndSendChunk done");
+      this.log_info("prepAndSendChunk done");
     } catch (err) {
       this.log_error("failed to refresh and send chunk: ");
       this.log_error(error_to_string(err));

@@ -1,8 +1,10 @@
 import jsdoc from "eslint-plugin-jsdoc";
 import globals from "globals";
 import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
 
-export default [
+export default defineConfig([
+    globalIgnores(["./MMM-OneDrive.js"]),
     js.configs.recommended,
     jsdoc.configs['flat/recommended'],
     jsdoc.configs['flat/recommended-typescript-flavor'],
@@ -19,6 +21,8 @@ export default [
                 MM: true,
                 Module: true,
                 moment: true,
+                define: true,
+                PhotosConverter: true,
             },
 
             ecmaVersion: 13,
@@ -50,4 +54,4 @@ export default [
             semi: "error",
         },
     },
-];
+]);

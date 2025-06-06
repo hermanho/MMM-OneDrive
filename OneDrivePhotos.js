@@ -326,15 +326,6 @@ class OneDrivePhotos extends EventEmitter {
       }
     }
 
-    this.log("Scanning HEIC photos to convert");
-    const heicPhotos = items.filter(i => i.mimeType === "image/heic" && i.baseUrl);
-    for (let photo of heicPhotos) {
-      const buf = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
-      const cacheFilename = encodeURI(path.join(cachePath, photo.id + "-convert.jpg"));
-      await writeFile(cacheFilename, buf);
-      photo._buffer = cacheFilename;
-      photo._bufferFilename = photo.id + "-convert.jpg";
-    }
     this.log("Batch request refresh done, total: ", items.length);
 
     return items;
