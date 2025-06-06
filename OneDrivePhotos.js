@@ -92,7 +92,7 @@ class OneDrivePhotos extends EventEmitter {
         };
         try {
           const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
-          this.log("onAuthReady token responded");
+          // this.log("onAuthReady token responded");
           this.emit("authSuccess");
           this.#graphClient = Client.init({
             authProvider: (done) => {
@@ -221,6 +221,7 @@ class OneDrivePhotos extends EventEmitter {
     await this.onAuthReady();
     let url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
 
+    this.log("Indexing photos. album:", albumId);
     /**
      * @type {OneDriveMediaItem[]}
      */
@@ -231,7 +232,6 @@ class OneDrivePhotos extends EventEmitter {
      * @returns {Promise<OneDriveMediaItem[]>} DriveItem
      */
     const getImages = async (pageUrl) => {
-      this.log("Indexing photos now. total: ", list.length);
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
         let response = await this.request('getImage', pageUrl, "get");
@@ -283,6 +283,7 @@ class OneDrivePhotos extends EventEmitter {
                     dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, '$1-$2-$3T$4');
                   }
                   itemVal.mediaMetadata.dateTimeOriginal = dt;
+                  itemVal.mediaMetadata.manualExtractEXIF = true;
                 }
               }
 
@@ -294,11 +295,12 @@ class OneDrivePhotos extends EventEmitter {
             }
           }
           if (list.length >= maxNum) {
+            this.log("Indexing photos done, found: ", list.length);
             return list; // full with maxNum
           } else {
             if (response["@odata.nextLink"]) {
               await sleep(500);
-              return getImages(response["@odata.nextLink"]);
+              return await getImages(response["@odata.nextLink"]);
             } else {
               return list; // all found but lesser than maxNum
             }
@@ -312,7 +314,7 @@ class OneDrivePhotos extends EventEmitter {
         throw err;
       }
     };
-    return getImages(url);
+    return await getImages(url);
   }
 
   /**

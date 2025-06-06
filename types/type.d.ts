@@ -4,6 +4,7 @@ interface OneDriveMediaItem {
   mimeType: string;
   mediaMetadata: {
     dateTimeOriginal: string;
+    manualExtractEXIF: boolean | null;
     width: string;
     height: string;
     photo: {
@@ -25,5 +26,4 @@ interface OneDriveMediaItem {
   filename: string;
   _albumId: string;
   _albumTitle: string;
-  _buffer: ArrayBufferLike
 }

@@ -227,13 +227,16 @@ const NodeHeleprObject = {
         // update the localList
         this.localPhotoList.splice(this.localPhotoPntr, list.length, ...list);
 
+        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
+        this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+
         // send updated pics
         this.sendSocketNotification("MORE_PICS", list);
 
         // update pointer
         this.lastLocalPhotoPntr = this.localPhotoPntr;
         this.localPhotoPntr = this.localPhotoPntr + list.length;
-        this.log_debug("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
       } else {
         this.log_error("couldn't send ", list.length, " pics");
       }
@@ -393,8 +396,6 @@ const NodeHeleprObject = {
         this.localPhotoPntr = 0;
         this.lastLocalPhotoPntr = 0;
         this.prepAndSendChunk(50).then();
-        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(photos, null, 4), "Photo list cache");
-        this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
       } else {
         this.log_warn(`photos.length is 0`);
       }
