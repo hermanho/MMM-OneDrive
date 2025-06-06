@@ -10,7 +10,6 @@ const Log = require("logger");
 const { error_to_string } = require("./error_to_string");
 const { msalConfig, protectedResources } = require("./msal/authConfig");
 const AuthProvider = require("./msal/AuthProvider");
-const { convertHEIC } = require("./PhotosConverter");
 const sleep = require("./sleep");
 
 const chunk = (arr, size) =>
