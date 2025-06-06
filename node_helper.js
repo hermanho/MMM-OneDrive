@@ -21,7 +21,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 /**
  * @type {OneDrivePhotos}
  */
-let OneDrivePhoto = null;
+let oneDrivePhotosInstance = null;
 
 const NodeHeleprObject = {
   start: function () {
@@ -64,8 +64,8 @@ const NodeHeleprObject = {
         break;
       case "IMAGE_LOADED":
         {
-          const { id, index } = payload;
-          this.log_debug("Image loaded:", `${this.lastLocalPhotoPntr} + ${index}`, id);
+          const { id, filename, index } = payload;
+          this.log_debug("Image loaded:", { index: this.lastLocalPhotoPntr + index, id, filename });
         }
         break;
       case "NEED_MORE_PICS":
@@ -103,9 +103,9 @@ const NodeHeleprObject = {
       this.log_info("No uploadable album exists.");
       return;
     }
-    let uploadToken = await OneDrivePhoto.upload(path);
+    let uploadToken = await oneDrivePhotosInstance.upload(path);
     if (uploadToken) {
-      await OneDrivePhoto.create(uploadToken, this.uploadAlbumId);
+      await oneDrivePhotosInstance.create(uploadToken, this.uploadAlbumId);
       this.log_info("Upload completed.");
     } else {
       this.log_error("Upload Fails.");
@@ -116,14 +116,14 @@ const NodeHeleprObject = {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
     if (!this.config.scanInterval || this.config.scanInterval < 1000 * 60 * 10) this.config.scanInterval = 1000 * 60 * 10;
-    OneDrivePhoto = new OneDrivePhotos({
+    oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
     });
-    OneDrivePhoto.on("errorMessage", (message) => {
+    oneDrivePhotosInstance.on("errorMessage", (message) => {
       this.sendSocketNotification("ERROR", message);
     });
-    OneDrivePhoto.on("authSuccess", () => {
+    oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
     });
 
@@ -240,7 +240,7 @@ const NodeHeleprObject = {
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await OneDrivePhoto.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
+        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh), cachePath);
       }
 
       if (list.length > 0) {
@@ -267,10 +267,7 @@ const NodeHeleprObject = {
   /** @returns {microsoftgraph.DriveItem[]} album */
   getAlbums: async function () {
     try {
-      let r = await OneDrivePhoto.getAlbums();
-      r.forEach(item => {
-        item.title = item.name;
-      });
+      const r = await oneDrivePhotosInstance.getAlbums();
       const configHash = await this.calculateConfigHash();
       if (configHash) {
         await this.saveCacheConfig("CACHE_HASH", configHash);
@@ -341,6 +338,12 @@ const NodeHeleprObject = {
     selecetedAlbums = Set(selecetedAlbums).toArray();
     this.log_info("Finish Album scanning. Properly scanned :", selecetedAlbums.length);
     this.log_info("Albums:", selecetedAlbums.map((a) => a.title).join(", "));
+
+    for (let album of selecetedAlbums) {
+      album.coverPhotoBaseUrl = await oneDrivePhotosInstance.getAlbumThumbnail(album);
+    }
+
+
     this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selecetedAlbums, null, 4), "Album list cache");
     this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
@@ -393,7 +396,7 @@ const NodeHeleprObject = {
     try {
       for (let album of this.selecetedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
-        let list = await OneDrivePhoto.getImageFromAlbum(album.id, photoCondition);
+        let list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
         list.forEach((i) => {
           i._albumTitle = album.title;
         });

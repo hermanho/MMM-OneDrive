@@ -130,11 +130,14 @@ class OneDrivePhotos extends EventEmitter {
   }
 
   async getAlbums() {
-    let albums = await this.getAlbumType();
+    const albums = await this.getAlbumLoop();
+    albums.forEach(item => {
+      item.title = item.name;
+    });
     return albums;
   }
 
-  async getAlbumType() {
+  async getAlbumLoop() {
     await this.onAuthReady();
     let url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
     /** @type {microsoftgraph.DriveItem[]} */
@@ -143,7 +146,7 @@ class OneDrivePhotos extends EventEmitter {
     /**
      * 
      * @param {string} pageUrl 
-     * @returns {microsoftgraph.DriveItem[]} DriveItem
+     * @returns {Promise<microsoftgraph.DriveItem[]>} DriveItem
      */
     const getAlbum = async (pageUrl) => {
       this.log("Getting Album info chunks.");
@@ -158,13 +161,10 @@ class OneDrivePhotos extends EventEmitter {
           arrayValue.map(a => `${a.name}\t${a.id}`).forEach(s => this.logDebug(s));
           found += arrayValue.length;
           list = list.concat(arrayValue);
-          for (let album of arrayValue) {
-            album.coverPhotoBaseUrl = await this.getAlbumThumbnail(album);
-          }
         }
         if (response["@odata.nextLink"]) {
           await sleep(500);
-          return getAlbum(response["@odata.nextLink"]);
+          return await getAlbum(response["@odata.nextLink"]);
         } else {
           return list;
         }
@@ -174,7 +174,7 @@ class OneDrivePhotos extends EventEmitter {
         throw err;
       }
     };
-    return getAlbum(url);
+    return await getAlbum(url);
   }
 
   /**

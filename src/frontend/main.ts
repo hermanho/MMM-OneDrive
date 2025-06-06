@@ -237,7 +237,7 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
-    this.sendSocketNotification("IMAGE_LOADED", { id: target.id, index: this.index });
+    this.sendSocketNotification("IMAGE_LOADED", { id: target.id, filename: target.filename, index: this.index });
   },
 
   getDom: function () {
