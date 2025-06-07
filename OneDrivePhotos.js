@@ -265,7 +265,7 @@ class OneDrivePhotos extends EventEmitter {
                   focalLength: item.photo.focalLength,
                   apertureFNumber: item.photo.fNumber,
                   isoEquivalent: item.photo.iso,
-                  exposureTime: (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + 's',
+                  exposureTime: item.photo.exposureNumerator && item.photo.exposureDenominator ? (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + 's' : null,
                 };
               }
               if (item.video) {

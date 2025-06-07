@@ -8,12 +8,12 @@ interface OneDriveMediaItem {
     width: string;
     height: string;
     photo: {
-      cameraMake: string;
-      cameraModel: string;
-      focalLength: number;
-      apertureFNumber: number;
-      isoEquivalent: number;
-      exposureTime: string;
+      cameraMake?: string;
+      cameraModel?: string;
+      focalLength?: number;
+      apertureFNumber?: number;
+      isoEquivalent?: number;
+      exposureTime?: string;
     };
   };
   parentReference: {
