@@ -2,7 +2,13 @@ import convert from 'heic-convert/browser';
 
 declare const Log: any
 
-export const convertHEIC = async ({ id, filename, url }) => {
+interface ConvertHEICParams {
+  id: string;
+  filename: string;
+  url: string;
+}
+
+export const convertHEIC = async ({ id, filename, url }: ConvertHEICParams) => {
   try {
     Log.debug('convertHEIC', { id, filename, url });
     const d = new Date().valueOf();
