@@ -1,5 +1,32 @@
 # MMM-OneDrive Change Log
 
+**`[1.4.0] - 2025/06/09`**
+- Fixed: HEIC image cannot be loaded #16
+- Feat: Convert frontend code to typescript
+- Build(deps): dependencies update:  
+  - "exifreader": "^4.31.0",
+  - "@rollup/plugin-commonjs": "^25.0.7",
+  - "@rollup/plugin-node-resolve": "^15.2.3",
+  - "@rollup/plugin-terser": "^0.4.4",
+  - "@rollup/plugin-typescript": "^11.1.6",
+  - "eslint": "^9.28.0",
+  - "eslint-config-prettier": "^10.1.5",
+  - "eslint-plugin-prettier": "^5.4.1",
+  - "globals": "^15.13.0",
+  - "prettier": "^3.2.4",
+  - "rollup": "^4.41.2",
+  - "rollup-plugin-banner2": "^1.3.1",
+  - "typescript": "^5.3.3",
+  - "typescript-eslint": "^8.33.1"
+  - "@babel/runtime": "7.26.10"
+
+**`[1.3.0] - 2024/12/04`**
+- Fixed: no token auth flow when first time
+- Feat:
+  - add OAuth2.0 device code flow
+  - add more logging
+  - update document
+
 **`[1.2.0] - 2024/12/04`**
 - Fixed: The resource could not be found when getAlbumType #10
 - Build(deps): dependencies update:

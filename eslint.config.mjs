@@ -1,8 +1,20 @@
 import jsdoc from "eslint-plugin-jsdoc";
 import globals from "globals";
 import js from "@eslint/js";
+import { defineConfig, globalIgnores } from "eslint/config";
+import eslint from '@eslint/js';
+import tseslint from 'typescript-eslint';
 
-export default [
+export default defineConfig([
+    globalIgnores(["./MMM-OneDrive.js"]),
+    eslint.configs.recommended,
+    tseslint.configs.recommended,
+    {
+        files: ["*.js"],
+        rules: {
+            "@typescript-eslint/no-require-imports": "off",
+        },
+    },
     js.configs.recommended,
     jsdoc.configs['flat/recommended'],
     jsdoc.configs['flat/recommended-typescript-flavor'],
@@ -19,6 +31,8 @@ export default [
                 MM: true,
                 Module: true,
                 moment: true,
+                define: true,
+                PhotosConverter: true,
             },
 
             ecmaVersion: 13,
@@ -39,7 +53,6 @@ export default [
                 exports: "always-multiline",
                 functions: "only-multiline",
             }],
-
             eqeqeq: "error",
             "no-prototype-builtins": "off",
             "no-unused-vars": "off",
@@ -48,6 +61,10 @@ export default [
             "jsdoc/require-returns": "off",
             "jsdoc/require-param-description": "off",
             semi: "error",
+            "@typescript-eslint/no-unused-vars": [
+                "error",
+                { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
+            ],
         },
     },
-];
+]);

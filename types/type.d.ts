@@ -3,16 +3,17 @@ interface OneDriveMediaItem {
   baseUrl: string;
   mimeType: string;
   mediaMetadata: {
-    creationTime: string;
+    dateTimeOriginal: string;
+    manualExtractEXIF: boolean | null;
     width: string;
     height: string;
     photo: {
-      cameraMake: string;
-      cameraModel: string;
-      focalLength: number;
-      apertureFNumber: number;
-      isoEquivalent: number;
-      exposureTime: string;
+      cameraMake?: string;
+      cameraModel?: string;
+      focalLength?: number;
+      apertureFNumber?: number;
+      isoEquivalent?: number;
+      exposureTime?: string;
     };
   };
   parentReference: {
@@ -25,5 +26,4 @@ interface OneDriveMediaItem {
   filename: string;
   _albumId: string;
   _albumTitle: string;
-  _buffer: ArrayBufferLike
 }
