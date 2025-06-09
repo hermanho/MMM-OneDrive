@@ -29,7 +29,7 @@ const NodeHeleprObject = {
     this.config = {};
     this.scanTimer = null;
     /** @type {microsoftgraph.DriveItem} */
-    this.selecetedAlbums = [];
+    this.selectedAlbums = [];
     /** @type {OneDriveMediaItem[]} */
     this.localPhotoList = [];
     this.localPhotoPntr = 0;
@@ -37,7 +37,7 @@ const NodeHeleprObject = {
     this.queue = null;
     this.initializeTimer = null;
 
-    this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selecetedAlbumsCache.json");
+    this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
     this.CACHE_CONFIG = path.resolve(this.path, "cache", "config.json");
   },
@@ -169,11 +169,11 @@ const NodeHeleprObject = {
       this.log_info("Loading cached albumns list");
       try {
         const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
-        this.selecetedAlbums = JSON.parse(data.toString());
-        this.log_debug("successfully loaded selecetedAlbums");
-        this.sendSocketNotification("UPDATE_ALBUMS", this.selecetedAlbums); // for fast startup
+        this.selectedAlbums = JSON.parse(data.toString());
+        this.log_debug("successfully loaded selectedAlbums");
+        this.sendSocketNotification("UPDATE_ALBUMS", this.selectedAlbums); // for fast startup
       } catch (err) {
-        this.log_error("unable to load selecetedAlbums cache", err);
+        this.log_error("unable to load selectedAlbums cache", err);
       }
     }
 
@@ -279,7 +279,7 @@ const NodeHeleprObject = {
     this.queue = null;
     await this.getAlbumList();
     try {
-      if (this.selecetedAlbums.length > 0) {
+      if (this.selectedAlbums.length > 0) {
         this.photos = await this.getImageList();
         return true;
       } else {
@@ -300,7 +300,7 @@ const NodeHeleprObject = {
     /** 
      * @type {microsoftgraph.DriveItem[]} 
      */
-    let selecetedAlbums = [];
+    let selectedAlbums = [];
     for (let ta of this.albumsFilters) {
       const matches = albums.filter((a) => {
         if (ta instanceof RE2) {
@@ -315,22 +315,22 @@ const NodeHeleprObject = {
         this.log_warn(`Can't find "${ta instanceof RE2 ? ta.source : ta}" in your album list.`);
       }
       else {
-        selecetedAlbums.push(...matches);
+        selectedAlbums.push(...matches);
       }
     }
-    selecetedAlbums = Set(selecetedAlbums).toArray();
-    this.log_info("Finish Album scanning. Properly scanned :", selecetedAlbums.length);
-    this.log_info("Albums:", selecetedAlbums.map((a) => a.title).join(", "));
+    selectedAlbums = Set(selectedAlbums).toArray();
+    this.log_info("Finish Album scanning. Properly scanned :", selectedAlbums.length);
+    this.log_info("Albums:", selectedAlbums.map((a) => a.title).join(", "));
 
-    for (let album of selecetedAlbums) {
+    for (let album of selectedAlbums) {
       album.coverPhotoBaseUrl = await oneDrivePhotosInstance.getAlbumThumbnail(album);
     }
 
 
-    this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selecetedAlbums, null, 4), "Album list cache");
+    this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selectedAlbums, null, 4), "Album list cache");
     this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
-    for (let a of selecetedAlbums) {
+    for (let a of selectedAlbums) {
       if (a.coverPhotoBaseUrl) {
         let url = a.coverPhotoBaseUrl;
         let fpath = path.join(this.path, "cache", a.id);
@@ -339,9 +339,9 @@ const NodeHeleprObject = {
         await finished(Readable.fromWeb(response.body).pipe(file));
       }
     }
-    this.selecetedAlbums = selecetedAlbums;
+    this.selectedAlbums = selectedAlbums;
     this.log_info("getAlbumList done");
-    this.sendSocketNotification("INITIALIZED", selecetedAlbums);
+    this.sendSocketNotification("INITIALIZED", selectedAlbums);
   },
 
   getImageList: async function () {
@@ -370,7 +370,7 @@ const NodeHeleprObject = {
     /** @type {OneDriveMediaItem[]} */
     let photos = [];
     try {
-      for (const album of this.selecetedAlbums) {
+      for (const album of this.selectedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
         let list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
         list.forEach((i) => {
