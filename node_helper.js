@@ -199,10 +199,10 @@ const NodeHeleprObject = {
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
-    // if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
-    //   return;
-    // }
-    // this.lastScanTime = new Date();
+    if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
+      return;
+    }
+    this.lastScanTime = new Date();
     this.log_debug("prepAndSendChunk");
 
     try {
