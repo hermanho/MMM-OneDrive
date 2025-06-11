@@ -1,7 +1,8 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import { convertHEIC } from "./photosConverter";
 import moment from "moment";
-import * as Log from 'logger';
+import * as Log from "logger";
+import type { OneDriveMediaItem } from "../../types/type";
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -120,12 +121,9 @@ Module.register<Config>("MMM-OneDrive", {
     if (noti === "ONEDRIVE_PHOTO_NEXT") {
       this.updatePhotos();
     }
-    if (noti === "ONEDRIVE_PHOTO_PREVIOUS") {
-      this.updatePhotos(-2);
-    }
   },
 
-  updatePhotos: function (dir = 0) {
+  updatePhotos: function () {
     Log.debug("Updating photos..");
     this.firstScan = false;
 
@@ -139,30 +137,51 @@ Module.register<Config>("MMM-OneDrive", {
       info.innerHTML = "";
       return;
     }
-    this.index = this.index + dir; //only used for reversing
-    if (this.index < 0) this.index = this.scanned.length + this.index;
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    const target = this.scanned[this.index];
-    switch (target.mimeType) {
-      case "image/heic": {
-        convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
-          const blob = new Blob([buf]);
-          target.blobUrl = URL.createObjectURL(blob);
-          this.render(target.blobUrl, target);
-        });
+    let target: OneDriveMediaItem = this.scanned[this.index];
+
+    this.needMorePicsFlag = false;
+
+    // Skip expired baseUrl items, handle direction
+    const step = 1;
+    while (
+      target &&
+      target.baseUrlExpireDateTime &&
+      target.baseUrlExpireDateTime instanceof Date &&
+      !isNaN(target.baseUrlExpireDateTime.getTime()) &&
+      target.baseUrlExpireDateTime <= new Date()) {
+      this.index += step;
+      if (this.index >= this.scanned.length) {
+        this.index = 0;
+        this.needMorePicsFlag = true;
+        target = null;
         break;
       }
-      default: {
-        const url = target.baseUrl;
-        this.ready(url, target);
-      }
+      target = this.scanned[this.index];
     }
-    this.index++;
-    if (this.index >= this.scanned.length) {
-      this.index = 0;
-      this.needMorePicsFlag = true;
+
+    if (target) {
+      switch (target.mimeType) {
+        case "image/heic": {
+          convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
+            const blob = new Blob([buf]);
+            const blobUrl = URL.createObjectURL(blob);
+            this.render(blobUrl, target);
+          });
+          break;
+        }
+        default: {
+          const url = target.baseUrl;
+          this.ready(url, target);
+        }
+      }
+      this.index++;
+      if (this.index >= this.scanned.length) {
+        this.index = 0;
+        this.needMorePicsFlag = true;
+      }
     }
     if (this.needMorePicsFlag) {
       setTimeout(() => {
