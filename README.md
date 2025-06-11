@@ -108,6 +108,16 @@ autoInfoPosition: (album, photo)=> {
 
 ```
 
+
+## Toggle MMM-OneDrive module
+
+To toggle next and previous photos from other modules use the following codes:
+
+```js
+this.sendNotification('ONEDRIVE_PHOTO_NEXT', undefined);
+this.sendNotification('ONEDRIVE_PHOTO_PREVIOUS', undefined);
+```
+
 ## Tip
 
 - Not to show photo info : Add this into your `css/custom.css`.
@@ -183,5 +193,8 @@ autoInfoPosition: (album, photo)=> {
 
 ## Last Tested
 
-- MagicMirror : v2.26.0
-- node.js : required over v18.
+- node.js: required over v18.
+- MagicMirror: v2.31.0
+- Modules:
+  - MMM-ModuleScheduler [https://github.com/ianperrin/MMM-ModuleScheduler]
+  - MMM-MagicMover [https://github.com/Lavve/MMM-MagicMover]
