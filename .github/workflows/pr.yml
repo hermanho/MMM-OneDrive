@@ -33,3 +33,31 @@ jobs:
       - uses: sibiraj-s/action-eslint@v3
         with:
           annotations: true
+  check-build:
+    name: Check build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out Git repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Node.js dependencies
+        run: npm ci
+
+      - name: Build project
+        run: npm run build
+
+      - name: Check build output
+        run: |
+          if [ $(git status --porcelain | wc -l) -eq "0" ]; then
+            echo "  🟢 Git repo is clean."
+          else
+            echo "  🔴 Git repo dirty. Quit."
+            exit 1
+          fi
+
