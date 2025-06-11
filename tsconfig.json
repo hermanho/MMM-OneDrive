@@ -10,5 +10,9 @@
       "ESNext"
     ],
     "esModuleInterop": true
-  }
+  },
+  "include": [
+    "src",
+    "types"
+  ]
 }

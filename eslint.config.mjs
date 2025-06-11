@@ -2,25 +2,34 @@ import jsdoc from "eslint-plugin-jsdoc";
 import globals from "globals";
 import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
-import eslint from '@eslint/js';
-import tseslint from 'typescript-eslint';
+import eslint from "@eslint/js";
+import tseslint from "typescript-eslint";
+import stylistic from "@stylistic/eslint-plugin";
 
 export default defineConfig([
     globalIgnores(["./MMM-OneDrive.js"]),
     eslint.configs.recommended,
     tseslint.configs.recommended,
     {
-        files: ["*.js"],
+        files: ["**/*.js"],
         rules: {
             "@typescript-eslint/no-require-imports": "off",
         },
     },
+    {
+        files: ["**/*.test.ts", "tests/**"],
+        rules: {
+            "@typescript-eslint/no-explicit-any": "off",
+            "jsdoc/require-jsdoc": "off",
+        },
+    },
     js.configs.recommended,
-    jsdoc.configs['flat/recommended'],
-    jsdoc.configs['flat/recommended-typescript-flavor'],
+    jsdoc.configs["flat/recommended"],
+    jsdoc.configs["flat/recommended-typescript-flavor"],
     {
         plugins: {
             jsdoc,
+            "@stylistic": stylistic,
         },
 
         languageOptions: {
@@ -65,6 +74,7 @@ export default defineConfig([
                 "error",
                 { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
             ],
+            "@stylistic/quotes": ["error", "double"],
         },
     },
 ]);

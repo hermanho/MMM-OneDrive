@@ -1,9 +1,9 @@
-import banner2 from 'rollup-plugin-banner2';
-import commonjs from '@rollup/plugin-commonjs';
-import nodeResolve from '@rollup/plugin-node-resolve';
-import terser from '@rollup/plugin-terser';
-import typescript from '@rollup/plugin-typescript';
-import pkg from './package.json';
+import banner2 from "rollup-plugin-banner2";
+import commonjs from "@rollup/plugin-commonjs";
+import nodeResolve from "@rollup/plugin-node-resolve";
+import terser from "@rollup/plugin-terser";
+import typescript from "@rollup/plugin-typescript";
+import pkg from "./package.json";
 
 const bannerText = `/*! *****************************************************************************
   ${pkg.name}
@@ -21,16 +21,16 @@ const bannerText = `/*! ********************************************************
 `;
 export default [
   {
-    input: './src/frontend/main.ts',
-    external: ['logger', 'moment'],
-    plugins: [typescript({ module: 'ESNext' }), nodeResolve(), commonjs(), terser(), banner2(() => bannerText)],
+    input: "src/frontend/main.ts",
+    external: ["logger", "moment"],
+    plugins: [typescript({ module: "ESNext", include: ["src/**", "types/**"] }), nodeResolve(), commonjs(), terser(), banner2(() => bannerText)],
     output: {
       file: `./${pkg.main}`,
-      format: 'iife',
+      format: "iife",
       sourcemap: true,
       globals: {
-        logger: 'Log',
-        moment: 'moment',
+        logger: "Log",
+        moment: "moment",
       },
     },
   },

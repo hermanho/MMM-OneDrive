@@ -2,13 +2,12 @@
  * Copyright (c) Microsoft Corporation. All rights reserved.
  * Licensed under the MIT License.
  */
-const { ICachePlugin } = require('@azure/msal-node');
-const fs = require('fs');
+const fs = require("fs");
 
 /**
  * 
  * @param {string} CACHE_LOCATION 
- * @returns {ICachePlugin}
+ * @returns {import("@azure/msal-node").ICachePlugin}
  */
 const cachePlugin = (CACHE_LOCATION) => {
   const beforeCacheAccess = async (cacheContext) => {

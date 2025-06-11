@@ -1,0 +1,5 @@
+{
+  "search.exclude": {
+    "MMM-OneDrive.js*": true
+  }
+}

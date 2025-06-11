@@ -1,19 +1,23 @@
 "use strict";
 
+/**
+ * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
+ */
+
 const fs = require("fs");
 const { writeFile, readFile, mkdir } = require("fs/promises");
 const path = require("path");
 const moment = require("moment");
-const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { Readable } = require("stream");
 const { finished } = require("stream/promises");
 const { RE2 } = require("re2-wasm");
-const { Set } = require('immutable');
+const { Set } = require("immutable");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
+const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
-const { error_to_string } = require("./error_to_string");
+const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
@@ -23,17 +27,19 @@ const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
  */
 let oneDrivePhotosInstance = null;
 
-const NodeHeleprObject = {
+const nodeHelperObject = {
+  /** @type {OneDriveMediaItem[]} */
+  localPhotoList: [],
+  /** @type {number} */
+  localPhotoPntr: 0,
   start: function () {
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
     /** @type {microsoftgraph.DriveItem} */
     this.selectedAlbums = [];
-    /** @type {OneDriveMediaItem[]} */
     this.localPhotoList = [];
-    this.localPhotoPntr = 0;
-    this.lastLocalPhotoPntr = 0;
+    this.photoRefreshPointer = 0;
     this.queue = null;
     this.initializeTimer = null;
 
@@ -49,24 +55,28 @@ const NodeHeleprObject = {
         break;
       case "IMAGE_LOAD_FAIL":
         {
-          const { url, event, source, lineno, colno, error } = payload;
-          this.log_error("[ONEDRIVE] hidden.onerror", { event, source, lineno, colno });
+          const { url, event, source, lineno, colno, error, originalError, target } = payload;
+          this.log_error("[ONEDRIVE] hidden.onerror", { event, originalError, source, lineno, colno });
           if (error) {
             this.log_error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
           }
           this.log_error("Image loading fails. Check your network.:", url);
-          this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
+          if (target?.baseUrlExpireDateTime) {
+            this.log_error("Image baseUrlExpireDateTime:", target.baseUrlExpireDateTime);
+          }
+          // How many photos to load for 20 minutes?
+          // this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
       case "IMAGE_LOADED":
         {
-          const { id, filename, index } = payload;
-          this.log_debug("Image loaded:", { index: this.lastLocalPhotoPntr + index, id, filename });
+          this.log_debug("Image loaded:", payload);
         }
         break;
       case "NEED_MORE_PICS":
         {
           this.log_info("Used last pic in list");
+          // How many photos to load for 20 minutes?
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
@@ -94,7 +104,7 @@ const NodeHeleprObject = {
     Log.warn("[ONEDRIVE] [node_helper]", ...args);
   },
 
-  initializeAfterLoading: function (config) {
+  initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
     if (!this.config.scanInterval || this.config.scanInterval < 1000 * 60 * 10) this.config.scanInterval = 1000 * 60 * 10;
@@ -112,13 +122,13 @@ const NodeHeleprObject = {
     this.albumsFilters = [];
     for (let album of config.albums) {
       if (album.hasOwnProperty("source") && album.hasOwnProperty("flags")) {
-        this.albumsFilters.push(new RE2(album.source, album.flags + 'u'));
+        this.albumsFilters.push(new RE2(album.source, album.flags + "u"));
       } else {
         this.albumsFilters.push(album);
       }
     }
 
-    this.tryToIntitialize();
+    await this.tryToIntitialize();
   },
 
   tryToIntitialize: async function () {
@@ -145,7 +155,7 @@ const NodeHeleprObject = {
     if (!tokenStr) {
       return undefined;
     }
-    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + '\n' + tokenStr).digest("hex");
+    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + "\n" + tokenStr).digest("hex");
     return hash;
   },
 
@@ -199,20 +209,15 @@ const NodeHeleprObject = {
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
-    if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
-      return;
-    }
-    this.lastScanTime = new Date();
     this.log_debug("prepAndSendChunk");
 
     try {
       //find which ones to refresh
-      if (this.localPhotoPntr < 0 || this.localPhotoPntr >= this.localPhotoList.length) {
-        this.localPhotoPntr = 0;
-        this.lastLocalPhotoPntr = 0;
+      if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
+        this.photoRefreshPointer = 0;
       }
-      let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.localPhotoPntr, 20); //20 is api limit
-      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+      let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
+      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
 
       /**
        * refresh them
@@ -220,12 +225,12 @@ const NodeHeleprObject = {
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh));
+        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
       }
 
       if (list.length > 0) {
         // update the localList
-        this.localPhotoList.splice(this.localPhotoPntr, list.length, ...list);
+        this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
 
         this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
         this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
@@ -234,9 +239,8 @@ const NodeHeleprObject = {
         this.sendSocketNotification("MORE_PICS", list);
 
         // update pointer
-        this.lastLocalPhotoPntr = this.localPhotoPntr;
-        this.localPhotoPntr = this.localPhotoPntr + list.length;
-        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+        this.photoRefreshPointer = this.photoRefreshPointer + list.length;
+        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
       } else {
         this.log_error("couldn't send ", list.length, " pics");
       }
@@ -244,6 +248,7 @@ const NodeHeleprObject = {
     } catch (err) {
       this.log_error("failed to refresh and send chunk: ");
       this.log_error(error_to_string(err));
+      throw err;
     }
   },
 
@@ -280,7 +285,7 @@ const NodeHeleprObject = {
     await this.getAlbumList();
     try {
       if (this.selectedAlbums.length > 0) {
-        this.photos = await this.getImageList();
+        await this.getImageList();
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
@@ -368,7 +373,7 @@ const NodeHeleprObject = {
       return true;
     };
     /** @type {OneDriveMediaItem[]} */
-    let photos = [];
+    const photos = [];
     try {
       for (const album of this.selectedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
@@ -377,7 +382,7 @@ const NodeHeleprObject = {
           i._albumTitle = album.title;
         });
         this.log_info(`Got ${list.length} photo(s) from '${album.title}'`);
-        photos = photos.concat(list);
+        photos.push(...list);
       }
       if (photos.length > 0) {
         if (this.config.sort === "new" || this.config.sort === "old") {
@@ -392,17 +397,20 @@ const NodeHeleprObject = {
           shuffle(photos);
         }
         this.log_info(`Total indexed photos: ${photos.length}`);
-        this.localPhotoList = [...photos];
-        this.localPhotoPntr = 0;
-        this.lastLocalPhotoPntr = 0;
-        this.prepAndSendChunk(50).then();
+        this.localPhotoList = [...photos].map((photo, index) => {
+          photo._indexOfPhotos = index;
+          return photo;
+        });
+        if (this.photoRefreshPointer >= this.localPhotoList.length) {
+          this.photoRefreshPointer = 0;
+        }
+        await this.prepAndSendChunk(50);
       } else {
-        this.log_warn(`photos.length is 0`);
+        this.log_warn("photos.length is 0");
       }
-
-      return photos;
     } catch (err) {
       this.log_error(error_to_string(err));
+      throw err;
     }
   },
 
@@ -452,7 +460,7 @@ const NodeHeleprObject = {
         return undefined;
       }
     } catch (err) {
-      this.log_error(`unable to read Cache Config`);
+      this.log_error("unable to read Cache Config");
       this.log_error(error_to_string(err));
     }
   },
@@ -468,10 +476,10 @@ const NodeHeleprObject = {
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache config JSON");
       this.log_debug(`Cache config ${key} saved`);
     } catch (err) {
-      this.log_error(`unable to write Cache Config`);
+      this.log_error("unable to write Cache Config");
       this.log_error(error_to_string(err));
     }
   },
 };
 
-module.exports = NodeHelper.create(NodeHeleprObject);
+module.exports = NodeHelper.create(nodeHelperObject);

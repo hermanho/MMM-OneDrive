@@ -1,10 +1,14 @@
 "use strict";
 
+/**
+ * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
+ */
+
 const EventEmitter = require("events");
 const crypto = require("crypto");
-const { Client } = require('@microsoft/microsoft-graph-client');
+const { Client } = require("@microsoft/microsoft-graph-client");
 const { LogLevel } = require("@azure/msal-node");
-const ExifReader = require('exifreader');
+const ExifReader = require("exifreader");
 const Log = require("logger");
 const { error_to_string } = require("./error_to_string");
 const { msalConfig, protectedResources } = require("./msal/authConfig");
@@ -115,13 +119,13 @@ class OneDrivePhotos extends EventEmitter {
   }
 
   async request(logContext, url, method = "get", data = null) {
-    this.logDebug((logContext ? `[${logContext}]` : '') + ` request ${method} URL: ${url}`);
+    this.logDebug((logContext ? `[${logContext}]` : "") + ` request ${method} URL: ${url}`);
     try {
       const ret = await this.#graphClient.api(url)[method](data);
       return ret;
     } catch (error) {
-      this.logError((logContext ? `[${logContext}]` : '') + ` request fail ${method} URL: ${url}`);
-      this.logError((logContext ? `[${logContext}]` : '') + " data: ", JSON.stringify(data));
+      this.logError((logContext ? `[${logContext}]` : "") + ` request fail ${method} URL: ${url}`);
+      this.logError((logContext ? `[${logContext}]` : "") + " data: ", JSON.stringify(data));
       this.logError(error_to_string(error));
       throw error;
     }
@@ -150,7 +154,7 @@ class OneDrivePhotos extends EventEmitter {
       this.log("Getting Album info chunks.");
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request('getAlbum', pageUrl, "get", null);
+        let response = await this.request("getAlbum", pageUrl, "get", null);
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const arrayValue = response.value;
@@ -186,8 +190,8 @@ class OneDrivePhotos extends EventEmitter {
       return null;
     }
     try {
-      const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace('$$item-id$$', album.bundle.album.coverImageItemId);
-      let response2 = await this.request('getAlbumThumbnail', thumbnailUrl, "get", null);
+      const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$item-id$$", album.bundle.album.coverImageItemId);
+      let response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
       if (Array.isArray(response2.value) && response2.value.length > 0) {
         const thumbnail = response2.value[0];
         const thumbnailUrl = thumbnail.mediumSquare?.url || thumbnail.medium?.url;
@@ -234,7 +238,7 @@ class OneDrivePhotos extends EventEmitter {
     const getImages = async (pageUrl) => {
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request('getImage', pageUrl, "get");
+        let response = await this.request("getImage", pageUrl, "get");
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const childrenItems = response.value;
@@ -244,7 +248,8 @@ class OneDrivePhotos extends EventEmitter {
               id: item.id,
               _albumId: albumId,
               mimeType: item.file?.mimeType,
-              baseUrl: item['@microsoft.graph.downloadUrl'],
+              baseUrl: item["@microsoft.graph.downloadUrl"],
+              baseUrlExpireDateTime: new Date(Date.now() + 59 * 60 * 1000),
               filename: item.name,
               mediaMetadata: {
                 dateTimeOriginal: item.photo?.takenDateTime
@@ -265,7 +270,7 @@ class OneDrivePhotos extends EventEmitter {
                   focalLength: item.photo.focalLength,
                   apertureFNumber: item.photo.fNumber,
                   isoEquivalent: item.photo.iso,
-                  exposureTime: item.photo.exposureNumerator && item.photo.exposureDenominator && item.photo.exposureDenominator !== 0 ? (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + 's' : null,
+                  exposureTime: item.photo.exposureNumerator && item.photo.exposureDenominator && item.photo.exposureDenominator !== 0 ? (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + "s" : null,
                 };
               }
               if (item.video) {
@@ -276,11 +281,11 @@ class OneDrivePhotos extends EventEmitter {
 
               if (!item.photo?.takenDateTime) {
                 const exifTags = await this.getEXIF(itemVal.baseUrl);
-                if (exifTags && exifTags['DateTimeOriginal']) {
-                  let dt = exifTags['DateTimeOriginal'].description;
+                if (exifTags && exifTags["DateTimeOriginal"]) {
+                  let dt = exifTags["DateTimeOriginal"].description;
                   // Convert 'YYYY:MM:DD HH:mm:ss' to ISO 8601 'YYYY-MM-DDTHH:mm:ss'
-                  if (typeof dt === 'string' && dt.length > 0 && /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)) {
-                    dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, '$1-$2-$3T$4');
+                  if (typeof dt === "string" && dt.length > 0 && /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)) {
+                    dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, "$1-$2-$3T$4");
                   }
                   itemVal.mediaMetadata.dateTimeOriginal = dt;
                   itemVal.mediaMetadata.manualExtractEXIF = true;
@@ -320,7 +325,7 @@ class OneDrivePhotos extends EventEmitter {
   /**
    * 
    * @param {OneDriveMediaItem[]} items
-   * @returns {OneDriveMediaItem[]} items
+   * @returns {Promise<OneDriveMediaItem[]>} items
    */
   async batchRequestRefresh(items) {
     if (items.length <= 0) {
@@ -338,16 +343,17 @@ class OneDrivePhotos extends EventEmitter {
       const requestsValue = grp.filter(i => i.item?.parentReference).map((item, i) => ({
         id: i,
         method: "GET",
-        url: protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace('$$item-id$$', item.id),
+        url: protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace("$$item-id$$", item.id),
       }));
       if (requestsValue.length > 0) {
         const requestsPayload = {
           "requests": requestsValue,
         };
-        const response = await this.request('batchRequestRefresh', protectedResources.$batch.endpoint, "post", requestsPayload);
+        const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
         for (let r of response.response) {
           if (r.status < 400) {
-            grp[r.id].baseUrl = r.body.value['@microsoft.graph.downloadUrl'];
+            grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
+            grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 59 * 60 * 1000);
           }
           else {
             console.error(r);
