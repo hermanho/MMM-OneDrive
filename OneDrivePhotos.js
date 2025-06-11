@@ -364,7 +364,6 @@ class OneDrivePhotos extends EventEmitter {
     }
 
     this.log("Batch request refresh done, total: ", items.length);
-    this.log("xxxx: ", items[0]._indexOfPhotos, items[2]._indexOfPhotos);
 
     return items;
   }

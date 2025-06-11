@@ -55,14 +55,17 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOAD_FAIL":
         {
-          const { url, event, source, lineno, colno, error } = payload;
-          this.log_error("[ONEDRIVE] hidden.onerror", { event, source, lineno, colno });
+          const { url, event, source, lineno, colno, error, originalError, target } = payload;
+          this.log_error("[ONEDRIVE] hidden.onerror", { event, originalError, source, lineno, colno });
           if (error) {
             this.log_error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
           }
           this.log_error("Image loading fails. Check your network.:", url);
+          if (target?.baseUrlExpireDateTime) {
+            this.log_error("Image baseUrlExpireDateTime:", target.baseUrlExpireDateTime);
+          }
           // How many photos to load for 20 minutes?
-          this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
+          // this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
       case "IMAGE_LOADED":
@@ -73,6 +76,7 @@ const nodeHelperObject = {
       case "NEED_MORE_PICS":
         {
           this.log_info("Used last pic in list");
+          // How many photos to load for 20 minutes?
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;

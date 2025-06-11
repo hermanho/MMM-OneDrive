@@ -192,10 +192,15 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  ready: function (url, target) {
+  ready: function (url: string, target: OneDriveMediaItem) {
     const hidden = document.createElement("img");
     hidden.onerror = (event, source, lineno, colno, error) => {
-      const errObj = { url, event, source, lineno, colno, error };
+      const errObj = {
+        url, event, source, lineno, colno,
+        error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
+        originalError: error,
+        target,
+      };
       console.error("[MMM-OneDrive] hidden.onerror", errObj);
       this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
     };
