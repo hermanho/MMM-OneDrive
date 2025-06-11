@@ -16,7 +16,7 @@ const msalConfig = {
   },
   system: {
     loggerOptions: {
-      loggerCallback(loglevel, message, containsPii) {
+      loggerCallback(loglevel, message, _containsPii) {
         console.log(message);
       },
       piiLoggingEnabled: false,
@@ -34,7 +34,7 @@ const protectedResources = {
     // scopes: ["User.Read"],
   },
   listAllAlbums: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/bundles?filter=${encodeURIComponent('bundle/album ne null')}`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/bundles?filter=${encodeURIComponent("bundle/album ne null")}`,
   },
   getChildrenInAlbum: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children`,

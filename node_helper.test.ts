@@ -1,7 +1,7 @@
-import { describe, expect, it, beforeEach, jest, afterEach } from '@jest/globals';
+import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
 import nodeHelperObj from "./node_helper.js";
-import type { OneDriveMediaItem } from "./OneDrivePhotos.js";
 import logLevel from "./tests/logger.mock";
+import type { OneDriveMediaItem } from "./types/type";
 
 const createMockOneDrivePhotos = (num: number) => Array(num).fill({}).map((_, i) => ({ id: "photo" + i, mediaMetadata: { dateTimeOriginal: new Date().toISOString() } } as OneDriveMediaItem));
 
@@ -16,16 +16,18 @@ jest.mock("./OneDrivePhotos.js", () =>
 );
 
 describe("nodeHelperObj", () => {
-  let helper: any;
+  let helper: InstanceType<typeof nodeHelperObj>;
   beforeEach(async () => {
     helper = new nodeHelperObj();
     // Provide a minimal config for initializeAfterLoading
     const config = { albums: [], updateInterval: 60000, sort: "new", condition: {}, showWidth: 1080, showHeight: 1920, timeFormat: "YYYY/MM/DD HH:mm", forceAuthInteractive: false };
     helper.readFileSafe = jest.fn(() => Promise.resolve(""));
-    helper.writeFileSafe = jest.fn();
-    helper.saveCacheConfig = jest.fn();
-    helper.sendSocketNotification = jest.fn();
-    helper.tryToIntitialize = jest.fn();
+    helper.writeFileSafe = jest.fn(() => Promise.resolve());
+    helper.saveCacheConfig = jest.fn(() => Promise.resolve());
+    helper.sendSocketNotification = jest.fn(() => Promise.resolve());
+    const mockTryToIntitialize = jest.fn(() => Promise.resolve()) as any;
+    mockTryToIntitialize.initializeTimer = null;
+    helper.tryToIntitialize = mockTryToIntitialize;
     await helper.initializeAfterLoading(config);
     helper.localPhotoList = createMockOneDrivePhotos(10);
     helper.localPhotoPntr = 0;

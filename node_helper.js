@@ -7,7 +7,7 @@ const moment = require("moment");
 const { Readable } = require("stream");
 const { finished } = require("stream/promises");
 const { RE2 } = require("re2-wasm");
-const { Set } = require('immutable');
+const { Set } = require("immutable");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
@@ -112,7 +112,7 @@ const nodeHelperObject = {
     this.albumsFilters = [];
     for (let album of config.albums) {
       if (album.hasOwnProperty("source") && album.hasOwnProperty("flags")) {
-        this.albumsFilters.push(new RE2(album.source, album.flags + 'u'));
+        this.albumsFilters.push(new RE2(album.source, album.flags + "u"));
       } else {
         this.albumsFilters.push(album);
       }
@@ -145,7 +145,7 @@ const nodeHelperObject = {
     if (!tokenStr) {
       return undefined;
     }
-    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + '\n' + tokenStr).digest("hex");
+    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + "\n" + tokenStr).digest("hex");
     return hash;
   },
 
@@ -400,7 +400,7 @@ const nodeHelperObject = {
         }
         await this.prepAndSendChunk(50);
       } else {
-        this.log_warn(`photos.length is 0`);
+        this.log_warn("photos.length is 0");
       }
 
       return photos;
@@ -456,7 +456,7 @@ const nodeHelperObject = {
         return undefined;
       }
     } catch (err) {
-      this.log_error(`unable to read Cache Config`);
+      this.log_error("unable to read Cache Config");
       this.log_error(error_to_string(err));
     }
   },
@@ -472,7 +472,7 @@ const nodeHelperObject = {
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache config JSON");
       this.log_debug(`Cache config ${key} saved`);
     } catch (err) {
-      this.log_error(`unable to write Cache Config`);
+      this.log_error("unable to write Cache Config");
       this.log_error(error_to_string(err));
     }
   },

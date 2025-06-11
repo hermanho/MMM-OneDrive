@@ -111,11 +111,10 @@ autoInfoPosition: (album, photo)=> {
 
 ## Toggle MMM-OneDrive module
 
-To toggle next and previous photos from other modules use the following codes:
+To toggle next photos from other modules use the following codes:
 
 ```js
 this.sendNotification('ONEDRIVE_PHOTO_NEXT', undefined);
-this.sendNotification('ONEDRIVE_PHOTO_PREVIOUS', undefined);
 ```
 
 ## Tip

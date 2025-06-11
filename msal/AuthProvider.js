@@ -86,7 +86,7 @@ class AuthProvider {
       } else {
         try {
           authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
-        } catch (e) {
+        } catch {
           waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
           authResponse = await this.getTokenInteractive(tokenRequest);
         }
@@ -96,7 +96,7 @@ class AuthProvider {
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.logInfo('getToken done');
+    this.logInfo("getToken done");
 
     return authResponse || null;
   }
@@ -119,7 +119,7 @@ class AuthProvider {
       return undefined;
     }
     finally {
-      this.logInfo('getTokenSilent done');
+      this.logInfo("getTokenSilent done");
     }
   }
 
@@ -138,7 +138,7 @@ class AuthProvider {
       }
     };
 
-    this.logInfo('Requesting a token interactively via the browser');
+    this.logInfo("Requesting a token interactively via the browser");
     const authResponse = await this.clientApplication.acquireTokenInteractive({
       ...tokenRequest,
       openBrowser,
@@ -148,7 +148,7 @@ class AuthProvider {
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.logInfo('getTokenInteractive done');
+    this.logInfo("getTokenInteractive done");
 
     return authResponse;
   }
@@ -171,13 +171,13 @@ class AuthProvider {
         }
       },
     };
-    this.logInfo('Requesting a token using OAuth2.0 device code flow');
+    this.logInfo("Requesting a token using OAuth2.0 device code flow");
     const authResponse = await this.clientApplication
       .acquireTokenByDeviceCode(deviceCodeRequest);
     if (authResponse) {
       this.account = authResponse.account;
     }
-    this.logInfo('getTokenDeviceCode done');
+    this.logInfo("getTokenDeviceCode done");
     return authResponse;
   }
 
