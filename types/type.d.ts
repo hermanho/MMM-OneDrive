@@ -27,4 +27,5 @@ export interface OneDriveMediaItem {
   filename: string;
   _albumId: string;
   _albumTitle: string;
+  _indexOfPhotos: number;
 }

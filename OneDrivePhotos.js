@@ -325,7 +325,7 @@ class OneDrivePhotos extends EventEmitter {
   /**
    * 
    * @param {OneDriveMediaItem[]} items
-   * @returns {OneDriveMediaItem[]} items
+   * @returns {Promise<OneDriveMediaItem[]>} items
    */
   async batchRequestRefresh(items) {
     if (items.length <= 0) {

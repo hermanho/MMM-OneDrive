@@ -30,8 +30,7 @@ describe("nodeHelperObj", () => {
     helper.tryToIntitialize = mockTryToIntitialize;
     await helper.initializeAfterLoading(config);
     helper.localPhotoList = createMockOneDrivePhotos(10);
-    helper.localPhotoPntr = 0;
-    helper.lastLocalPhotoPntr = 0;
+    helper.photoRefreshPointer = 0;
     jest.clearAllMocks();
   });
 
@@ -43,64 +42,47 @@ describe("nodeHelperObj", () => {
 
 
   describe("getImageList", () => {
-    it("should increase localPhotoPntr after getImageList call", async () => {
+    it("should increase photoRefreshPointer after getImageList call", async () => {
       helper.localPhotoList = createMockOneDrivePhotos(20);
-      helper.selecetedAlbums = Array(10).fill({}).map((_, i) => ({ id: "album" + i, title: "album" + i }));
+      helper.selectedAlbums = Array(10).fill({}).map((_, i) => ({ id: "album" + i, title: "album" + i }));
       await helper.prepAndSendChunk(7);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(0);
-      expect(helper.localPhotoPntr).toBe(7);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+      expect(helper.photoRefreshPointer).toBe(7);
       await helper.prepAndSendChunk(7);
-      expect(helper.lastLocalPhotoPntr).toBe(7);
-      expect(helper.localPhotoPntr).toBe(14);
+      expect(helper.photoRefreshPointer).toBe(14);
       await helper.getImageList();
       expect(helper.localPhotoList.length).toBe(100);
-      expect(helper.lastLocalPhotoPntr).toBe(14);
-      expect(helper.localPhotoPntr).toBe(34);
+      expect(helper.photoRefreshPointer).toBe(34);
     });
   });
 
   describe("prepAndSendChunk", () => {
-    it("should reset lastLocalPhotoPntr, localPhotoPntr if out of bounds and not loop endlessly", async () => {
-      await helper.prepAndSendChunk(5);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(0);
-      expect(helper.localPhotoPntr).toBe(5);
-      expect(logLevel.info).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "prepAndSendChunk done");
-    });
-
-    it("should reset lastLocalPhotoPntr, localPhotoPntr from 0 with remaining", async () => {
+    it("should reset photoRefreshPointer from 0 with remaining", async () => {
       helper.localPhotoList = createMockOneDrivePhotos(19);
-      helper.localPhotoPntr = 100; // Out of bounds
-      helper.lastLocalPhotoPntr = 0;
+      helper.photoRefreshPointer = 100; // Out of bounds
       await helper.prepAndSendChunk(7);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(0);
-      expect(helper.localPhotoPntr).toBe(7);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+      expect(helper.photoRefreshPointer).toBe(7);
       await helper.prepAndSendChunk(7);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(7);
-      expect(helper.localPhotoPntr).toBe(14);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+      expect(helper.photoRefreshPointer).toBe(14);
       await helper.prepAndSendChunk(7);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(14);
-      expect(helper.localPhotoPntr).toBe(19);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+      expect(helper.photoRefreshPointer).toBe(19);
       await helper.prepAndSendChunk(7);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(0);
-      expect(helper.localPhotoPntr).toBe(7);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+      expect(helper.photoRefreshPointer).toBe(7);
     });
 
-    it("should handle localPhotoPntr < 0", async () => {
-      helper.localPhotoPntr = -10;
+    it("should handle photoRefreshPointer < 0", async () => {
+      helper.photoRefreshPointer = -10;
       await helper.prepAndSendChunk(5);
-      expect(helper.localPhotoPntr).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.lastLocalPhotoPntr).toBe(0);
+      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
     });
 
     it("should not call batchRequestRefresh if no items to refresh", async () => {
       helper.localPhotoList = [];
-      helper.localPhotoPntr = 0;
+      helper.photoRefreshPointer = 0;
       await helper.prepAndSendChunk(5);
       expect(logLevel.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
     });

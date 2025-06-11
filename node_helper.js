@@ -1,5 +1,9 @@
 "use strict";
 
+/**
+ * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
+ */
+
 const fs = require("fs");
 const { writeFile, readFile, mkdir } = require("fs/promises");
 const path = require("path");
@@ -24,16 +28,18 @@ const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 let oneDrivePhotosInstance = null;
 
 const nodeHelperObject = {
+  /** @type {OneDriveMediaItem[]} */
+  localPhotoList: [],
+  /** @type {number} */
+  localPhotoPntr: 0,
   start: function () {
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
     /** @type {microsoftgraph.DriveItem} */
     this.selectedAlbums = [];
-    /** @type {OneDriveMediaItem[]} */
     this.localPhotoList = [];
-    this.localPhotoPntr = 0;
-    this.lastLocalPhotoPntr = 0;
+    this.photoRefreshPointer = 0;
     this.queue = null;
     this.initializeTimer = null;
 
@@ -55,13 +61,13 @@ const nodeHelperObject = {
             this.log_error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
           }
           this.log_error("Image loading fails. Check your network.:", url);
+          // How many photos to load for 20 minutes?
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
       case "IMAGE_LOADED":
         {
-          const { id, filename, index } = payload;
-          this.log_debug("Image loaded:", { index: this.lastLocalPhotoPntr + index, id, filename });
+          this.log_debug("Image loaded:", payload);
         }
         break;
       case "NEED_MORE_PICS":
@@ -199,20 +205,15 @@ const nodeHelperObject = {
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
-    if (this.lastScanTime && (new Date() - this.lastScanTime) < 30000) {
-      return;
-    }
-    this.lastScanTime = new Date();
     this.log_debug("prepAndSendChunk");
 
     try {
       //find which ones to refresh
-      if (this.localPhotoPntr < 0 || this.localPhotoPntr >= this.localPhotoList.length) {
-        this.localPhotoPntr = 0;
-        this.lastLocalPhotoPntr = 0;
+      if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
+        this.photoRefreshPointer = 0;
       }
-      let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.localPhotoPntr, 20); //20 is api limit
-      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+      let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
+      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
 
       /**
        * refresh them
@@ -220,12 +221,12 @@ const nodeHelperObject = {
        */
       let list = [];
       if (numItemsToRefresh > 0) {
-        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.localPhotoPntr, this.localPhotoPntr + numItemsToRefresh));
+        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
       }
 
       if (list.length > 0) {
         // update the localList
-        this.localPhotoList.splice(this.localPhotoPntr, list.length, ...list);
+        this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
 
         this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
         this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
@@ -234,9 +235,8 @@ const nodeHelperObject = {
         this.sendSocketNotification("MORE_PICS", list);
 
         // update pointer
-        this.lastLocalPhotoPntr = this.localPhotoPntr;
-        this.localPhotoPntr = this.localPhotoPntr + list.length;
-        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.localPhotoPntr);
+        this.photoRefreshPointer = this.photoRefreshPointer + list.length;
+        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
       } else {
         this.log_error("couldn't send ", list.length, " pics");
       }
@@ -281,7 +281,7 @@ const nodeHelperObject = {
     await this.getAlbumList();
     try {
       if (this.selectedAlbums.length > 0) {
-        this.photos = await this.getImageList();
+        await this.getImageList();
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
@@ -393,17 +393,17 @@ const nodeHelperObject = {
           shuffle(photos);
         }
         this.log_info(`Total indexed photos: ${photos.length}`);
-        this.localPhotoList = [...photos];
-        if (this.localPhotoPntr >= this.localPhotoList.length) {
-          this.localPhotoPntr = 0;
-          this.lastLocalPhotoPntr = 0;
+        this.localPhotoList = [...photos].map((photo, index) => {
+          photo._indexOfPhotos = index;
+          return photo;
+        });
+        if (this.photoRefreshPointer >= this.localPhotoList.length) {
+          this.photoRefreshPointer = 0;
         }
         await this.prepAndSendChunk(50);
       } else {
         this.log_warn("photos.length is 0");
       }
-
-      return photos;
     } catch (err) {
       this.log_error(error_to_string(err));
       throw err;

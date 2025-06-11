@@ -81,9 +81,11 @@ Module.register<Config>("MMM-OneDrive", {
       this.albums = payload;
     }
     if (noti === "MORE_PICS") {
-      if (payload && Array.isArray(payload) && payload.length > 0) this.needMorePicsFlag = false;
-      this.scanned = payload;
-      this.index = 0;
+      if (payload && Array.isArray(payload) && payload.length > 0) {
+        this.needMorePicsFlag = false;
+        this.scanned = payload;
+        this.index = 0;
+      }
       if (this.firstScan) {
         this.updatePhotos(); //little faster starting
       }
@@ -169,7 +171,7 @@ Module.register<Config>("MMM-OneDrive", {
             const blob = new Blob([buf]);
             const blobUrl = URL.createObjectURL(blob);
             this.render(blobUrl, target);
-          });
+          }).then();
           break;
         }
         default: {
@@ -203,7 +205,7 @@ Module.register<Config>("MMM-OneDrive", {
     hidden.src = url;
   },
 
-  render: function (url, target) {
+  render: function (url: string, target: OneDriveMediaItem) {
     const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
@@ -250,7 +252,11 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
-    this.sendSocketNotification("IMAGE_LOADED", { id: target.id, filename: target.filename, index: this.index });
+    this.sendSocketNotification("IMAGE_LOADED", {
+      id: target.id,
+      filename: target.filename,
+      indexOfPhotos: target._indexOfPhotos,
+    });
   },
 
   getDom: function () {
