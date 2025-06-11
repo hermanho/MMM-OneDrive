@@ -1,8 +1,15 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import { convertHEIC } from "./photosConverter";
-import moment from "moment";
-import * as Log from "logger";
+import type MomentLib from "moment";
+import type LogLib from "logger";
 import type { OneDriveMediaItem } from "../../types/type";
+
+/**
+ * Global or injected variable declarations
+ * moment.js is lazy loaded so not available when script is loaded.
+ */
+declare const moment: typeof MomentLib;
+declare const Log: typeof LogLib;
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
