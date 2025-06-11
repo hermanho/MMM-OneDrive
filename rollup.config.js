@@ -21,9 +21,9 @@ const bannerText = `/*! ********************************************************
 `;
 export default [
   {
-    input: './src/frontend/main.ts',
+    input: 'src/frontend/main.ts',
     external: ['logger', 'moment'],
-    plugins: [typescript({ module: 'ESNext' }), nodeResolve(), commonjs(), terser(), banner2(() => bannerText)],
+    plugins: [typescript({ module: 'ESNext', include: ['src/**', 'types/**'] }), nodeResolve(), commonjs(), terser(), banner2(() => bannerText)],
     output: {
       file: `./${pkg.main}`,
       format: 'iife',

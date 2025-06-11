@@ -15,6 +15,13 @@ export default defineConfig([
             "@typescript-eslint/no-require-imports": "off",
         },
     },
+    {
+        files: ["*.test.ts", "tests/**"],
+        rules: {
+            "@typescript-eslint/no-explicit-any": "off",
+            "jsdoc/require-jsdoc": "off",
+        },
+    },
     js.configs.recommended,
     jsdoc.configs['flat/recommended'],
     jsdoc.configs['flat/recommended-typescript-flavor'],

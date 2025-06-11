@@ -4,7 +4,6 @@ const fs = require("fs");
 const { writeFile, readFile, mkdir } = require("fs/promises");
 const path = require("path");
 const moment = require("moment");
-const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { Readable } = require("stream");
 const { finished } = require("stream/promises");
 const { RE2 } = require("re2-wasm");
@@ -12,8 +11,9 @@ const { Set } = require('immutable');
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
+const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
-const { error_to_string } = require("./error_to_string");
+const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
@@ -23,7 +23,7 @@ const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
  */
 let oneDrivePhotosInstance = null;
 
-const NodeHeleprObject = {
+const nodeHelperObject = {
   start: function () {
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
@@ -94,7 +94,7 @@ const NodeHeleprObject = {
     Log.warn("[ONEDRIVE] [node_helper]", ...args);
   },
 
-  initializeAfterLoading: function (config) {
+  initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
     if (!this.config.scanInterval || this.config.scanInterval < 1000 * 60 * 10) this.config.scanInterval = 1000 * 60 * 10;
@@ -118,7 +118,7 @@ const NodeHeleprObject = {
       }
     }
 
-    this.tryToIntitialize();
+    await this.tryToIntitialize();
   },
 
   tryToIntitialize: async function () {
@@ -244,6 +244,7 @@ const NodeHeleprObject = {
     } catch (err) {
       this.log_error("failed to refresh and send chunk: ");
       this.log_error(error_to_string(err));
+      throw err;
     }
   },
 
@@ -368,7 +369,7 @@ const NodeHeleprObject = {
       return true;
     };
     /** @type {OneDriveMediaItem[]} */
-    let photos = [];
+    const photos = [];
     try {
       for (const album of this.selectedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
@@ -377,7 +378,7 @@ const NodeHeleprObject = {
           i._albumTitle = album.title;
         });
         this.log_info(`Got ${list.length} photo(s) from '${album.title}'`);
-        photos = photos.concat(list);
+        photos.push(...list);
       }
       if (photos.length > 0) {
         if (this.config.sort === "new" || this.config.sort === "old") {
@@ -393,9 +394,11 @@ const NodeHeleprObject = {
         }
         this.log_info(`Total indexed photos: ${photos.length}`);
         this.localPhotoList = [...photos];
-        this.localPhotoPntr = 0;
-        this.lastLocalPhotoPntr = 0;
-        this.prepAndSendChunk(50).then();
+        if (this.localPhotoPntr >= this.localPhotoList.length) {
+          this.localPhotoPntr = 0;
+          this.lastLocalPhotoPntr = 0;
+        }
+        await this.prepAndSendChunk(50);
       } else {
         this.log_warn(`photos.length is 0`);
       }
@@ -403,6 +406,7 @@ const NodeHeleprObject = {
       return photos;
     } catch (err) {
       this.log_error(error_to_string(err));
+      throw err;
     }
   },
 
@@ -474,4 +478,4 @@ const NodeHeleprObject = {
   },
 };
 
-module.exports = NodeHelper.create(NodeHeleprObject);
+module.exports = NodeHelper.create(nodeHelperObject);
