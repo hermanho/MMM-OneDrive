@@ -116,15 +116,12 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  notificationReceived: function (noti, payload, _sender) {
+  notificationReceived: function (noti, _payload, _sender) {
     if (noti === "ONEDRIVE_PHOTO_NEXT") {
       this.updatePhotos();
     }
     if (noti === "ONEDRIVE_PHOTO_PREVIOUS") {
       this.updatePhotos(-2);
-    }
-    if (noti === "ONEDRIVE_PHOTO_UPLOAD") {
-      this.sendSocketNotification("UPLOAD", payload);
     }
   },
 
