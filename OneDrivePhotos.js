@@ -251,14 +251,15 @@ class OneDrivePhotos extends EventEmitter {
             const itemVal = {
               id: item.id,
               _albumId: albumId,
-              mimeType: item.file?.mimeType,
+              mimeType: item.file?.mimeType || "",
               baseUrl: item["@microsoft.graph.downloadUrl"],
               baseUrlExpireDateTime: new Date(Date.now() + 59 * 60 * 1000),
               filename: item.name,
               mediaMetadata: {
-                dateTimeOriginal: item.photo?.takenDateTime
-                  || item.fileSystemInfo?.createdDateTime
-                  || item.fileSystemInfo?.lastModifiedDateTime,
+                dateTimeOriginal:
+                  item.photo?.takenDateTime ||
+                  item.fileSystemInfo?.createdDateTime ||
+                  item.fileSystemInfo?.lastModifiedDateTime,
               },
               parentReference: item.parentReference,
             };
@@ -274,7 +275,15 @@ class OneDrivePhotos extends EventEmitter {
                   focalLength: item.photo.focalLength,
                   apertureFNumber: item.photo.fNumber,
                   isoEquivalent: item.photo.iso,
-                  exposureTime: item.photo.exposureNumerator && item.photo.exposureDenominator && item.photo.exposureDenominator !== 0 ? (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + "s" : null,
+                  exposureTime:
+                    item.photo.exposureNumerator &&
+                      item.photo.exposureDenominator &&
+                      item.photo.exposureDenominator !== 0
+                      ? (
+                        (item.photo.exposureNumerator * 1.0) /
+                        item.photo.exposureDenominator
+                      ).toFixed(2) + "s"
+                      : null,
                 };
               }
               if (item.video) {
@@ -283,13 +292,20 @@ class OneDrivePhotos extends EventEmitter {
                 itemVal.mediaMetadata.video = item.video;
               }
 
-              if (!item.photo?.takenDateTime) {
+              if (item.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
                 const exifTags = await this.getEXIF(itemVal.baseUrl);
                 if (exifTags && exifTags["DateTimeOriginal"]) {
                   let dt = exifTags["DateTimeOriginal"].description;
                   // Convert 'YYYY:MM:DD HH:mm:ss' to ISO 8601 'YYYY-MM-DDTHH:mm:ss'
-                  if (typeof dt === "string" && dt.length > 0 && /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)) {
-                    dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, "$1-$2-$3T$4");
+                  if (
+                    typeof dt === "string" &&
+                    dt.length > 0 &&
+                    /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)
+                  ) {
+                    dt = dt.replace(
+                      /^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/,
+                      "$1-$2-$3T$4"
+                    );
                   }
                   itemVal.mediaMetadata.dateTimeOriginal = dt;
                   itemVal.mediaMetadata.manualExtractEXIF = true;
@@ -297,7 +313,9 @@ class OneDrivePhotos extends EventEmitter {
               }
 
               if (typeof isValid === "function") {
-                if (isValid(itemVal)) list.push(itemVal);
+                if (isValid(itemVal)) {
+                  list.push(itemVal);
+                }
               } else {
                 list.push(itemVal);
               }
@@ -327,7 +345,7 @@ class OneDrivePhotos extends EventEmitter {
   }
 
   /**
-   * 
+   *
    * @param {OneDriveMediaItem[]} items
    * @returns {Promise<OneDriveMediaItem[]>} items
    */
@@ -351,15 +369,14 @@ class OneDrivePhotos extends EventEmitter {
       }));
       if (requestsValue.length > 0) {
         const requestsPayload = {
-          "requests": requestsValue,
+          requests: requestsValue,
         };
         const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
         for (let r of response.response) {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
             grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 59 * 60 * 1000);
-          }
-          else {
+          } else {
             console.error(r);
             grp[r.id].baseUrl = null;
           }

@@ -361,8 +361,7 @@ const nodeHelperObject = {
     let photoCondition = (photo) => {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
       let data = photo.mediaMetadata;
-      if (data.hasOwnProperty("video")) return false;
-      if (!data.hasOwnProperty("photo")) return false;
+      if (!photo.mimeType.startsWith("image/")) return false;
       let ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
