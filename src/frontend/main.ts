@@ -78,7 +78,7 @@ Module.register<Config>("MMM-OneDrive", {
       this.albums = payload;
       //set up timer once initialized, more robust against faults
       if (!this.updateTimer || this.updateTimer === null) {
-        Log.info("Start timer for updating photos.");
+        Log.info("[MMM-OneDrive] Start timer for updating photos.");
         this.updateTimer = setInterval(() => {
           this.updatePhotos();
         }, this.config.updateInterval);
@@ -133,7 +133,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   updatePhotos: function () {
-    Log.debug("Updating photos..");
+    Log.debug("[MMM-OneDrive] Updating photos..");
     this.firstScan = false;
 
     if (this.scanned.length === 0) {
@@ -178,7 +178,8 @@ Module.register<Config>("MMM-OneDrive", {
             const blob = new Blob([buf]);
             const blobUrl = URL.createObjectURL(blob);
             this.render(blobUrl, target);
-          }).then();
+          })
+            .then();
           break;
         }
         default: {
@@ -208,7 +209,7 @@ Module.register<Config>("MMM-OneDrive", {
         originalError: error,
         target,
       };
-      console.error("[MMM-OneDrive] hidden.onerror", errObj);
+      Log.error("[MMM-OneDrive] hidden.onerror", errObj);
       this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
     };
     hidden.onload = () => {
@@ -291,7 +292,7 @@ Module.register<Config>("MMM-OneDrive", {
     wrapper.appendChild(back);
     wrapper.appendChild(current);
     wrapper.appendChild(info);
-    console.log("updated!");
+    Log.info("[MMM-OneDrive] Dom updated!");
     return wrapper;
   },
 

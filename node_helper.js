@@ -33,6 +33,7 @@ const nodeHelperObject = {
   /** @type {number} */
   localPhotoPntr: 0,
   start: function () {
+    this.log_info("Starting module helper");
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
@@ -46,6 +47,7 @@ const nodeHelperObject = {
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
     this.CACHE_CONFIG = path.resolve(this.path, "cache", "config.json");
+    this.log_info("Started");
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -155,7 +157,8 @@ const nodeHelperObject = {
     if (!tokenStr) {
       return undefined;
     }
-    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + "\n" + tokenStr).digest("hex");
+    const hash = crypto.createHash("sha256").update(JSON.stringify(this.config) + "\n" + tokenStr)
+      .digest("hex");
     return hash;
   },
 
@@ -311,15 +314,15 @@ const nodeHelperObject = {
         if (ta instanceof RE2) {
           this.log_debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
           return ta.test(a.title);
-        }
-        else {
+        } else {
           return ta === a.title;
         }
       });
       if (matches.length === 0) {
-        this.log_warn(`Can't find "${ta instanceof RE2 ? ta.source : ta}" in your album list.`);
-      }
-      else {
+        this.log_warn(`Can't find "${ta instanceof RE2
+          ? ta.source
+          : ta}" in your album list.`);
+      } else {
         selectedAlbums.push(...matches);
       }
     }
@@ -455,8 +458,7 @@ const nodeHelperObject = {
       }
       if (Object(config).hasOwnProperty(key)) {
         return config[key];
-      }
-      else {
+      } else {
         return undefined;
       }
     } catch (err) {
