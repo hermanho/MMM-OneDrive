@@ -34,8 +34,8 @@ class Auth extends EventEmitter {
       process.nextTick(() =>
         this.emit("ready")
       ),
-      (err) =>
-        this.emit("error", err)
+    (err) =>
+      this.emit("error", err)
     );
   }
 
@@ -292,7 +292,7 @@ class OneDrivePhotos extends EventEmitter {
                 itemVal.mediaMetadata.video = item.video;
               }
 
-              if (item.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
+              if (itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
                 const exifTags = await this.getEXIF(itemVal.baseUrl);
                 if (exifTags && exifTags["DateTimeOriginal"]) {
                   let dt = exifTags["DateTimeOriginal"].description;

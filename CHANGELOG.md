@@ -1,5 +1,9 @@
 # MMM-OneDrive Change Log
 
+**`[1.4.1] - 2025/06/09`**
+- Fixed: image failed loading due to URL expired #16
+- Fixed: global variable momentjs inject problem, ignore non image file when check EXIF #20
+
 **`[1.4.0] - 2025/06/09`**
 - Fixed: HEIC image cannot be loaded #16
 - Feat: Convert frontend code to typescript
