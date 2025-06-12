@@ -1,6 +1,6 @@
-import { jest } from "@jest/globals";
+const { jest } = require("@jest/globals");
 
-const logLevel = {
+const logger = {
   debug: jest.fn(),
   log: jest.fn(),
   info: jest.fn(),
@@ -15,4 +15,4 @@ const logLevel = {
   setLogLevel: jest.fn(),
 };
 
-export = logLevel;
+module.exports = logger;

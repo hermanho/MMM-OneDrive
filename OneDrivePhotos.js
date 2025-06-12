@@ -77,6 +77,10 @@ class OneDrivePhotos extends EventEmitter {
     Log.debug("[ONEDRIVE:CORE]", ...args);
   }
 
+  logWarn(...args) {
+    Log.warn("[ONEDRIVE:CORE]", ...args);
+  }
+
   /**
    *
    * @param {import("@azure/msal-common").DeviceCodeResponse} response
@@ -233,18 +237,23 @@ class OneDrivePhotos extends EventEmitter {
      * @type {OneDriveMediaItem[]}
      */
     const list = [];
+    let loopCycle = 0;
     /**
      *
      * @param {string} pageUrl
      * @returns {Promise<OneDriveMediaItem[]>} DriveItem
      */
     const getImages = async (pageUrl) => {
+      this.logDebug(`getImages loop cycle: ${loopCycle}`);
+      const startTime = Date.now();
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
         const response = await this.request("getImage", pageUrl, "get");
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const childrenItems = response.value;
+          this.logDebug(`Parsing ${childrenItems.length} items in ${albumId}`);
+          let validCount = 0;
           for (const item of childrenItems) {
             /** @type {OneDriveMediaItem} */
             const itemVal = {
@@ -291,7 +300,8 @@ class OneDrivePhotos extends EventEmitter {
                 itemVal.mediaMetadata.video = item.video;
               }
 
-              if (itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
+              // eslint-disable-next-line no-constant-condition, no-constant-binary-expression
+              if (false && itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
                 const exifTags = await this.getEXIF(itemVal.baseUrl);
                 if (exifTags && exifTags["DateTimeOriginal"]) {
                   let dt = exifTags["DateTimeOriginal"].description;
@@ -314,17 +324,24 @@ class OneDrivePhotos extends EventEmitter {
               if (typeof isValid === "function") {
                 if (isValid(itemVal)) {
                   list.push(itemVal);
+                  validCount++;
                 }
               } else {
                 list.push(itemVal);
+                validCount++;
               }
             }
           }
+          this.logDebug(`Valid ${validCount} items in ${albumId}`);
+          const endTime = Date.now();
+          this.logDebug(`getImages loop cycle ${loopCycle} took ${endTime - startTime} ms`);
           if (list.length >= maxNum) {
             this.log("Indexing photos done, found: ", list.length);
             return list; // full with maxNum
           } else {
             if (response["@odata.nextLink"]) {
+              this.logDebug(`Got nextLink, continue to get more images from album: ${albumId}`);
+              loopCycle++;
               await sleep(500);
               return await getImages(response["@odata.nextLink"]);
             } else {
@@ -332,6 +349,7 @@ class OneDrivePhotos extends EventEmitter {
             }
           }
         } else {
+          this.logWarn(`${albumId}`, albumId);
           return list; // empty
         }
       } catch (err) {

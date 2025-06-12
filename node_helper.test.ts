@@ -1,6 +1,6 @@
 import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
 import nodeHelperObj from "./node_helper.js";
-import logLevel from "./tests/logger.mock";
+import logger from "./tests/logger.mock";
 import type { OneDriveMediaItem } from "./types/type";
 
 const createMockOneDrivePhotos = (num: number) => Array(num).fill({})
@@ -123,7 +123,7 @@ describe("nodeHelperObj", () => {
       helper.localPhotoList = [];
       helper.photoRefreshPointer = 0;
       await helper.prepAndSendChunk(5);
-      expect(logLevel.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
+      expect(logger.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
     });
   });
 });
