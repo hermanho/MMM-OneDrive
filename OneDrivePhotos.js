@@ -30,12 +30,11 @@ class Auth extends EventEmitter {
   constructor(debug = false) {
     super();
     this.#debug = debug;
-    this.init().then(() =>
-      process.nextTick(() =>
+    this.init().then(
+      () => process.nextTick(() =>
         this.emit("ready")
       ),
-    (err) =>
-      this.emit("error", err)
+      (err) => this.emit("error", err)
     );
   }
 
@@ -145,7 +144,7 @@ class OneDrivePhotos extends EventEmitter {
 
   async getAlbumLoop() {
     await this.onAuthReady();
-    let url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
+    const url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
     /** @type {microsoftgraph.DriveItem[]} */
     let list = [];
     let found = 0;
@@ -158,7 +157,7 @@ class OneDrivePhotos extends EventEmitter {
       this.log("Getting Album info chunks.");
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request("getAlbum", pageUrl, "get", null);
+        const response = await this.request("getAlbum", pageUrl, "get", null);
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const arrayValue = response.value;
@@ -195,7 +194,7 @@ class OneDrivePhotos extends EventEmitter {
     }
     try {
       const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$item-id$$", album.bundle.album.coverImageItemId);
-      let response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
+      const response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
       if (Array.isArray(response2.value) && response2.value.length > 0) {
         const thumbnail = response2.value[0];
         const thumbnailUrl = thumbnail.mediumSquare?.url || thumbnail.medium?.url;
@@ -227,13 +226,13 @@ class OneDrivePhotos extends EventEmitter {
 
   async getImageFromAlbum(albumId, isValid = null, maxNum = 99999) {
     await this.onAuthReady();
-    let url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
+    const url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
 
     this.log("Indexing photos. album:", albumId);
     /**
      * @type {OneDriveMediaItem[]}
      */
-    let list = [];
+    const list = [];
     /**
      *
      * @param {string} pageUrl
@@ -242,11 +241,11 @@ class OneDrivePhotos extends EventEmitter {
     const getImages = async (pageUrl) => {
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request("getImage", pageUrl, "get");
+        const response = await this.request("getImage", pageUrl, "get");
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const childrenItems = response.value;
-          for (let item of childrenItems) {
+          for (const item of childrenItems) {
             /** @type {OneDriveMediaItem} */
             const itemVal = {
               id: item.id,
@@ -372,7 +371,7 @@ class OneDrivePhotos extends EventEmitter {
           requests: requestsValue,
         };
         const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
-        for (let r of response.response) {
+        for (const r of response.response) {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
             grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 59 * 60 * 1000);

@@ -69,6 +69,7 @@ export default defineConfig([
       "no-var": "error",
       "jsdoc/require-returns": "off",
       "jsdoc/require-param-description": "off",
+      "prefer-const": "error",
       semi: "error",
       "@typescript-eslint/no-unused-vars": [
         "error",

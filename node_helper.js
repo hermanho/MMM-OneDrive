@@ -122,7 +122,7 @@ const nodeHelperObject = {
     });
 
     this.albumsFilters = [];
-    for (let album of config.albums) {
+    for (const album of config.albums) {
       if (album.hasOwnProperty("source") && album.hasOwnProperty("flags")) {
         this.albumsFilters.push(new RE2(album.source, album.flags + "u"));
       } else {
@@ -219,7 +219,7 @@ const nodeHelperObject = {
       if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
         this.photoRefreshPointer = 0;
       }
-      let numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
+      const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
       this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
 
       /**
@@ -304,12 +304,12 @@ const nodeHelperObject = {
     /**
      * @type {microsoftgraph.DriveItem[]} 
      */
-    let albums = await this.getAlbums();
+    const albums = await this.getAlbums();
     /** 
      * @type {microsoftgraph.DriveItem[]} 
      */
     let selectedAlbums = [];
-    for (let ta of this.albumsFilters) {
+    for (const ta of this.albumsFilters) {
       const matches = albums.filter((a) => {
         if (ta instanceof RE2) {
           this.log_debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
@@ -330,7 +330,7 @@ const nodeHelperObject = {
     this.log_info("Finish Album scanning. Properly scanned :", selectedAlbums.length);
     this.log_info("Albums:", selectedAlbums.map((a) => a.title).join(", "));
 
-    for (let album of selectedAlbums) {
+    for (const album of selectedAlbums) {
       album.coverPhotoBaseUrl = await oneDrivePhotosInstance.getAlbumThumbnail(album);
     }
 
@@ -338,11 +338,11 @@ const nodeHelperObject = {
     this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selectedAlbums, null, 4), "Album list cache");
     this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
-    for (let a of selectedAlbums) {
+    for (const a of selectedAlbums) {
       if (a.coverPhotoBaseUrl) {
-        let url = a.coverPhotoBaseUrl;
-        let fpath = path.join(this.path, "cache", a.id);
-        let file = fs.createWriteStream(fpath);
+        const url = a.coverPhotoBaseUrl;
+        const fpath = path.join(this.path, "cache", a.id);
+        const file = fs.createWriteStream(fpath);
         const response = await fetch(url);
         await finished(Readable.fromWeb(response.body).pipe(file));
       }
@@ -354,22 +354,22 @@ const nodeHelperObject = {
 
   getImageList: async function () {
     this.log_info("Getting image list");
-    let condition = this.config.condition;
+    const condition = this.config.condition;
     /**
      * @param {OneDriveMediaItem} photo
      */
-    let photoCondition = (photo) => {
+    const photoCondition = (photo) => {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
-      let data = photo.mediaMetadata;
+      const data = photo.mediaMetadata;
       if (!photo.mimeType.startsWith("image/")) return false;
-      let ct = moment(data.dateTimeOriginal);
+      const ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
       if (condition.minWidth && Number(condition.minWidth) > Number(data.width)) return false;
       if (condition.minHeight && Number(condition.minHeight) > Number(data.height)) return false;
       if (condition.maxWidth && Number(condition.maxWidth) < Number(data.width)) return false;
       if (condition.maxHeight && Number(condition.maxHeight) < Number(data.height)) return false;
-      let whr = Number(data.width) / Number(data.height);
+      const whr = Number(data.width) / Number(data.height);
       if (condition.minWHRatio && Number(condition.minWHRatio) > whr) return false;
       if (condition.maxWHRatio && Number(condition.maxWHRatio) < whr) return false;
       return true;
@@ -379,7 +379,7 @@ const nodeHelperObject = {
     try {
       for (const album of this.selectedAlbums) {
         this.log_info(`Prepare to get photo list from '${album.title}'`);
-        let list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
+        const list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
         list.forEach((i) => {
           i._albumTitle = album.title;
         });
@@ -389,8 +389,8 @@ const nodeHelperObject = {
       if (photos.length > 0) {
         if (this.config.sort === "new" || this.config.sort === "old") {
           photos.sort((a, b) => {
-            let at = moment(a.mediaMetadata.dateTimeOriginal);
-            let bt = moment(b.mediaMetadata.dateTimeOriginal);
+            const at = moment(a.mediaMetadata.dateTimeOriginal);
+            const bt = moment(b.mediaMetadata.dateTimeOriginal);
             if (at.isBefore(bt) && this.config.sort === "new") return 1;
             if (at.isAfter(bt) && this.config.sort === "old") return 1;
             return -1;
