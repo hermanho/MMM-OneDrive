@@ -198,12 +198,16 @@ const nodeHelperObject = {
       this.log_info("Loading cached list");
       try {
         const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
-        this.localPhotoList = JSON.parse(data.toString());
-        if (this.config.sort === "random") {
-          shuffle(this.localPhotoList);
+        const cachedPhotoList = JSON.parse(data.toString());
+        // check if the cached photo list is empty
+        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length === 0) {
+          this.localPhotoList = cachedPhotoList;
+          if (this.config.sort === "random") {
+            shuffle(this.localPhotoList);
+          }
+          this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
+          await this.prepAndSendChunk(5); // only 5 for extra fast startup
         }
-        this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
-        await this.prepAndSendChunk(5); // only 5 for extra fast startup
       } catch (err) {
         this.log_error("unable to load photo list cache", err);
       }
@@ -220,33 +224,37 @@ const nodeHelperObject = {
         this.photoRefreshPointer = 0;
       }
       const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
-      this.log_debug("num to ref: ", numItemsToRefresh, ", DesChunk: ", desiredChunk, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
+      this.log_debug(`Num to ref: ${numItemsToRefresh}, DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
+
+      if (numItemsToRefresh <= 0) {
+        this.log_warn(`No items to refresh. prepAndSendChunk skipped. DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
+        return;
+      }
 
       /**
        * refresh them
        * @type {OneDriveMediaItem[]}
        */
-      let list = [];
-      if (numItemsToRefresh > 0) {
-        list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
+      const list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
+
+      if (list.length <= 0) {
+        this.log_error("No items from batchRequestRefresh. prepAndSendChunk skipped");
+        return;
       }
 
-      if (list.length > 0) {
-        // update the localList
-        this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
+      // update the localList
+      this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
 
-        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
-        this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+      this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
+      this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
 
-        // send updated pics
-        this.sendSocketNotification("MORE_PICS", list);
+      // send updated pics
+      this.sendSocketNotification("MORE_PICS", list);
 
-        // update pointer
-        this.photoRefreshPointer = this.photoRefreshPointer + list.length;
-        this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
-      } else {
-        this.log_error("couldn't send ", list.length, " pics");
-      }
+      // update pointer
+      this.photoRefreshPointer = this.photoRefreshPointer + list.length;
+      this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
+
       this.log_info("prepAndSendChunk done");
     } catch (err) {
       this.log_error("failed to refresh and send chunk: ");
@@ -255,7 +263,7 @@ const nodeHelperObject = {
     }
   },
 
-  /** @returns {microsoftgraph.DriveItem[]} album */
+  /** @returns {Promise<microsoftgraph.DriveItem[]>} album */
   getAlbums: async function () {
     try {
       const r = await oneDrivePhotosInstance.getAlbums();
