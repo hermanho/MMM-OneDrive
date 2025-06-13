@@ -175,7 +175,7 @@ Module.register<Config>("MMM-OneDrive", {
       switch (target.mimeType) {
         case "image/heic": {
           convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
-            const blob = new Blob([buf]);
+            const blob = new Blob([buf], { type: "image/jpeg" });
             const blobUrl = URL.createObjectURL(blob);
             this.render(blobUrl, target);
           })
@@ -201,30 +201,40 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   ready: function (url: string, target: OneDriveMediaItem) {
+    Log.debug("[MMM-OneDrive] preload image", { id: target.id, url });
+    const startDt = new Date();
     const hidden = document.createElement("img");
-    hidden.onerror = (event, source, lineno, colno, error) => {
-      const errObj = {
-        url, event, source, lineno, colno,
-        error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
-        originalError: error,
-        target,
+    const loadPromise = new Promise<void>((resolve, reject) => {
+      hidden.onerror = (event, source, lineno, colno, error) => {
+        const errObj = {
+          url, event, source, lineno, colno,
+          error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
+          originalError: error,
+          target,
+        };
+        Log.error("[MMM-OneDrive] hidden.onerror", errObj);
+        this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
+        reject(error);
       };
-      Log.error("[MMM-OneDrive] hidden.onerror", errObj);
-      this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
-    };
-    hidden.onload = () => {
-      this.render(url, target);
-    };
-    hidden.src = url;
+      hidden.onload = () => {
+        Log.debug("[MMM-OneDrive] preload image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
+        this.render(url, target);
+        resolve();
+      };
+      hidden.src = url;
+    });
+    loadPromise.then();
   },
 
   render: function (url: string, target: OneDriveMediaItem) {
+    Log.debug("[MMM-OneDrive] render image", { id: target.id, url });
+    const startDt = new Date();
     const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+    current.classList.add("animated");
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
-    current.classList.add("animated");
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     const album = this.albums.find((a) => a.id === target._albumId);
     if (this.config.autoInfoPosition) {
@@ -265,6 +275,7 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
+    Log.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
