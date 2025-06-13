@@ -70,7 +70,7 @@ describe("nodeHelperObj", () => {
     });
 
     it("should filter out non image minetype items", async () => {
-      const mineMap = [
+      const mimeMap = [
         "image/jpeg",
         "image/heic",
         "image/png",
