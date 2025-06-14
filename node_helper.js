@@ -58,9 +58,9 @@ const nodeHelperObject = {
       case "IMAGE_LOAD_FAIL":
         {
           const { url, event, source, lineno, colno, error, originalError, target } = payload;
-          this.log_error("[ONEDRIVE] hidden.onerror", { event, originalError, source, lineno, colno });
+          this.log_error("hidden.onerror", { event, originalError, source, lineno, colno });
           if (error) {
-            this.log_error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
+            this.log_error("hidden.onerror error", error.message, error.name, error.stack);
           }
           this.log_error("Image loading fails. Check your network.:", url);
           if (target?.baseUrlExpireDateTime) {
@@ -91,19 +91,19 @@ const nodeHelperObject = {
   },
 
   log_debug: function (...args) {
-    Log.debug("[ONEDRIVE] [node_helper]", ...args);
+    Log.debug("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_info: function (...args) {
-    Log.info("[ONEDRIVE] [node_helper]", ...args);
+    Log.info("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_error: function (...args) {
-    Log.error("[ONEDRIVE] [node_helper]", ...args);
+    Log.error("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_warn: function (...args) {
-    Log.warn("[ONEDRIVE] [node_helper]", ...args);
+    Log.warn("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   initializeAfterLoading: async function (config) {
@@ -134,13 +134,13 @@ const nodeHelperObject = {
   },
 
   tryToIntitialize: async function () {
-    //set timer, in case if fails to retry in 1 min
+    //set timer, in case if fails to retry in 2 min
     clearTimeout(this.initializeTimer);
     this.initializeTimer = setTimeout(
       () => {
         this.tryToIntitialize();
       },
-      1 * 60 * 1000,
+      2 * 60 * 1000,
     );
 
     this.log_info("Starting Initialization");
@@ -200,11 +200,15 @@ const nodeHelperObject = {
         const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
         const cachedPhotoList = JSON.parse(data.toString());
         // check if the cached photo list is empty
-        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length === 0) {
+        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length > 0) {
           this.localPhotoList = cachedPhotoList;
           if (this.config.sort === "random") {
-            shuffle(this.localPhotoList);
+            shuffle(cachedPhotoList);
           }
+          this.localPhotoList = [...cachedPhotoList].map((photo, index) => {
+            photo._indexOfPhotos = index;
+            return photo;
+          });
           this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
           await this.prepAndSendChunk(5); // only 5 for extra fast startup
         }
@@ -297,6 +301,11 @@ const nodeHelperObject = {
     try {
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
+
+        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache").then(async () => {
+          await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+        });
+
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
