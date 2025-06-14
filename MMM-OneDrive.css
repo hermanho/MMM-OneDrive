@@ -6,34 +6,37 @@
 }
 
 @keyframes trans {
-  from {opacity: 0}
-  to {opacity: 1}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .region.fullscreen #ONEDRIVE_PHOTO {
-  position:static;
-  top:0;
-  left:0;
-  width:100vw;
-  height:100vh;
+  position: static;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
 }
 
-
 #ONEDRIVE_PHOTO {
-  position:relative;
+  position: relative;
   min-width: 300px;
-  min-height:300px;
+  min-height: 300px;
 }
 
 #ONEDRIVE_PHOTO_CURRENT {
-  background-size:contain;
-  background-repeat:no-repeat;
-  background-position:center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   position: absolute;
-  top:10px;
-  left:10px;
-  right:10px;
-  bottom:10px;
+  top: 10px;
+  left: 10px;
+  right: 10px;
+  bottom: 10px;
 }
 
 #ONEDRIVE_PHOTO_CURRENT.animated {
@@ -41,56 +44,56 @@
   animation-duration: 2s;
 }
 
-#ONEDRIVE_PHOTO_BACK {
-  background-size:cover;
-  background-repeat:no-repeat;
-  background-position:center;
+#ONEDRIVE_PHOTO_BACKDROP {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
   position: absolute;
-  top:0;
-  left:0;
-  right:0;
-  bottom:0;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   filter: blur(10px) sepia(80%) brightness(40%);
 }
 
 #ONEDRIVE_PHOTO_INFO {
-  position:absolute;
+  position: absolute;
   top: var(--top);
   left: var(--left);
   bottom: var(--bottom);
   right: var(--right);
-  margin:10px;
-  background-color: rgba(0,0,0,0.5);
+  margin: 10px;
+  background-color: rgba(0, 0, 0, 0.5);
   padding: 10px;
   border-radius: 36px;
   line-height: 100%;
-  text-align:left;
+  text-align: left;
 }
 
 #ONEDRIVE_PHOTO_INFO .albumCover {
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  background-size:cover;
-  background-repeat:no-repeat;
-  background-position:center;
-  float:left;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  float: left;
 }
 
 #ONEDRIVE_PHOTO_INFO .albumTitle {
-  color:#FDD;
+  color: #fdd;
 }
 
 #ONEDRIVE_PHOTO_INFO .photoTime {
-  color:#DFD;
+  color: #dfd;
 }
 
 #ONEDRIVE_PHOTO_INFO .infoText {
-  float:right;
+  float: right;
   margin-left: 12px;
   padding-right: 12px;
-  padding-top:6px;
-  font-size:18px;
-  line-height:100%;
-  color:#FFF;
+  padding-top: 6px;
+  font-size: 18px;
+  line-height: 100%;
+  color: #fff;
 }

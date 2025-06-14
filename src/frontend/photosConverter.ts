@@ -1,5 +1,6 @@
 import convert from "heic-convert/browser";
 import * as Log from "logger";
+import { fetchToUint8Array } from "./fetchItem";
 
 interface ConvertHEICParams {
   id: string;
@@ -11,9 +12,7 @@ export const convertHEIC = async ({ id, filename, url }: ConvertHEICParams) => {
   try {
     Log.debug("[MMM-OneDrive] convertHEIC", { id, filename, url });
     const d = new Date().getTime();
-    const resp = await fetch(url);
-    const arrayBuffer = await resp.arrayBuffer();
-    const inputBuffer = new Uint8Array(arrayBuffer);
+    const inputBuffer = await fetchToUint8Array(url);
     const outputBuffer = await convert({
       buffer: inputBuffer, // the HEIC file buffer
       format: "JPEG",      // output format

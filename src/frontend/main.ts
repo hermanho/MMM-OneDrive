@@ -3,6 +3,7 @@ import { convertHEIC } from "./photosConverter";
 import type MomentLib from "moment";
 import type LogLib from "logger";
 import type { OneDriveMediaItem } from "../../types/type";
+import { fetchToUint8Array } from "./fetchItem";
 
 /**
  * Global or injected variable declarations
@@ -149,44 +150,59 @@ Module.register<Config>("MMM-OneDrive", {
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    let target: OneDriveMediaItem = this.scanned[this.index];
+    let photo: OneDriveMediaItem = this.scanned[this.index];
 
     this.needMorePicsFlag = false;
 
     // Skip expired baseUrl items, handle direction
     const step = 1;
     while (
-      target &&
-      target.baseUrlExpireDateTime &&
-      target.baseUrlExpireDateTime instanceof Date &&
-      !isNaN(target.baseUrlExpireDateTime.getTime()) &&
-      target.baseUrlExpireDateTime <= new Date()) {
+      photo &&
+      photo.baseUrlExpireDateTime &&
+      new Date(photo.baseUrlExpireDateTime) instanceof Date &&
+      !isNaN(new Date(photo.baseUrlExpireDateTime).getTime()) &&
+      new Date(photo.baseUrlExpireDateTime) <= new Date()) {
       this.index += step;
       if (this.index >= this.scanned.length) {
         this.index = 0;
         this.needMorePicsFlag = true;
-        target = null;
+        photo = null;
         break;
       }
-      target = this.scanned[this.index];
+      photo = this.scanned[this.index];
     }
 
-    if (target) {
-      switch (target.mimeType) {
-        case "image/heic": {
-          convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
-            const blob = new Blob([buf], { type: "image/jpeg" });
-            const blobUrl = URL.createObjectURL(blob);
-            this.render(blobUrl, target);
-          })
-            .then();
-          break;
+    if (photo) {
+      (async () => {
+        let blobUrl = null;
+        try {
+          switch (photo.mimeType) {
+            case "image/heic": {
+              const buf = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
+              const blob = new Blob([buf], { type: "image/jpeg" });
+              blobUrl = URL.createObjectURL(blob);
+              break;
+            }
+            default: {
+              const buf = await fetchToUint8Array(photo.baseUrl);
+              const blob = new Blob([buf], { type: photo.mimeType });
+              blobUrl = URL.createObjectURL(blob);
+              break;
+            }
+          }
+        } catch (err) {
+          this.sendSocketNotification("IMAGE_LOAD_FAIL", {
+            error: {
+              message: err.message,
+              name: err.name,
+              stack: err.stack,
+            },
+            photo,
+          });
         }
-        default: {
-          const url = target.baseUrl;
-          this.ready(url, target);
-        }
-      }
+        this.render(blobUrl, photo);
+      })();
+
       this.index++;
       if (this.index >= this.scanned.length) {
         this.index = 0;
@@ -200,41 +216,16 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  ready: function (url: string, target: OneDriveMediaItem) {
-    Log.debug("[MMM-OneDrive] preload image", { id: target.id, url });
-    const startDt = new Date();
-    const hidden = document.createElement("img");
-    const loadPromise = new Promise<void>((resolve, reject) => {
-      hidden.onerror = (event, source, lineno, colno, error) => {
-        const errObj = {
-          url, event, source, lineno, colno,
-          error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
-          originalError: error,
-          target,
-        };
-        Log.error("[MMM-OneDrive] hidden.onerror", errObj);
-        this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
-        reject(error);
-      };
-      hidden.onload = () => {
-        Log.debug("[MMM-OneDrive] preload image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
-        this.render(url, target);
-        resolve();
-      };
-      hidden.src = url;
-    });
-    loadPromise.then();
-  },
-
   render: function (url: string, target: OneDriveMediaItem) {
     Log.debug("[MMM-OneDrive] render image", { id: target.id, url });
     const startDt = new Date();
-    const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
+    const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
-    current.classList.add("animated");
     current.textContent = "";
+    current.style.opacity = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
+    current.classList.add("animated");
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     const album = this.albums.find((a) => a.id === target._albumId);
     if (this.config.autoInfoPosition) {
@@ -287,7 +278,7 @@ Module.register<Config>("MMM-OneDrive", {
     const wrapper = document.createElement("div");
     wrapper.id = "ONEDRIVE_PHOTO";
     const back = document.createElement("div");
-    back.id = "ONEDRIVE_PHOTO_BACK";
+    back.id = "ONEDRIVE_PHOTO_BACKDROP";
     const current = document.createElement("div");
     current.id = "ONEDRIVE_PHOTO_CURRENT";
     if (this.data.position.search("fullscreen") === -1) {
@@ -296,6 +287,7 @@ Module.register<Config>("MMM-OneDrive", {
     }
     current.addEventListener("animationend", () => {
       current.classList.remove("animated");
+      back.classList.remove("animated");
     });
     const info = document.createElement("div");
     info.id = "ONEDRIVE_PHOTO_INFO";
