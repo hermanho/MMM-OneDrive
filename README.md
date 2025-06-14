@@ -141,7 +141,7 @@ this.sendNotification('ONEDRIVE_PHOTO_NEXT', undefined);
 - Not to show blurred Background : Add this into your `css/custom.css`.
 
 ```css
-#ONEDRIVE_PHOTO_BACK {
+#ONEDRIVE_PHOTO_BACKDROP {
   display: none;
 }
 ```

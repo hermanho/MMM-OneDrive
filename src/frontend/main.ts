@@ -1,8 +1,16 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import { convertHEIC } from "./photosConverter";
-import moment from "moment";
-import * as Log from "logger";
+import type MomentLib from "moment";
+import type LogLib from "logger";
 import type { OneDriveMediaItem } from "../../types/type";
+import { fetchToUint8Array } from "./fetchItem";
+
+/**
+ * Global or injected variable declarations
+ * moment.js is lazy loaded so not available when script is loaded.
+ */
+declare const moment: typeof MomentLib;
+declare const Log: typeof LogLib;
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -71,7 +79,7 @@ Module.register<Config>("MMM-OneDrive", {
       this.albums = payload;
       //set up timer once initialized, more robust against faults
       if (!this.updateTimer || this.updateTimer === null) {
-        Log.info("Start timer for updating photos.");
+        Log.info("[MMM-OneDrive] Start timer for updating photos.");
         this.updateTimer = setInterval(() => {
           this.updatePhotos();
         }, this.config.updateInterval);
@@ -126,7 +134,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   updatePhotos: function () {
-    Log.debug("Updating photos..");
+    Log.debug("[MMM-OneDrive] Updating photos..");
     this.firstScan = false;
 
     if (this.scanned.length === 0) {
@@ -142,43 +150,58 @@ Module.register<Config>("MMM-OneDrive", {
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    let target: OneDriveMediaItem = this.scanned[this.index];
+    let photo: OneDriveMediaItem = this.scanned[this.index];
 
     this.needMorePicsFlag = false;
 
     // Skip expired baseUrl items, handle direction
     const step = 1;
     while (
-      target &&
-      target.baseUrlExpireDateTime &&
-      target.baseUrlExpireDateTime instanceof Date &&
-      !isNaN(target.baseUrlExpireDateTime.getTime()) &&
-      target.baseUrlExpireDateTime <= new Date()) {
+      photo &&
+      photo.baseUrlExpireDateTime &&
+      !isNaN(+new Date(photo.baseUrlExpireDateTime)) &&
+      new Date(photo.baseUrlExpireDateTime) <= new Date()) {
       this.index += step;
       if (this.index >= this.scanned.length) {
         this.index = 0;
         this.needMorePicsFlag = true;
-        target = null;
+        photo = null;
         break;
       }
-      target = this.scanned[this.index];
+      photo = this.scanned[this.index];
     }
 
-    if (target) {
-      switch (target.mimeType) {
-        case "image/heic": {
-          convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
-            const blob = new Blob([buf]);
-            const blobUrl = URL.createObjectURL(blob);
-            this.render(blobUrl, target);
-          }).then();
-          break;
+    if (photo) {
+      (async () => {
+        let blobUrl = null;
+        try {
+          switch (photo.mimeType) {
+            case "image/heic": {
+              const buf = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
+              const blob = new Blob([buf], { type: "image/jpeg" });
+              blobUrl = URL.createObjectURL(blob);
+              break;
+            }
+            default: {
+              const buf = await fetchToUint8Array(photo.baseUrl);
+              const blob = new Blob([buf], { type: photo.mimeType });
+              blobUrl = URL.createObjectURL(blob);
+              break;
+            }
+          }
+        } catch (err) {
+          this.sendSocketNotification("IMAGE_LOAD_FAIL", {
+            error: {
+              message: err.message,
+              name: err.name,
+              stack: err.stack,
+            },
+            photo,
+          });
         }
-        default: {
-          const url = target.baseUrl;
-          this.ready(url, target);
-        }
-      }
+        this.render(blobUrl, photo);
+      })();
+
       this.index++;
       if (this.index >= this.scanned.length) {
         this.index = 0;
@@ -192,26 +215,10 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  ready: function (url: string, target: OneDriveMediaItem) {
-    const hidden = document.createElement("img");
-    hidden.onerror = (event, source, lineno, colno, error) => {
-      const errObj = {
-        url, event, source, lineno, colno,
-        error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
-        originalError: error,
-        target,
-      };
-      console.error("[MMM-OneDrive] hidden.onerror", errObj);
-      this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
-    };
-    hidden.onload = () => {
-      this.render(url, target);
-    };
-    hidden.src = url;
-  },
-
   render: function (url: string, target: OneDriveMediaItem) {
-    const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
+    Log.debug("[MMM-OneDrive] render image", { id: target.id, url });
+    const startDt = new Date();
+    const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
@@ -257,6 +264,7 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
+    Log.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
@@ -268,7 +276,7 @@ Module.register<Config>("MMM-OneDrive", {
     const wrapper = document.createElement("div");
     wrapper.id = "ONEDRIVE_PHOTO";
     const back = document.createElement("div");
-    back.id = "ONEDRIVE_PHOTO_BACK";
+    back.id = "ONEDRIVE_PHOTO_BACKDROP";
     const current = document.createElement("div");
     current.id = "ONEDRIVE_PHOTO_CURRENT";
     if (this.data.position.search("fullscreen") === -1) {
@@ -284,7 +292,7 @@ Module.register<Config>("MMM-OneDrive", {
     wrapper.appendChild(back);
     wrapper.appendChild(current);
     wrapper.appendChild(info);
-    console.log("updated!");
+    Log.info("[MMM-OneDrive] Dom updated!");
     return wrapper;
   },
 
