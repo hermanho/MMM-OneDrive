@@ -57,6 +57,9 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOAD_FAIL":
         {
+          /**
+           * @type {{error: Error, photo: OneDriveMediaItem}}
+           */
           const { error, photo } = payload;
           this.log_error("Image loading fails:", photo.filename, photo.baseUrl);
           if (error) {
@@ -64,8 +67,8 @@ const nodeHelperObject = {
           }
           if (photo?.baseUrlExpireDateTime) {
             this.log_error("Image baseUrlExpireDateTime:", photo.baseUrlExpireDateTime);
-
-            if (photo.baseUrlExpireDateTime && photo.baseUrlExpireDateTime < Date.now()) {
+            const expireDt = new Date(photo.baseUrlExpireDateTime);
+            if (!isNaN(+expireDt) && expireDt < Date.now()) {
               const p = await oneDrivePhotosInstance.refreshItem(photo);
               const found = this.localPhotoList.find((item) => item.id === p.id);
               if (found) {
@@ -235,13 +238,15 @@ const nodeHelperObject = {
       if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
         this.photoRefreshPointer = 0;
       }
-      const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
+      const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer);
       this.log_debug(`Num to ref: ${numItemsToRefresh}, DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
 
       if (numItemsToRefresh <= 0) {
         this.log_warn(`No items to refresh. prepAndSendChunk skipped. DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
         return;
       }
+
+      this.log_info(`Preparing to refresh ${numItemsToRefresh} photos`);
 
       /**
        * refresh them
