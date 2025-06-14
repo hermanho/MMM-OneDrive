@@ -159,8 +159,7 @@ Module.register<Config>("MMM-OneDrive", {
     while (
       photo &&
       photo.baseUrlExpireDateTime &&
-      new Date(photo.baseUrlExpireDateTime) instanceof Date &&
-      !isNaN(new Date(photo.baseUrlExpireDateTime).getTime()) &&
+      !isNaN(+new Date(photo.baseUrlExpireDateTime)) &&
       new Date(photo.baseUrlExpireDateTime) <= new Date()) {
       this.index += step;
       if (this.index >= this.scanned.length) {
@@ -222,7 +221,6 @@ Module.register<Config>("MMM-OneDrive", {
     const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
-    current.style.opacity = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
     current.classList.add("animated");
@@ -287,7 +285,6 @@ Module.register<Config>("MMM-OneDrive", {
     }
     current.addEventListener("animationend", () => {
       current.classList.remove("animated");
-      back.classList.remove("animated");
     });
     const info = document.createElement("div");
     info.id = "ONEDRIVE_PHOTO_INFO";

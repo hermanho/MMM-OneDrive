@@ -57,6 +57,9 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOAD_FAIL":
         {
+          /**
+           * @type {{error: Error, photo: OneDriveMediaItem}}
+           */
           const { error, photo } = payload;
           this.log_error("Image loading fails:", photo.filename, photo.baseUrl);
           if (error) {
@@ -64,8 +67,8 @@ const nodeHelperObject = {
           }
           if (photo?.baseUrlExpireDateTime) {
             this.log_error("Image baseUrlExpireDateTime:", photo.baseUrlExpireDateTime);
-
-            if (photo.baseUrlExpireDateTime && photo.baseUrlExpireDateTime < Date.now()) {
+            const expireDt = new Date(photo.baseUrlExpireDateTime);
+            if (!isNaN(+expireDt) && expireDt < Date.now()) {
               const p = await oneDrivePhotosInstance.refreshItem(photo);
               const found = this.localPhotoList.find((item) => item.id === p.id);
               if (found) {
