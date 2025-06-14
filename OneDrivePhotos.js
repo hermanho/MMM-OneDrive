@@ -264,7 +264,7 @@ class OneDrivePhotos extends EventEmitter {
                 _albumId: albumId,
                 mimeType: item.file?.mimeType || "",
                 baseUrl: item["@microsoft.graph.downloadUrl"],
-                baseUrlExpireDateTime: new Date(Date.now() + 59 * 60 * 1000),
+                baseUrlExpireDateTime: new Date(Date.now() + 58 * 60 * 1000),
                 filename: item.name,
                 mediaMetadata: {
                   dateTimeOriginal:
@@ -302,7 +302,7 @@ class OneDrivePhotos extends EventEmitter {
                   itemVal.mediaMetadata.height = item.video.height;
                   itemVal.mediaMetadata.video = item.video;
                 }
-                
+
                 // It looks very slow to download the image and get EXIF data...
                 // if (itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
                 //   const exifTags = await this.getEXIF(itemVal.baseUrl);
@@ -396,7 +396,7 @@ class OneDrivePhotos extends EventEmitter {
         for (const r of response.response) {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
-            grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 59 * 60 * 1000);
+            grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 58 * 60 * 1000);
           } else {
             console.error(r);
             grp[r.id].baseUrl = null;
@@ -408,6 +408,32 @@ class OneDrivePhotos extends EventEmitter {
     this.log("Batch request refresh done, total: ", items.length);
 
     return items;
+  }
+
+  /**
+   *
+   * @param {OneDriveMediaItem} item
+   * @returns {Promise<OneDriveMediaItem>} item
+   */
+  async refreshItem(item) {
+    if (!item) {
+      return null;
+    }
+    await this.onAuthReady();
+    this.log("received: ", item.id, " to refresh");
+    const url = protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace("$$item-id$$", item.id);
+    const response = await this.request("refreshItem", url, "get");
+    if (response.status < 400) {
+      item.baseUrl = response.body.value["@microsoft.graph.downloadUrl"];
+      item.baseUrlExpireDateTime = new Date(Date.now() + 58 * 60 * 1000);
+    } else {
+      console.error(response);
+      item.baseUrl = null;
+    }
+
+    this.log("Refresh done");
+
+    return item;
   }
 }
 

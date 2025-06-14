@@ -80,11 +80,11 @@ describe("nodeHelperObj", () => {
         "unknown",
       ];
       mockGetImageFromAlbum.mockImplementation((id: string, validator: (photo: OneDriveMediaItem) => boolean) =>
-        Promise.resolve(createMockOneDrivePhotos(mineMap.length * 3)
+        Promise.resolve(createMockOneDrivePhotos(mimeMap.length * 3)
           .map((photo, i) => ({
             ...photo,
             albumId: "album" + id,
-            mimeType: mineMap[i % mineMap.length],
+            mimeType: mimeMap[i % mimeMap.length],
           }))
           .filter(validator))
       );

@@ -19,6 +19,8 @@ const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
+const { convertHEIC } = require("./photosConverter-node");
+const { createIntervalRunner } = require("./interval-runner");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
@@ -32,6 +34,8 @@ const nodeHelperObject = {
   localPhotoList: [],
   /** @type {number} */
   localPhotoPntr: 0,
+  uiPhotoIndex: 0,
+  uiRunner: null,
   start: function () {
     this.log_info("Starting module helper");
     this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
@@ -43,6 +47,7 @@ const nodeHelperObject = {
     this.photoRefreshPointer = 0;
     this.queue = null;
     this.initializeTimer = null;
+    this.uiPhotoIndex = -1;
 
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
@@ -58,9 +63,9 @@ const nodeHelperObject = {
       case "IMAGE_LOAD_FAIL":
         {
           const { url, event, source, lineno, colno, error, originalError, target } = payload;
-          this.log_error("[ONEDRIVE] hidden.onerror", { event, originalError, source, lineno, colno });
+          this.log_error("hidden.onerror", { event, originalError, source, lineno, colno });
           if (error) {
-            this.log_error("[ONEDRIVE] hidden.onerror error", error.message, error.name, error.stack);
+            this.log_error("hidden.onerror error", error.message, error.name, error.stack);
           }
           this.log_error("Image loading fails. Check your network.:", url);
           if (target?.baseUrlExpireDateTime) {
@@ -70,20 +75,29 @@ const nodeHelperObject = {
           // this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
         }
         break;
-      case "IMAGE_LOADED":
-        {
-          this.log_debug("Image loaded:", payload);
-        }
-        break;
-      case "NEED_MORE_PICS":
-        {
-          this.log_info("Used last pic in list");
-          // How many photos to load for 20 minutes?
-          this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
-        }
-        break;
+      // case "IMAGE_LOADED":
+      //   {
+      //     this.log_debug("Image loaded:", payload);
+      //   }
+      //   break;
+      // case "NEED_MORE_PICS":
+      //   {
+      //     this.log_info("Used last pic in list");
+      //     // How many photos to load for 20 minutes?
+      //     this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
+      //   }
+      //   break;
       case "MODULE_SUSPENDED_SKIP_UPDATE":
         this.log_debug("Module is suspended so skip the UI update");
+        break;
+      case "MODULE_SUSPENDED":
+        this.uiRunner?.stop();
+        break;
+      case "MODULE_RESUMED":
+        this.uiRunner?.resume();
+        break;
+      case "NEXT_PHOTO":
+        this.uiRunner?.skipToNext();
         break;
       default:
         this.log_error("Unknown notification received", notification);
@@ -91,19 +105,19 @@ const nodeHelperObject = {
   },
 
   log_debug: function (...args) {
-    Log.debug("[ONEDRIVE] [node_helper]", ...args);
+    Log.debug("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_info: function (...args) {
-    Log.info("[ONEDRIVE] [node_helper]", ...args);
+    Log.info("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_error: function (...args) {
-    Log.error("[ONEDRIVE] [node_helper]", ...args);
+    Log.error("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   log_warn: function (...args) {
-    Log.warn("[ONEDRIVE] [node_helper]", ...args);
+    Log.warn("[MMM-OneDrive] [node_helper]", ...args);
   },
 
   initializeAfterLoading: async function (config) {
@@ -115,10 +129,12 @@ const nodeHelperObject = {
       config: config,
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
+      this.uiRunner?.stop();
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
+      this.uiRunner?.resume();
     });
 
     this.albumsFilters = [];
@@ -130,17 +146,18 @@ const nodeHelperObject = {
       }
     }
 
+    this.startUIRenderClock();
     await this.tryToIntitialize();
   },
 
   tryToIntitialize: async function () {
-    //set timer, in case if fails to retry in 1 min
+    //set timer, in case if fails to retry in 2 min
     clearTimeout(this.initializeTimer);
     this.initializeTimer = setTimeout(
       () => {
         this.tryToIntitialize();
       },
-      1 * 60 * 1000,
+      2 * 60 * 1000,
     );
 
     this.log_info("Starting Initialization");
@@ -184,7 +201,7 @@ const nodeHelperObject = {
         const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
         this.selectedAlbums = JSON.parse(data.toString());
         this.log_debug("successfully loaded selectedAlbums");
-        this.sendSocketNotification("UPDATE_ALBUMS", this.selectedAlbums); // for fast startup
+        // this.sendSocketNotification("UPDATE_ALBUMS", this.selectedAlbums); // for fast startup
       } catch (err) {
         this.log_error("unable to load selectedAlbums cache", err);
       }
@@ -200,13 +217,18 @@ const nodeHelperObject = {
         const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
         const cachedPhotoList = JSON.parse(data.toString());
         // check if the cached photo list is empty
-        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length === 0) {
+        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length >= 0) { //<<<<<
           this.localPhotoList = cachedPhotoList;
           if (this.config.sort === "random") {
-            shuffle(this.localPhotoList);
+            shuffle(cachedPhotoList);
           }
+          this.localPhotoList = [...cachedPhotoList].map((photo, index) => {
+            photo._indexOfPhotos = index;
+            return photo;
+          });
           this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
-          await this.prepAndSendChunk(5); // only 5 for extra fast startup
+          // await this.prepAndSendChunk(5); // only 5 for extra fast startup
+          this.uiRunner?.skipToNext();
         }
       } catch (err) {
         this.log_error("unable to load photo list cache", err);
@@ -215,53 +237,53 @@ const nodeHelperObject = {
 
   },
 
-  prepAndSendChunk: async function (desiredChunk = 20) {
-    this.log_debug("prepAndSendChunk");
+  // prepAndSendChunk: async function (desiredChunk = 20) {
+  //   this.log_debug("prepAndSendChunk");
 
-    try {
-      //find which ones to refresh
-      if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
-        this.photoRefreshPointer = 0;
-      }
-      const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
-      this.log_debug(`Num to ref: ${numItemsToRefresh}, DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
+  //   try {
+  //     //find which ones to refresh
+  //     if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
+  //       this.photoRefreshPointer = 0;
+  //     }
+  //     const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer, 20); //20 is api limit
+  //     this.log_debug(`Num to ref: ${numItemsToRefresh}, DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
 
-      if (numItemsToRefresh <= 0) {
-        this.log_warn(`No items to refresh. prepAndSendChunk skipped. DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
-        return;
-      }
+  //     if (numItemsToRefresh <= 0) {
+  //       this.log_warn(`No items to refresh. prepAndSendChunk skipped. DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
+  //       return;
+  //     }
 
-      /**
-       * refresh them
-       * @type {OneDriveMediaItem[]}
-       */
-      const list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
+  //     /**
+  //      * refresh them
+  //      * @type {OneDriveMediaItem[]}
+  //      */
+  //     const list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
 
-      if (list.length <= 0) {
-        this.log_error("No items from batchRequestRefresh. prepAndSendChunk skipped");
-        return;
-      }
+  //     if (list.length <= 0) {
+  //       this.log_error("No items from batchRequestRefresh. prepAndSendChunk skipped");
+  //       return;
+  //     }
 
-      // update the localList
-      this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
+  //     // update the localList
+  //     this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
 
-      this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
-      this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+  //     this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
+  //     this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
 
-      // send updated pics
-      this.sendSocketNotification("MORE_PICS", list);
+  //     // send updated pics
+  //     this.sendSocketNotification("MORE_PICS", list);
 
-      // update pointer
-      this.photoRefreshPointer = this.photoRefreshPointer + list.length;
-      this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
+  //     // update pointer
+  //     this.photoRefreshPointer = this.photoRefreshPointer + list.length;
+  //     this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
 
-      this.log_info("prepAndSendChunk done");
-    } catch (err) {
-      this.log_error("failed to refresh and send chunk: ");
-      this.log_error(error_to_string(err));
-      throw err;
-    }
-  },
+  //     this.log_info("prepAndSendChunk done");
+  //   } catch (err) {
+  //     this.log_error("failed to refresh and send chunk: ");
+  //     this.log_error(error_to_string(err));
+  //     throw err;
+  //   }
+  // },
 
   /** @returns {Promise<microsoftgraph.DriveItem[]>} album */
   getAlbums: async function () {
@@ -275,6 +297,55 @@ const nodeHelperObject = {
     } catch (err) {
       this.log_error(error_to_string(err));
     }
+  },
+
+  startUIRenderClock: function () {
+    this.log_info("Starting UI render clock");
+
+    this.uiPhotoIndex = 0;
+
+    this.uiRunner = createIntervalRunner(async () => {
+      if (!this.localPhotoList || this.localPhotoList.length === 0) {
+        this.log_warn("Not ready to render UI. No photos in list.");
+        return;
+      }
+      this.log_info("Rendering UI...");
+      const photo = this.localPhotoList[this.uiPhotoIndex];
+      if (photo) {
+        if (photo.baseUrlExpireDateTime && photo.baseUrlExpireDateTime < Date.now()) {
+          await oneDrivePhotosInstance.refreshItem(photo);
+        }
+
+        let buffer = null;
+        switch (photo.mimeType) {
+          case "image/heic": {
+            buffer = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
+            break;
+          }
+          default: {
+            const resp = await fetch(photo.baseUrl);
+            const arrayBuffer = await resp.arrayBuffer();
+            buffer = Buffer.from(arrayBuffer);
+          }
+        }
+        const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
+
+        const base64 = buffer.toString("base64");
+
+        this.log_debug("Image load:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+        this.sendSocketNotification("NEW_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+
+        this.index++;
+        if (this.index >= this.localPhotoList.length) {
+          this.index = 0;
+          this.needMorePicsFlag = true;
+        }
+      }
+      this.uiPhotoIndex++;
+      if (this.uiPhotoIndex >= this.localPhotoList.length) {
+        this.uiPhotoIndex = 0;
+      }
+    }, this.config.updateInterval);
   },
 
   startScanning: function () {
@@ -297,6 +368,11 @@ const nodeHelperObject = {
     try {
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
+
+        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache").then(async () => {
+          await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+        });
+
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
@@ -357,7 +433,7 @@ const nodeHelperObject = {
     }
     this.selectedAlbums = selectedAlbums;
     this.log_info("getAlbumList done");
-    this.sendSocketNotification("INITIALIZED", selectedAlbums);
+    // this.sendSocketNotification("INITIALIZED", selectedAlbums);
   },
 
   getImageList: async function () {
@@ -414,7 +490,7 @@ const nodeHelperObject = {
         if (this.photoRefreshPointer >= this.localPhotoList.length) {
           this.photoRefreshPointer = 0;
         }
-        await this.prepAndSendChunk(50);
+        // await this.prepAndSendChunk(50);
       } else {
         this.log_warn("photos.length is 0");
       }
