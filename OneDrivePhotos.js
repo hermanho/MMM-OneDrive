@@ -429,7 +429,7 @@ class OneDrivePhotos extends EventEmitter {
       item.baseUrl = response.body.value["@microsoft.graph.downloadUrl"];
       item.baseUrlExpireDateTime = generateNewExpirationDate();
     } else {
-      console.error(response);
+      this.logError("Error in refreshItem", response.status, { id: item.id, filename: item.filename });
       item.baseUrl = null;
     }
 

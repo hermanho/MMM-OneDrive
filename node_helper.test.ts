@@ -69,7 +69,7 @@ describe("nodeHelperObj", () => {
       expect(helper.photoRefreshPointer).toBe(34);
     });
 
-    it("should filter out non image minetype items", async () => {
+    it("should filter out non image mimetype items", async () => {
       const mimeMap = [
         "image/jpeg",
         "image/heic",
