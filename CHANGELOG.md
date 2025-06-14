@@ -2,6 +2,7 @@
 
 **`[1.4.2] - 2025/06/13`**
 - Fixed: disable this.getEXIF due to perf issue, global variable momentjs inject problem, ignore non image file when check EXIF #20
+- Fixed: photo flickering on change
 
 **`[1.4.1] - 2025/06/11`**
 - Fixed: image failed loading due to URL expired #16
