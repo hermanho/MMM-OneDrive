@@ -95,6 +95,7 @@ const nodeHelperObject = {
           this.log_info("Used last pic in list");
           // How many photos to load for 20 minutes?
           this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
+          this.savePhotoListCache();
         }
         break;
       case "MODULE_SUSPENDED_SKIP_UPDATE":
@@ -225,6 +226,7 @@ const nodeHelperObject = {
             return photo;
           });
           this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
+          this.savePhotoListCache();
           await this.prepAndSendChunk(5); // only 5 for extra fast startup
         }
       } catch (err) {
@@ -266,10 +268,6 @@ const nodeHelperObject = {
       // update the localList
       this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
 
-      this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache").then(async () => {
-        await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
-      });
-
       // send updated pics
       this.sendSocketNotification("MORE_PICS", list);
 
@@ -303,7 +301,7 @@ const nodeHelperObject = {
     const fn = () => {
       const nextScanDt = new Date(Date.now() + this.scanInterval);
       this.scanJob().then(() => {
-        this.log_info("Next scan will be at", nextScanDt);
+        this.log_info("Next scan will be at", nextScanDt.toLocaleString());
       });
     };
     // set up interval, then 1 fail won't stop future scans
@@ -319,10 +317,7 @@ const nodeHelperObject = {
     try {
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
-
-        this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache").then(async () => {
-          await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
-        });
+        this.savePhotoListCache();
 
         return true;
       } else {
@@ -453,6 +448,13 @@ const nodeHelperObject = {
 
   stop: function () {
     clearInterval(this.scanTimer);
+  },
+
+  savePhotoListCache: function () {
+    (async () => {
+      await this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
+      await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
+    })();
   },
 
   readFileSafe: async function (filePath, fileDescription) {

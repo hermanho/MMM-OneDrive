@@ -190,6 +190,7 @@ Module.register<Config>("MMM-OneDrive", {
             }
           }
         } catch (err) {
+          Log.error("[MMM-OneDrive] IMAGE_LOAD_FAIL", { id: photo.id, filename: photo.filename, error: err.message });
           this.sendSocketNotification("IMAGE_LOAD_FAIL", {
             error: {
               message: err.message,
@@ -198,6 +199,13 @@ Module.register<Config>("MMM-OneDrive", {
             },
             photo,
           });
+          return;
+        } finally {
+          setTimeout(() => {
+            if (blobUrl) {
+              URL.revokeObjectURL(blobUrl);
+            }
+          }, 1000 * 60 * 2); // Revoke after 2 minutes to avoid memory leaks
         }
         this.render(blobUrl, photo);
       })();
