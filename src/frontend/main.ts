@@ -1,8 +1,6 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
-import { convertHEIC } from "./photosConverter";
 import type MomentLib from "moment";
 import type { OneDriveMediaItem } from "../../types/type";
-import { FetchHTTPError, fetchToUint8Array } from "./fetchItem";
 
 /**
  * Global or injected variable declarations
@@ -123,6 +121,17 @@ Module.register<Config>("MMM-OneDrive", {
       const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
       info.innerHTML = String(payload);
     }
+    if (noti === "RENDER_PHOTO") {
+      this.state = {
+        type: "newPhoto",
+        payload,
+      };
+      const { photo, photoBase64 } = payload;
+      const mimeType = photo.mimeType === "image/heic" ? "image/jpeg" : photo.mimeType;
+      const url = `data:${mimeType};base64,${photoBase64}`;
+      console.debug("[MMM-OneDrive] render image", { id: photo.id });
+      this.render(url, photo);
+    }
   },
 
   notificationReceived: function (noti, _payload, _sender) {
@@ -148,78 +157,16 @@ Module.register<Config>("MMM-OneDrive", {
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    let photo: OneDriveMediaItem = this.scanned[this.index];
+    const photo: OneDriveMediaItem = this.scanned[this.index];
+
+    this.sendSocketNotification("TRIGGER_SHOWING_PHOTO", { photoId: photo.id });
 
     this.needMorePicsFlag = false;
 
-    // Skip expired baseUrl items, handle direction
-    const step = 1;
-    while (
-      photo &&
-      photo.baseUrlExpireDateTime &&
-      !isNaN(+new Date(photo.baseUrlExpireDateTime)) &&
-      new Date(photo.baseUrlExpireDateTime) <= new Date()) {
-      this.index += step;
-      if (this.index >= this.scanned.length) {
-        this.index = 0;
-        this.needMorePicsFlag = true;
-        photo = null;
-        break;
-      }
-      photo = this.scanned[this.index];
-    }
-
-    if (photo) {
-      (async () => {
-        let blobUrl = null;
-        try {
-          switch (photo.mimeType) {
-            case "image/heic": {
-              const buf = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
-              const blob = new Blob([buf], { type: "image/jpeg" });
-              blobUrl = URL.createObjectURL(blob);
-              break;
-            }
-            default: {
-              const buf = await fetchToUint8Array(photo.baseUrl);
-              const blob = new Blob([buf], { type: photo.mimeType });
-              blobUrl = URL.createObjectURL(blob);
-              break;
-            }
-          }
-        } catch (err) {
-          if (err instanceof FetchHTTPError) {
-            // silently skip the error
-            return;
-          }
-          console.error("[MMM-OneDrive] IMAGE_LOAD_FAIL", { id: photo.id, filename: photo.filename, error: err.message });
-          console.error(err?.stack || err);
-          this.sendSocketNotification("IMAGE_LOAD_FAIL", {
-            error: {
-              message: err.message,
-              name: err.name,
-              stack: err.stack,
-            },
-            photo,
-          });
-          return;
-        } finally {
-          setTimeout(() => {
-            if (blobUrl) {
-              URL.revokeObjectURL(blobUrl);
-            }
-          }, 1000 * 60 * 2 + this.config.updateInterval); // Revoke after +2 minutes to avoid memory leaks
-        }
-        this.render(blobUrl, photo);
-      })();
-
-      this.index++;
-      if (this.index >= this.scanned.length) {
-        this.index = 0;
-        this.needMorePicsFlag = true;
-      }
-    }
-    if (this.needMorePicsFlag) {
+    this.index++;
+    if (this.index >= this.scanned.length) {
+      this.index = 0;
+      this.needMorePicsFlag = true;
       setTimeout(() => {
         this.sendSocketNotification("NEED_MORE_PICS", []);
       }, 2000);
@@ -227,7 +174,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   render: function (url: string, target: OneDriveMediaItem) {
-    console.debug("[MMM-OneDrive] render image", { id: target.id, url });
+    console.debug("[MMM-OneDrive] render image", { id: target.id, url, mimeType: target.mimeType });
     const startDt = new Date();
     const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
