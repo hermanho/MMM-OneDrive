@@ -1,5 +1,9 @@
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-declare const newrelic: any;
+export class FetchHTTPError extends Error {
+  constructor(public url: string, public status: number, public responseText: string) {
+    super(`Failed to fetch url ${url}: ${status}, ${responseText}`);
+    this.cause = responseText;
+  }
+}
 
 const fetchToUint8ArrayOnce = async (url: string): Promise<Uint8Array> => {
   const resp = await fetch(url);
@@ -10,7 +14,7 @@ const fetchToUint8ArrayOnce = async (url: string): Promise<Uint8Array> => {
     } catch {
       // Ignore errors while reading the response text
     }
-    throw new Error(`Failed to fetch url ${url}: ${resp.status}`, { cause: text });
+    throw new FetchHTTPError(url, resp.status, text);
   }
   const arrayBuffer = await resp.arrayBuffer();
   const buffer = new Uint8Array(arrayBuffer);
@@ -30,9 +34,12 @@ export const fetchToUint8Array = async (url: string, maxRetries = 3, retryDelay 
           continue;
         }
       }
+      if (err instanceof FetchHTTPError && err.status >= 400 && err.status < 500) {
+        // If it's a client error (4xx), we don't retry
+        throw err;
+      }
       console.error(`Error fetching ${url}:`);
       console.error(err);
-      newrelic?.noticeError(err);
       throw err;
     }
   }

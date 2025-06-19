@@ -1,16 +1,14 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import { convertHEIC } from "./photosConverter";
 import type MomentLib from "moment";
-import type LogLib from "logger";
 import type { OneDriveMediaItem } from "../../types/type";
-import { fetchToUint8Array } from "./fetchItem";
+import { FetchHTTPError, fetchToUint8Array } from "./fetchItem";
 
 /**
  * Global or injected variable declarations
  * moment.js is lazy loaded so not available when script is loaded.
  */
 declare const moment: typeof MomentLib;
-declare const Log: typeof LogLib;
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -79,7 +77,7 @@ Module.register<Config>("MMM-OneDrive", {
       this.albums = payload;
       //set up timer once initialized, more robust against faults
       if (!this.updateTimer || this.updateTimer === null) {
-        Log.info("[MMM-OneDrive] Start timer for updating photos.");
+        console.info("[MMM-OneDrive] Start timer for updating photos.");
         this.updateTimer = setInterval(() => {
           this.updatePhotos();
         }, this.config.updateInterval);
@@ -134,7 +132,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   updatePhotos: function () {
-    Log.debug("[MMM-OneDrive] Updating photos..");
+    console.debug("[MMM-OneDrive] Updating photos..");
     this.firstScan = false;
 
     if (this.scanned.length === 0) {
@@ -190,7 +188,12 @@ Module.register<Config>("MMM-OneDrive", {
             }
           }
         } catch (err) {
-          Log.error("[MMM-OneDrive] IMAGE_LOAD_FAIL", { id: photo.id, filename: photo.filename, error: err.message });
+          if (err instanceof FetchHTTPError) {
+            // silently skip the error
+            return;
+          }
+          console.error("[MMM-OneDrive] IMAGE_LOAD_FAIL", { id: photo.id, filename: photo.filename, error: err.message });
+          console.error(err?.stack || err);
           this.sendSocketNotification("IMAGE_LOAD_FAIL", {
             error: {
               message: err.message,
@@ -205,7 +208,7 @@ Module.register<Config>("MMM-OneDrive", {
             if (blobUrl) {
               URL.revokeObjectURL(blobUrl);
             }
-          }, 1000 * 60 * 2); // Revoke after 2 minutes to avoid memory leaks
+          }, 1000 * 60 * 2 + this.config.updateInterval); // Revoke after +2 minutes to avoid memory leaks
         }
         this.render(blobUrl, photo);
       })();
@@ -224,7 +227,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   render: function (url: string, target: OneDriveMediaItem) {
-    Log.debug("[MMM-OneDrive] render image", { id: target.id, url });
+    console.debug("[MMM-OneDrive] render image", { id: target.id, url });
     const startDt = new Date();
     const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
@@ -272,7 +275,7 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
-    Log.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
+    console.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
@@ -300,7 +303,7 @@ Module.register<Config>("MMM-OneDrive", {
     wrapper.appendChild(back);
     wrapper.appendChild(current);
     wrapper.appendChild(info);
-    Log.info("[MMM-OneDrive] Dom updated!");
+    console.info("[MMM-OneDrive] Dom updated!");
     return wrapper;
   },
 
