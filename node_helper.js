@@ -19,6 +19,8 @@ const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
+const { convertHEIC } = require("./photosConverter-node");
+const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 
@@ -100,6 +102,9 @@ const nodeHelperObject = {
         break;
       case "MODULE_SUSPENDED_SKIP_UPDATE":
         this.log_debug("Module is suspended so skip the UI update");
+        break;
+      case "TRIGGER_SHOWING_PHOTO":
+        this.prepareShowPhoto(payload);
         break;
       default:
         this.log_error("Unknown notification received", notification);
@@ -444,6 +449,60 @@ const nodeHelperObject = {
       this.log_error(error_to_string(err));
       throw err;
     }
+  },
+
+  prepareShowPhoto: async function ({ photoId }) {
+    const photo = this.localPhotoList.find((p) => p.id === photoId);
+    if (!photo) {
+      this.log_error(`Photo with id ${photoId} not found in local list`);
+      return;
+    }
+
+    if (photo?.baseUrlExpireDateTime) {
+      const expireDt = new Date(photo.baseUrlExpireDateTime);
+      if (!isNaN(+expireDt) && expireDt < Date.now()) {
+        this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
+        const p = await oneDrivePhotosInstance.refreshItem(photo);
+        photo.baseUrl = p.baseUrl;
+        photo.baseUrlExpireDateTime = p.baseUrlExpireDateTime;
+        this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
+      }
+    }
+
+    let buffer = null;
+    try {
+      switch (photo.mimeType) {
+        case "image/heic": {
+          buffer = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
+          break;
+        }
+        default: {
+          const buf = await fetchToUint8Array(photo.baseUrl);
+          buffer = Buffer.from(buf);
+          break;
+        }
+      }
+
+      const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
+
+      const base64 = buffer.toString("base64");
+
+      this.log_debug("Image load:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+      this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+    } catch (err) {
+      if (err instanceof FetchHTTPError) {
+        // silently skip the error
+        return;
+      }
+      this.log_error("Image loading fails:", photo.id, photo.filename, photo.baseUrl);
+      if (err) {
+        this.log_error("error", err?.message, err?.name);
+        this.log_error(err?.stack || err);
+      }
+
+
+    }
+
   },
 
   stop: function () {
