@@ -1,7 +1,7 @@
 export interface OneDriveMediaItem {
   id: string;
   baseUrl?: string;
-  baseUrlExpireDateTime?: Date;
+  baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
     dateTimeOriginal: string;

@@ -16,9 +16,13 @@ const AuthProvider = require("./msal/AuthProvider");
 const sleep = require("./sleep");
 
 const chunk = (arr, size) =>
-  Array.from({ length: Math.ceil(arr.length / size) }, (v, i) =>
+  Array.from({
+    length: Math.ceil(arr.length / size),
+  }, (v, i) =>
     arr.slice(i * size, i * size + size)
   );
+
+const generateNewExpirationDate = () => new Date(Date.now() + 58 * 60 * 1000).toISOString();
 
 class Auth extends EventEmitter {
   #debug = {};
@@ -28,12 +32,11 @@ class Auth extends EventEmitter {
   constructor(debug = false) {
     super();
     this.#debug = debug;
-    this.init().then(() =>
-      process.nextTick(() =>
+    this.init().then(
+      () => process.nextTick(() =>
         this.emit("ready")
       ),
-      (err) =>
-        this.emit("error", err)
+      (err) => this.emit("error", err)
     );
   }
 
@@ -45,7 +48,9 @@ class Auth extends EventEmitter {
     Log.info("[ONEDRIVE:CORE] Auth -> AuthProvider created");
   }
 
-  get AuthProvider() { return this.#authProvider; }
+  get AuthProvider() {
+    return this.#authProvider;
+  }
 }
 
 class OneDrivePhotos extends EventEmitter {
@@ -74,8 +79,12 @@ class OneDrivePhotos extends EventEmitter {
     Log.debug("[ONEDRIVE:CORE]", ...args);
   }
 
+  logWarn(...args) {
+    Log.warn("[ONEDRIVE:CORE]", ...args);
+  }
+
   /**
-   * 
+   *
    * @param {import("@azure/msal-common").DeviceCodeResponse} response
    */
   deviceCodeCallback(response) {
@@ -141,7 +150,7 @@ class OneDrivePhotos extends EventEmitter {
 
   async getAlbumLoop() {
     await this.onAuthReady();
-    let url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
+    const url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
     /** @type {microsoftgraph.DriveItem[]} */
     let list = [];
     let found = 0;
@@ -154,7 +163,7 @@ class OneDrivePhotos extends EventEmitter {
       this.log("Getting Album info chunks.");
       try {
         /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request("getAlbum", pageUrl, "get", null);
+        const response = await this.request("getAlbum", pageUrl, "get", null);
         if (Array.isArray(response.value)) {
           /** @type {microsoftgraph.DriveItem[]} */
           const arrayValue = response.value;
@@ -191,7 +200,7 @@ class OneDrivePhotos extends EventEmitter {
     }
     try {
       const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$item-id$$", album.bundle.album.coverImageItemId);
-      let response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
+      const response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
       if (Array.isArray(response2.value) && response2.value.length > 0) {
         const thumbnail = response2.value[0];
         const thumbnailUrl = thumbnail.mediumSquare?.url || thumbnail.medium?.url;
@@ -223,107 +232,143 @@ class OneDrivePhotos extends EventEmitter {
 
   async getImageFromAlbum(albumId, isValid = null, maxNum = 99999) {
     await this.onAuthReady();
-    let url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
+    const url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
 
     this.log("Indexing photos. album:", albumId);
     /**
      * @type {OneDriveMediaItem[]}
      */
-    let list = [];
+    const list = [];
+    let loopCycle = 0;
     /**
-     *
-     * @param {string} pageUrl
-     * @returns {Promise<OneDriveMediaItem[]>} DriveItem
+     * Single-loop version of getImages
+     * @param {string} startUrl
+     * @returns {Promise<OneDriveMediaItem[]>}
      */
-    const getImages = async (pageUrl) => {
-      try {
-        /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        let response = await this.request("getImage", pageUrl, "get");
-        if (Array.isArray(response.value)) {
-          /** @type {microsoftgraph.DriveItem[]} */
-          const childrenItems = response.value;
-          for (let item of childrenItems) {
-            /** @type {OneDriveMediaItem} */
-            const itemVal = {
-              id: item.id,
-              _albumId: albumId,
-              mimeType: item.file?.mimeType,
-              baseUrl: item["@microsoft.graph.downloadUrl"],
-              baseUrlExpireDateTime: new Date(Date.now() + 59 * 60 * 1000),
-              filename: item.name,
-              mediaMetadata: {
-                dateTimeOriginal: item.photo?.takenDateTime
-                  || item.fileSystemInfo?.createdDateTime
-                  || item.fileSystemInfo?.lastModifiedDateTime,
-              },
-              parentReference: item.parentReference,
-            };
-            if (list.length < maxNum) {
-              if (item.image) {
-                itemVal.mediaMetadata.width = item.image.width;
-                itemVal.mediaMetadata.height = item.image.height;
-              }
-              if (item.photo) {
-                itemVal.mediaMetadata.photo = {
-                  cameraMake: item.photo.cameraMake,
-                  cameraModel: item.photo.cameraModel,
-                  focalLength: item.photo.focalLength,
-                  apertureFNumber: item.photo.fNumber,
-                  isoEquivalent: item.photo.iso,
-                  exposureTime: item.photo.exposureNumerator && item.photo.exposureDenominator && item.photo.exposureDenominator !== 0 ? (item.photo.exposureNumerator * 1.0 / item.photo.exposureDenominator).toFixed(2) + "s" : null,
-                };
-              }
-              if (item.video) {
-                itemVal.mediaMetadata.width = item.video.width;
-                itemVal.mediaMetadata.height = item.video.height;
-                itemVal.mediaMetadata.video = item.video;
-              }
+    const getImages = async (startUrl) => {
+      let pageUrl = startUrl;
+      let done = false;
+      while (!done) {
+        this.log(`getImages loop cycle: ${loopCycle}`);
+        const startTime = Date.now();
+        try {
+          /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
+          const response = await this.request("getImage", pageUrl, "get");
+          if (Array.isArray(response.value)) {
+            /** @type {microsoftgraph.DriveItem[]} */
+            const childrenItems = response.value;
+            this.log(`Parsing ${childrenItems.length} items in ${albumId}`);
+            let validCount = 0;
+            for (const item of childrenItems) {
+              /** @type {OneDriveMediaItem} */
+              const itemVal = {
+                id: item.id,
+                _albumId: albumId,
+                mimeType: item.file?.mimeType || "",
+                baseUrl: item["@microsoft.graph.downloadUrl"],
+                baseUrlExpireDateTime: generateNewExpirationDate(),
+                filename: item.name,
+                mediaMetadata: {
+                  dateTimeOriginal:
+                    item.photo?.takenDateTime ||
+                    item.fileSystemInfo?.createdDateTime ||
+                    item.fileSystemInfo?.lastModifiedDateTime,
+                },
+                parentReference: item.parentReference,
+              };
+              if (list.length < maxNum) {
+                if (item.image) {
+                  itemVal.mediaMetadata.width = item.image.width;
+                  itemVal.mediaMetadata.height = item.image.height;
+                }
+                if (item.photo) {
+                  itemVal.mediaMetadata.photo = {
+                    cameraMake: item.photo.cameraMake,
+                    cameraModel: item.photo.cameraModel,
+                    focalLength: item.photo.focalLength,
+                    apertureFNumber: item.photo.fNumber,
+                    isoEquivalent: item.photo.iso,
+                    exposureTime:
+                      item.photo.exposureNumerator &&
+                        item.photo.exposureDenominator &&
+                        item.photo.exposureDenominator !== 0
+                        ? (
+                          (item.photo.exposureNumerator * 1.0) /
+                          item.photo.exposureDenominator
+                        ).toFixed(2) + "s"
+                        : null,
+                  };
+                }
+                if (item.video) {
+                  itemVal.mediaMetadata.width = item.video.width;
+                  itemVal.mediaMetadata.height = item.video.height;
+                  itemVal.mediaMetadata.video = item.video;
+                }
 
-              if (!item.photo?.takenDateTime) {
-                const exifTags = await this.getEXIF(itemVal.baseUrl);
-                if (exifTags && exifTags["DateTimeOriginal"]) {
-                  let dt = exifTags["DateTimeOriginal"].description;
-                  // Convert 'YYYY:MM:DD HH:mm:ss' to ISO 8601 'YYYY-MM-DDTHH:mm:ss'
-                  if (typeof dt === "string" && dt.length > 0 && /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)) {
-                    dt = dt.replace(/^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/, "$1-$2-$3T$4");
+                // It looks very slow to download the image and get EXIF data...
+                // if (itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
+                //   const exifTags = await this.getEXIF(itemVal.baseUrl);
+                //   if (exifTags && exifTags["DateTimeOriginal"]) {
+                //     let dt = exifTags["DateTimeOriginal"].description;
+                //     // Convert 'YYYY:MM:DD HH:mm:ss' to ISO 8601 'YYYY-MM-DDTHH:mm:ss'
+                //     if (
+                //       typeof dt === "string" &&
+                //       dt.length > 0 &&
+                //       /^\d{4}:\d{2}:\d{2} \d{2}:\d{2}:\d{2}$/.test(dt)
+                //     ) {
+                //       dt = dt.replace(
+                //         /^([0-9]{4}):([0-9]{2}):([0-9]{2}) ([0-9]{2}:[0-9]{2}:[0-9]{2})$/,
+                //         "$1-$2-$3T$4"
+                //       );
+                //     }
+                //     itemVal.mediaMetadata.dateTimeOriginal = dt;
+                //     itemVal.mediaMetadata.manualExtractEXIF = true;
+                //   }
+                // }
+                if (typeof isValid === "function") {
+                  if (isValid(itemVal)) {
+                    list.push(itemVal);
+                    validCount++;
                   }
-                  itemVal.mediaMetadata.dateTimeOriginal = dt;
-                  itemVal.mediaMetadata.manualExtractEXIF = true;
+                } else {
+                  list.push(itemVal);
+                  validCount++;
                 }
               }
-
-              if (typeof isValid === "function") {
-                if (isValid(itemVal)) list.push(itemVal);
-              } else {
-                list.push(itemVal);
-              }
             }
-          }
-          if (list.length >= maxNum) {
-            this.log("Indexing photos done, found: ", list.length);
-            return list; // full with maxNum
-          } else {
-            if (response["@odata.nextLink"]) {
+            this.logDebug(`Valid ${validCount} items in ${albumId}`);
+            const endTime = Date.now();
+            this.logDebug(`getImages loop cycle ${loopCycle} took ${endTime - startTime} ms`);
+            if (list.length >= maxNum) {
+              this.log("Indexing photos done, found: ", list.length);
+              done = true;
+              return list;
+            } else if (response["@odata.nextLink"]) {
+              this.logDebug(`Got nextLink, continue to get more images from album: ${albumId}`);
+              pageUrl = response["@odata.nextLink"];
+              loopCycle++;
               await sleep(500);
-              return await getImages(response["@odata.nextLink"]);
             } else {
-              return list; // all found but lesser than maxNum
+              done = true;
+              return list;
             }
+          } else {
+            this.logWarn(`${albumId}`, albumId);
+            done = true;
+            return list;
           }
-        } else {
-          return list; // empty
+        } catch (err) {
+          this.logError(".getImageFromAlbum()", err.toString());
+          this.logError(err);
+          throw err;
         }
-      } catch (err) {
-        this.logError(".getImageFromAlbum()", err.toString());
-        this.logError(err);
-        throw err;
       }
     };
     return await getImages(url);
   }
 
   /**
-   * 
+   *
    * @param {OneDriveMediaItem[]} items
    * @returns {Promise<OneDriveMediaItem[]>} items
    */
@@ -347,15 +392,14 @@ class OneDrivePhotos extends EventEmitter {
       }));
       if (requestsValue.length > 0) {
         const requestsPayload = {
-          "requests": requestsValue,
+          requests: requestsValue,
         };
         const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
-        for (let r of response.response) {
+        for (const r of response.response) {
           if (r.status < 400) {
             grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
-            grp[r.id].baseUrlExpireDateTime = new Date(Date.now() + 59 * 60 * 1000);
-          }
-          else {
+            grp[r.id].baseUrlExpireDateTime = generateNewExpirationDate();
+          } else {
             console.error(r);
             grp[r.id].baseUrl = null;
           }
@@ -366,6 +410,32 @@ class OneDrivePhotos extends EventEmitter {
     this.log("Batch request refresh done, total: ", items.length);
 
     return items;
+  }
+
+  /**
+   *
+   * @param {OneDriveMediaItem} item
+   * @returns {Promise<OneDriveMediaItem>} item
+   */
+  async refreshItem(item) {
+    if (!item) {
+      return null;
+    }
+    await this.onAuthReady();
+    this.log("received: ", item.id, " to refresh");
+    const url = protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace("$$item-id$$", item.id);
+    const response = await this.request("refreshItem", url, "get");
+    if (response.status < 400) {
+      item.baseUrl = response.body.value["@microsoft.graph.downloadUrl"];
+      item.baseUrlExpireDateTime = generateNewExpirationDate();
+    } else {
+      this.logError("Error in refreshItem", response.status, { id: item.id, filename: item.filename });
+      item.baseUrl = null;
+    }
+
+    this.log("Refresh done");
+
+    return item;
   }
 }
 
