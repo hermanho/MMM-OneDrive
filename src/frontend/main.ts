@@ -1,8 +1,12 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
-import { convertHEIC } from "./photosConverter";
-import moment from "moment";
-import * as Log from "logger";
+import type MomentLib from "moment";
 import type { OneDriveMediaItem } from "../../types/type";
+
+/**
+ * Global or injected variable declarations
+ * moment.js is lazy loaded so not available when script is loaded.
+ */
+declare const moment: typeof MomentLib;
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -71,7 +75,7 @@ Module.register<Config>("MMM-OneDrive", {
       this.albums = payload;
       //set up timer once initialized, more robust against faults
       if (!this.updateTimer || this.updateTimer === null) {
-        Log.info("Start timer for updating photos.");
+        console.info("[MMM-OneDrive] Start timer for updating photos.");
         this.updateTimer = setInterval(() => {
           this.updatePhotos();
         }, this.config.updateInterval);
@@ -117,6 +121,17 @@ Module.register<Config>("MMM-OneDrive", {
       const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
       info.innerHTML = String(payload);
     }
+    if (noti === "RENDER_PHOTO") {
+      this.state = {
+        type: "newPhoto",
+        payload,
+      };
+      const { photo, photoBase64 } = payload;
+      const mimeType = photo.mimeType === "image/heic" ? "image/jpeg" : photo.mimeType;
+      const url = `data:${mimeType};base64,${photoBase64}`;
+      console.debug("[MMM-OneDrive] render image", { id: photo.id });
+      this.render(url, photo);
+    }
   },
 
   notificationReceived: function (noti, _payload, _sender) {
@@ -126,7 +141,7 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   updatePhotos: function () {
-    Log.debug("Updating photos..");
+    console.debug("[MMM-OneDrive] Updating photos..");
     this.firstScan = false;
 
     if (this.scanned.length === 0) {
@@ -142,76 +157,26 @@ Module.register<Config>("MMM-OneDrive", {
     if (this.index >= this.scanned.length) {
       this.index -= this.scanned.length;
     }
-    let target: OneDriveMediaItem = this.scanned[this.index];
+    const photo: OneDriveMediaItem = this.scanned[this.index];
+
+    this.sendSocketNotification("TRIGGER_SHOWING_PHOTO", { photoId: photo.id });
 
     this.needMorePicsFlag = false;
 
-    // Skip expired baseUrl items, handle direction
-    const step = 1;
-    while (
-      target &&
-      target.baseUrlExpireDateTime &&
-      target.baseUrlExpireDateTime instanceof Date &&
-      !isNaN(target.baseUrlExpireDateTime.getTime()) &&
-      target.baseUrlExpireDateTime <= new Date()) {
-      this.index += step;
-      if (this.index >= this.scanned.length) {
-        this.index = 0;
-        this.needMorePicsFlag = true;
-        target = null;
-        break;
-      }
-      target = this.scanned[this.index];
-    }
-
-    if (target) {
-      switch (target.mimeType) {
-        case "image/heic": {
-          convertHEIC({ id: target.id, filename: target.filename, url: target.baseUrl }).then((buf) => {
-            const blob = new Blob([buf]);
-            const blobUrl = URL.createObjectURL(blob);
-            this.render(blobUrl, target);
-          }).then();
-          break;
-        }
-        default: {
-          const url = target.baseUrl;
-          this.ready(url, target);
-        }
-      }
-      this.index++;
-      if (this.index >= this.scanned.length) {
-        this.index = 0;
-        this.needMorePicsFlag = true;
-      }
-    }
-    if (this.needMorePicsFlag) {
+    this.index++;
+    if (this.index >= this.scanned.length) {
+      this.index = 0;
+      this.needMorePicsFlag = true;
       setTimeout(() => {
         this.sendSocketNotification("NEED_MORE_PICS", []);
       }, 2000);
     }
   },
 
-  ready: function (url: string, target: OneDriveMediaItem) {
-    const hidden = document.createElement("img");
-    hidden.onerror = (event, source, lineno, colno, error) => {
-      const errObj = {
-        url, event, source, lineno, colno,
-        error: JSON.parse(JSON.stringify({ message: error.message, name: error.name, stack: error.stack })),
-        originalError: error,
-        target,
-      };
-      console.error("[MMM-OneDrive] hidden.onerror", errObj);
-      this.sendSocketNotification("IMAGE_LOAD_FAIL", errObj);
-    };
-    hidden.onload = () => {
-      this.render(url, target);
-    };
-    hidden.src = url;
-  },
-
   render: function (url: string, target: OneDriveMediaItem) {
-    const back = document.getElementById("ONEDRIVE_PHOTO_BACK");
+    console.debug("[MMM-OneDrive] render image", { id: target.id, url, mimeType: target.mimeType });
+    const startDt = new Date();
+    const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
@@ -257,6 +222,7 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
+    console.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
@@ -268,7 +234,7 @@ Module.register<Config>("MMM-OneDrive", {
     const wrapper = document.createElement("div");
     wrapper.id = "ONEDRIVE_PHOTO";
     const back = document.createElement("div");
-    back.id = "ONEDRIVE_PHOTO_BACK";
+    back.id = "ONEDRIVE_PHOTO_BACKDROP";
     const current = document.createElement("div");
     current.id = "ONEDRIVE_PHOTO_CURRENT";
     if (this.data.position.search("fullscreen") === -1) {
@@ -284,7 +250,7 @@ Module.register<Config>("MMM-OneDrive", {
     wrapper.appendChild(back);
     wrapper.appendChild(current);
     wrapper.appendChild(info);
-    console.log("updated!");
+    console.info("[MMM-OneDrive] Dom updated!");
     return wrapper;
   },
 

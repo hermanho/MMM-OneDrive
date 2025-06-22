@@ -9,7 +9,8 @@ module.exports = {
     ...tsJestTransformCfg,
   },
   moduleNameMapper: {
-    "^logger$": "<rootDir>/tests/logger.mock.ts",
-    "^node_helper$": "<rootDir>/tests/node_helper.mock.ts",
+    "^logger$": "<rootDir>/tests/logger.mock.js",
+    "^node_helper$": "<rootDir>/tests/node_helper.mock.js",
   },
+  injectGlobals: false,
 };

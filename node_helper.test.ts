@@ -1,9 +1,18 @@
 import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
 import nodeHelperObj from "./node_helper.js";
-import logLevel from "./tests/logger.mock";
+import logger from "./tests/logger.mock";
 import type { OneDriveMediaItem } from "./types/type";
 
-const createMockOneDrivePhotos = (num: number) => Array(num).fill({}).map((_, i) => ({ id: "photo" + i, mediaMetadata: { dateTimeOriginal: new Date().toISOString() } } as OneDriveMediaItem));
+const createMockOneDrivePhotos = (num: number) => Array(num).fill({})
+  .map((_, i) => ({
+    id: "photo" + i,
+    mediaMetadata: {
+      dateTimeOriginal: new Date().toISOString(),
+    },
+    mimeType: "image/jpeg",
+  } as OneDriveMediaItem));
+
+const mockGetImageFromAlbum = jest.fn();
 
 jest.mock("./OneDrivePhotos.js", () =>
   jest.fn(() => ({
@@ -11,13 +20,17 @@ jest.mock("./OneDrivePhotos.js", () =>
     on: jest.fn(),
     getAlbums: async () => [],
     getAlbumThumbnail: async () => "mock-thumbnail-url",
-    getImageFromAlbum: async (id: string) => Promise.resolve(createMockOneDrivePhotos(10).map((photo) => ({ ...photo, albumId: "album" + id }))),
+    getImageFromAlbum: mockGetImageFromAlbum,
   }))
 );
 
 describe("nodeHelperObj", () => {
   let helper: InstanceType<typeof nodeHelperObj>;
   beforeEach(async () => {
+    mockGetImageFromAlbum.mockImplementation((id: string) =>
+      Promise.resolve(createMockOneDrivePhotos(10).map((photo) => ({ ...photo, albumId: "album" + id })))
+    );
+
     helper = new nodeHelperObj();
     // Provide a minimal config for initializeAfterLoading
     const config = { albums: [], updateInterval: 60000, sort: "new", condition: {}, showWidth: 1080, showHeight: 1920, timeFormat: "YYYY/MM/DD HH:mm", forceAuthInteractive: false };
@@ -44,7 +57,8 @@ describe("nodeHelperObj", () => {
   describe("getImageList", () => {
     it("should increase photoRefreshPointer after getImageList call", async () => {
       helper.localPhotoList = createMockOneDrivePhotos(20);
-      helper.selectedAlbums = Array(10).fill({}).map((_, i) => ({ id: "album" + i, title: "album" + i }));
+      helper.selectedAlbums = Array(10).fill({})
+        .map((_, i) => ({ id: "album" + i, title: "album" + i }));
       await helper.prepAndSendChunk(7);
       expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
       expect(helper.photoRefreshPointer).toBe(7);
@@ -53,6 +67,31 @@ describe("nodeHelperObj", () => {
       await helper.getImageList();
       expect(helper.localPhotoList.length).toBe(100);
       expect(helper.photoRefreshPointer).toBe(34);
+    });
+
+    it("should filter out non image mimetype items", async () => {
+      const mimeMap = [
+        "image/jpeg",
+        "image/heic",
+        "image/png",
+        "image/gif",
+        "video/quicktime",
+        "text/plain",
+        "unknown",
+      ];
+      mockGetImageFromAlbum.mockImplementation((id: string, validator: (photo: OneDriveMediaItem) => boolean) =>
+        Promise.resolve(createMockOneDrivePhotos(mimeMap.length * 3)
+          .map((photo, i) => ({
+            ...photo,
+            albumId: "album" + id,
+            mimeType: mimeMap[i % mimeMap.length],
+          }))
+          .filter(validator))
+      );
+      helper.selectedAlbums = Array(3).fill({})
+        .map((_, i) => ({ id: "album" + i, title: "album" + i }));
+      await helper.getImageList();
+      expect(helper.localPhotoList.length).toBe(36); // 3 albums * 3 items * 4 valid mime types
     });
   });
 
@@ -84,7 +123,7 @@ describe("nodeHelperObj", () => {
       helper.localPhotoList = [];
       helper.photoRefreshPointer = 0;
       await helper.prepAndSendChunk(5);
-      expect(logLevel.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
+      expect(logger.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
     });
   });
 });

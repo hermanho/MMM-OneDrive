@@ -75,8 +75,8 @@ describe("main.ts", () => {
 
     it("should skip expired baseUrlExpireDateTime items and show the next valid photo", () => {
       const now = new Date();
-      const expired = new Date(now.getTime() - 10000); // Date type
-      const valid = new Date(now.getTime() + 100000); // Date type
+      const expired = new Date(now.getTime() - 10000).toISOString(); // Date type
+      const valid = new Date(now.getTime() + 100000).toISOString(); // Date type
       instance.scanned = [
         { id: "1", mimeType: "image/jpeg", baseUrl: "url1", baseUrlExpireDateTime: expired },
         { id: "2", mimeType: "image/jpeg", baseUrl: "url2", baseUrlExpireDateTime: valid },
@@ -93,7 +93,7 @@ describe("main.ts", () => {
 
     it("should wrap and set needMorePicsFlag if all baseUrlExpireDateTime are expired", () => {
       const now = new Date();
-      const expired = new Date(now.getTime() - 10000); // Date type
+      const expired = new Date(now.getTime() - 10000).toISOString(); // Date type
       instance.scanned = [
         { id: "1", mimeType: "image/jpeg", baseUrl: "url1", baseUrlExpireDateTime: expired },
         { id: "2", mimeType: "image/jpeg", baseUrl: "url2", baseUrlExpireDateTime: expired },
