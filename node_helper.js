@@ -57,36 +57,6 @@ const nodeHelperObject = {
       case "INIT":
         this.initializeAfterLoading(payload);
         break;
-      case "IMAGE_LOAD_FAIL":
-        {
-          /**
-           * @type {{error: Error, photo: OneDriveMediaItem}}
-           */
-          const { error, photo } = payload;
-          this.log_error("Image loading fails:", photo.filename, photo.baseUrl);
-          if (error) {
-            this.log_error("error", error.message, error.name, error.stack);
-          }
-          if (photo?.baseUrlExpireDateTime) {
-            this.log_info("Image baseUrlExpireDateTime:", photo.baseUrlExpireDateTime);
-            const expireDt = new Date(photo.baseUrlExpireDateTime);
-            if (!isNaN(+expireDt) && expireDt < Date.now()) {
-              this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
-              const p = await oneDrivePhotosInstance.refreshItem(photo);
-              const found = this.localPhotoList.find((item) => item.id === p.id);
-              if (found) {
-                found.baseUrl = p.baseUrl;
-                found.baseUrlExpireDateTime = p.baseUrlExpireDateTime;
-                this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
-              }
-            } else {
-              this.log_info(`Image ${photo.filename} url is still valid, no need to refresh.`);
-            }
-          }
-          // How many photos to load for 20 minutes?
-          // this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
-        }
-        break;
       case "IMAGE_LOADED":
         {
           this.log_debug("Image loaded:", payload);
