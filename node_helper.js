@@ -192,7 +192,6 @@ const nodeHelperObject = {
         const cachedPhotoList = JSON.parse(data.toString());
         // check if the cached photo list is empty
         if (Array.isArray(cachedPhotoList) && cachedPhotoList.length > 0) {
-          this.localPhotoList = cachedPhotoList;
           if (this.config.sort === "random") {
             shuffle(cachedPhotoList);
           }
@@ -535,9 +534,15 @@ const nodeHelperObject = {
   saveCacheConfig: async function (key, value) {
     try {
       let config = {};
-      if (fs.existsSync(this.CACHE_CONFIG)) {
-        const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache config JSON");
-        config = JSON.parse(configStr || null) || {};
+      // What if the config file is crashed?
+      try {
+        if (fs.existsSync(this.CACHE_CONFIG)) {
+          const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache config JSON");
+          config = JSON.parse(configStr || null) || {};
+        }
+      } catch (err) {
+        this.log_error("unable to read Cache Config");
+        this.log_error(error_to_string(err));
       }
       config[key] = value;
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache config JSON");
