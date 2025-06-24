@@ -36,7 +36,6 @@ const nodeHelperObject = {
   localPhotoPntr: 0,
   start: function () {
     this.log_info("Starting module helper");
-    this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
     /** @type {microsoftgraph.DriveItem} */
@@ -100,7 +99,12 @@ const nodeHelperObject = {
   initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
-    if (!this.config.scanInterval || this.config.scanInterval < 1000 * 60 * 10) this.config.scanInterval = 1000 * 60 * 10;
+    if (!this.config.scanInterval) {
+      this.config.scanInterval = 1000 * 60 * 55;
+    }
+    if (this.config.scanInterval < 1000 * 60 * 10) {
+      this.config.scanInterval = 1000 * 60 * 10;
+    }
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
@@ -273,13 +277,13 @@ const nodeHelperObject = {
 
   startScanning: function () {
     const fn = () => {
-      const nextScanDt = new Date(Date.now() + this.scanInterval);
+      const nextScanDt = new Date(Date.now() + this.config.scanInterval);
       this.scanJob().then(() => {
         this.log_info("Next scan will be at", nextScanDt.toLocaleString());
       });
     };
     // set up interval, then 1 fail won't stop future scans
-    this.scanTimer = setInterval(fn, this.scanInterval);
+    this.scanTimer = setInterval(fn, this.config.scanInterval);
     // call for first time
     fn();
   },
