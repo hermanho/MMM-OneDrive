@@ -139,7 +139,12 @@ const nodeHelperObject = {
     );
 
     this.log_info("Starting Initialization");
-    await this.loadCache();
+    const cacheResult = await this.loadCache();
+
+    if (cacheResult) {
+      this.log_info("Show the first 5 photos from cache for fast startup");
+      await this.prepAndSendChunk(5); // only 5 for extra fast startup
+    }
 
     this.log_info("Initialization complete!");
     clearTimeout(this.initializeTimer);
@@ -157,6 +162,11 @@ const nodeHelperObject = {
     return hash;
   },
 
+  /**
+   * Loads the cache if it exists and is not expired.
+   * If the cache is expired or does not exist, it will skip loading and return false.
+   * @returns {Promise<boolean>} true if cache was loaded successfully, false otherwise
+   */
   loadCache: async function () {
     const cacheHash = await this.readCacheConfig("CACHE_HASH");
     const configHash = await this.calculateConfigHash();
@@ -164,7 +174,7 @@ const nodeHelperObject = {
       this.log_info("Config or token has changed. Ignore cache");
       this.log_debug("hash: ", { cacheHash, configHash });
       this.sendSocketNotification("UPDATE_STATUS", "Loading from OneDrive...");
-      return;
+      return false;
     }
     this.log_info("Loading cache data");
     this.sendSocketNotification("UPDATE_STATUS", "Loading from cache");
@@ -204,14 +214,13 @@ const nodeHelperObject = {
             return photo;
           });
           this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
-          this.savePhotoListCache();
-          await this.prepAndSendChunk(5); // only 5 for extra fast startup
+          return true;
         }
       } catch (err) {
         this.log_error("unable to load photo list cache", err);
       }
     }
-
+    return false;
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {

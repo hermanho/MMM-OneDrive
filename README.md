@@ -107,7 +107,7 @@ autoInfoPosition: (album, photo)=> {
 ```
 
 ### scanInterval
-- How often (ms) to check OneDrive for new or updated photos. Default: `1000 * 60 * 55` (55 minutes). Lower values update more often but use more network/API.
+- Optional value. How often (ms) to check OneDrive for new or updated photos. Default: `1000 * 60 * 55` (55 minutes). Lower values update more often but use more network/API.
 
 
 ## Toggle MMM-OneDrive module
