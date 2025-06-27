@@ -23,6 +23,8 @@ const { convertHEIC } = require("./photosConverter-node");
 const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
+const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
 /**
  * @type {OneDrivePhotos}
@@ -510,6 +512,7 @@ const nodeHelperObject = {
       this.log_error(`unable to read ${fileDescription}: ${filePath}`);
       this.log_error(error_to_string(err));
     }
+    return null;
   },
 
   writeFileSafe: async function (filePath, data, fileDescription) {
