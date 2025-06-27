@@ -100,10 +100,10 @@ const nodeHelperObject = {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
     if (!this.config.scanInterval) {
-      this.config.scanInterval = 1000 * 60 * 55;
+      this.config.scanInterval = DEFAULT_SCAN_INTERVAL;
     }
-    if (this.config.scanInterval < 1000 * 60 * 10) {
-      this.config.scanInterval = 1000 * 60 * 10;
+    if (this.config.scanInterval < MINIMUM_SCAN_INTERVAL) {
+      this.config.scanInterval = MINIMUM_SCAN_INTERVAL;
     }
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
