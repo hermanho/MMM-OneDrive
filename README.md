@@ -39,8 +39,6 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
 },
 ```
 
-## Usage
-
 ### `albums`
 
 Now this module can access not only your owns but also shared. You can specify album title like this.
@@ -107,6 +105,9 @@ autoInfoPosition: (album, photo)=> {
 }
 
 ```
+
+### scanInterval
+- Optional value. How often (ms) to check OneDrive for new or updated photos. Default: `1000 * 60 * 55` (55 minutes). Lower values update more often but use more network/API.
 
 
 ## Toggle MMM-OneDrive module

@@ -23,6 +23,8 @@ const { convertHEIC } = require("./photosConverter-node");
 const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
+const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
 /**
  * @type {OneDrivePhotos}
@@ -36,7 +38,6 @@ const nodeHelperObject = {
   localPhotoPntr: 0,
   start: function () {
     this.log_info("Starting module helper");
-    this.scanInterval = 1000 * 60 * 55; // fixed. no longer needs to be fixed
     this.config = {};
     this.scanTimer = null;
     /** @type {microsoftgraph.DriveItem} */
@@ -56,36 +57,6 @@ const nodeHelperObject = {
     switch (notification) {
       case "INIT":
         this.initializeAfterLoading(payload);
-        break;
-      case "IMAGE_LOAD_FAIL":
-        {
-          /**
-           * @type {{error: Error, photo: OneDriveMediaItem}}
-           */
-          const { error, photo } = payload;
-          this.log_error("Image loading fails:", photo.filename, photo.baseUrl);
-          if (error) {
-            this.log_error("error", error.message, error.name, error.stack);
-          }
-          if (photo?.baseUrlExpireDateTime) {
-            this.log_info("Image baseUrlExpireDateTime:", photo.baseUrlExpireDateTime);
-            const expireDt = new Date(photo.baseUrlExpireDateTime);
-            if (!isNaN(+expireDt) && expireDt < Date.now()) {
-              this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
-              const p = await oneDrivePhotosInstance.refreshItem(photo);
-              const found = this.localPhotoList.find((item) => item.id === p.id);
-              if (found) {
-                found.baseUrl = p.baseUrl;
-                found.baseUrlExpireDateTime = p.baseUrlExpireDateTime;
-                this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
-              }
-            } else {
-              this.log_info(`Image ${photo.filename} url is still valid, no need to refresh.`);
-            }
-          }
-          // How many photos to load for 20 minutes?
-          // this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
-        }
         break;
       case "IMAGE_LOADED":
         {
@@ -130,7 +101,12 @@ const nodeHelperObject = {
   initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
-    if (!this.config.scanInterval || this.config.scanInterval < 1000 * 60 * 10) this.config.scanInterval = 1000 * 60 * 10;
+    if (!this.config.scanInterval) {
+      this.config.scanInterval = DEFAULT_SCAN_INTERVAL;
+    }
+    if (this.config.scanInterval < MINIMUM_SCAN_INTERVAL) {
+      this.config.scanInterval = MINIMUM_SCAN_INTERVAL;
+    }
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
@@ -165,7 +141,12 @@ const nodeHelperObject = {
     );
 
     this.log_info("Starting Initialization");
-    await this.loadCache();
+    const cacheResult = await this.loadCache();
+
+    if (cacheResult) {
+      this.log_info("Show the first 5 photos from cache for fast startup");
+      await this.prepAndSendChunk(5); // only 5 for extra fast startup
+    }
 
     this.log_info("Initialization complete!");
     clearTimeout(this.initializeTimer);
@@ -183,6 +164,11 @@ const nodeHelperObject = {
     return hash;
   },
 
+  /**
+   * Loads the cache if it exists and is not expired.
+   * If the cache is expired or does not exist, it will skip loading and return false.
+   * @returns {Promise<boolean>} true if cache was loaded successfully, false otherwise
+   */
   loadCache: async function () {
     const cacheHash = await this.readCacheConfig("CACHE_HASH");
     const configHash = await this.calculateConfigHash();
@@ -190,7 +176,7 @@ const nodeHelperObject = {
       this.log_info("Config or token has changed. Ignore cache");
       this.log_debug("hash: ", { cacheHash, configHash });
       this.sendSocketNotification("UPDATE_STATUS", "Loading from OneDrive...");
-      return;
+      return false;
     }
     this.log_info("Loading cache data");
     this.sendSocketNotification("UPDATE_STATUS", "Loading from cache");
@@ -222,7 +208,6 @@ const nodeHelperObject = {
         const cachedPhotoList = JSON.parse(data.toString());
         // check if the cached photo list is empty
         if (Array.isArray(cachedPhotoList) && cachedPhotoList.length > 0) {
-          this.localPhotoList = cachedPhotoList;
           if (this.config.sort === "random") {
             shuffle(cachedPhotoList);
           }
@@ -231,14 +216,13 @@ const nodeHelperObject = {
             return photo;
           });
           this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
-          this.savePhotoListCache();
-          await this.prepAndSendChunk(5); // only 5 for extra fast startup
+          return true;
         }
       } catch (err) {
         this.log_error("unable to load photo list cache", err);
       }
     }
-
+    return false;
   },
 
   prepAndSendChunk: async function (desiredChunk = 20) {
@@ -304,13 +288,13 @@ const nodeHelperObject = {
 
   startScanning: function () {
     const fn = () => {
-      const nextScanDt = new Date(Date.now() + this.scanInterval);
+      const nextScanDt = new Date(Date.now() + this.config.scanInterval);
       this.scanJob().then(() => {
         this.log_info("Next scan will be at", nextScanDt.toLocaleString());
       });
     };
     // set up interval, then 1 fail won't stop future scans
-    this.scanTimer = setInterval(fn, this.scanInterval);
+    this.scanTimer = setInterval(fn, this.config.scanInterval);
     // call for first time
     fn();
   },
@@ -528,6 +512,7 @@ const nodeHelperObject = {
       this.log_error(`unable to read ${fileDescription}: ${filePath}`);
       this.log_error(error_to_string(err));
     }
+    return null;
   },
 
   writeFileSafe: async function (filePath, data, fileDescription) {
@@ -565,9 +550,15 @@ const nodeHelperObject = {
   saveCacheConfig: async function (key, value) {
     try {
       let config = {};
-      if (fs.existsSync(this.CACHE_CONFIG)) {
-        const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache config JSON");
-        config = JSON.parse(configStr || null) || {};
+      // What if the config file is crashed?
+      try {
+        if (fs.existsSync(this.CACHE_CONFIG)) {
+          const configStr = await this.readFileSafe(this.CACHE_CONFIG, "Cache config JSON");
+          config = JSON.parse(configStr || null) || {};
+        }
+      } catch (err) {
+        this.log_error("unable to read Cache Config");
+        this.log_error(error_to_string(err));
       }
       config[key] = value;
       await this.writeFileSafe(this.CACHE_CONFIG, JSON.stringify(config, null, 4), "Cache config JSON");
