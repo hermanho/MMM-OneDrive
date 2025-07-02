@@ -40,18 +40,23 @@ const protectedResources = {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children`,
   },
   getItem: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$drive-id$$/items/$$item-id$$`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$userId$$/items/$$itemId$$`,
   },
   getThumbnail: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drive/items/$$item-id$$/thumbnails`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drive/items/$$itemId$$/thumbnails`,
   },
   $batch: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/$batch`,
   },
 };
 
+const getRelativeResourceUrl = (url) => {
+  return url.replace(`${GRAPH_ENDPOINT_HOST}v1.0`, "");
+};
+
 module.exports = {
   msalConfig: msalConfig,
   cachePath: cachePath,
   protectedResources: protectedResources,
+  getRelativeResourceUrl: getRelativeResourceUrl,
 };

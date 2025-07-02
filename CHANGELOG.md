@@ -1,6 +1,9 @@
 # MMM-OneDrive Change Log
 
-**`[1.5.0] - 2025/06/24`**
+**`[1.5.1] - 2025/07/03`**
+- Fixed: batchRequestRefresh and refreshItem did not work correctly
+
+**`[1.5.0] - 2025/07/01`**
 - Feat: scanInterval parameter in config to control how often to check OneDrive for new or updated photos.
 
 **`[1.4.2] - 2025/06/21`**

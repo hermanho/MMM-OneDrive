@@ -444,7 +444,7 @@ const nodeHelperObject = {
 
     if (photo?.baseUrlExpireDateTime) {
       const expireDt = new Date(photo.baseUrlExpireDateTime);
-      if (!isNaN(+expireDt) && expireDt < Date.now()) {
+      if (!isNaN(+expireDt) && expireDt.getTime() < Date.now()) {
         this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
         const p = await oneDrivePhotosInstance.refreshItem(photo);
         photo.baseUrl = p.baseUrl;

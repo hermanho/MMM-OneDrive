@@ -11,7 +11,7 @@ const { LogLevel } = require("@azure/msal-node");
 const ExifReader = require("exifreader");
 const Log = require("logger");
 const { error_to_string } = require("./error_to_string");
-const { msalConfig, protectedResources } = require("./msal/authConfig");
+const { msalConfig, protectedResources, getRelativeResourceUrl } = require("./msal/authConfig");
 const AuthProvider = require("./msal/AuthProvider");
 const sleep = require("./sleep");
 
@@ -199,7 +199,7 @@ class OneDrivePhotos extends EventEmitter {
       return null;
     }
     try {
-      const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$item-id$$", album.bundle.album.coverImageItemId);
+      const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$itemId$$", album.bundle.album.coverImageItemId);
       const response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
       if (Array.isArray(response2.value) && response2.value.length > 0) {
         const thumbnail = response2.value[0];
@@ -379,35 +379,40 @@ class OneDrivePhotos extends EventEmitter {
     await this.onAuthReady();
 
     this.log("received: ", items.length, " to refresh");
+
+    let count = 0;
+
     /**
      * https://learn.microsoft.com/en-us/graph/json-batching#batch-size-limitations
      * @type {[OneDriveMediaItem[]]}
      */
     const chunkGroups = chunk(items, 20);
     for (const grp of chunkGroups) {
-      const requestsValue = grp.filter(i => i.item?.parentReference).map((item, i) => ({
+      const requestsValue = grp.filter(i => i.parentReference).map((item, i) => ({
         id: i,
         method: "GET",
-        url: protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace("$$item-id$$", item.id),
+        url: getRelativeResourceUrl(protectedResources.getItem.endpoint.replace("$$userId$$", this.#userId).replace("$$itemId$$", item.id)),
       }));
       if (requestsValue.length > 0) {
         const requestsPayload = {
           requests: requestsValue,
         };
         const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
-        for (const r of response.response) {
-          if (r.status < 400) {
-            grp[r.id].baseUrl = r.body.value["@microsoft.graph.downloadUrl"];
-            grp[r.id].baseUrlExpireDateTime = generateNewExpirationDate();
-          } else {
-            console.error(r);
-            grp[r.id].baseUrl = null;
+        if (Array.isArray(response.responses)) {
+          for (const r of response.responses) {
+            if (r.status < 400) {
+              grp[r.id].baseUrl = r.body["@microsoft.graph.downloadUrl"];
+              grp[r.id].baseUrlExpireDateTime = generateNewExpirationDate();
+              count++;
+            } else {
+              console.error(r);
+            }
           }
         }
       }
     }
 
-    this.log("Batch request refresh done, total: ", items.length);
+    this.log("Batch request refresh done, total: ", count);
 
     return items;
   }
@@ -423,19 +428,22 @@ class OneDrivePhotos extends EventEmitter {
     }
     await this.onAuthReady();
     this.log("received: ", item.id, " to refresh");
-    const url = protectedResources.getItem.endpoint.replace("$$drive-id$$", item.parentReference.driveId).replace("$$item-id$$", item.id);
-    const response = await this.request("refreshItem", url, "get");
-    if (response.status < 400) {
-      item.baseUrl = response.body.value["@microsoft.graph.downloadUrl"];
-      item.baseUrlExpireDateTime = generateNewExpirationDate();
-    } else {
-      this.logError("Error in refreshItem", response.status, { id: item.id, filename: item.filename });
-      item.baseUrl = null;
+    const url = protectedResources.getItem.endpoint.replace("$$userId$$", this.#userId).replace("$$itemId$$", item.id);
+
+    try {
+      const response = await this.request("refreshItem", url, "get");
+      if (!response) {
+        throw new Error("No response from OneDrive API " + url);
+      }
+      this.log("Refresh done");
+      return {
+        baseUrl: response["@microsoft.graph.downloadUrl"],
+        baseUrlExpireDateTime: generateNewExpirationDate(),
+      };
+    } catch (err) {
+      this.logError("Error in refreshItem", { id: item.id, filename: item.filename });
+      this.logError(error_to_string(err));
     }
-
-    this.log("Refresh done");
-
-    return item;
   }
 }
 
