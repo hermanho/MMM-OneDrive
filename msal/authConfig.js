@@ -37,7 +37,7 @@ const protectedResources = {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drive/bundles?filter=${encodeURIComponent("bundle/album ne null")}`,
   },
   getChildrenInAlbum: {
-    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children`,
+    endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/me/drives/$$userId$$/items/$$albumId$$/children?$top=1000`,
   },
   getItem: {
     endpoint: `${GRAPH_ENDPOINT_HOST}v1.0/drives/$$userId$$/items/$$itemId$$`,
