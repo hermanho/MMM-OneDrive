@@ -1,6 +1,7 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
 import type MomentLib from "moment";
 import type { OneDriveMediaItem } from "../../types/type";
+import type { DriveItem } from "@microsoft/microsoft-graph-types";
 
 /**
  * Global or injected variable declarations
@@ -112,7 +113,6 @@ Module.register<Config>("MMM-OneDrive", {
       console.debug("[MMM-OneDrive] Module is suspended, skipping render");
       return;
     }
-    console.debug("[MMM-OneDrive] render image", { id: target.id, url, mimeType: target.mimeType });
     const startDt = new Date();
     const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
@@ -159,7 +159,12 @@ Module.register<Config>("MMM-OneDrive", {
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
     info.appendChild(infoText);
-    console.debug("[MMM-OneDrive] render image done", { id: target.id, duration: new Date().getTime() - startDt.getTime() });
+    console.debug("[MMM-OneDrive] render image done",
+      JSON.stringify({
+        id: target.id,
+        filename: target.filename,
+        duration: new Date().getTime() - startDt.getTime(),
+      }));
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
