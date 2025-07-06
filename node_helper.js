@@ -11,7 +11,6 @@ const moment = require("moment");
 const { Readable } = require("stream");
 const { finished } = require("stream/promises");
 const { RE2 } = require("re2-wasm");
-const { Set } = require("immutable");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
@@ -21,6 +20,7 @@ const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
 const { convertHEIC } = require("./photosConverter-node");
 const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
+const { createIntervalRunner } = require("./src/interval-runner");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
@@ -36,6 +36,7 @@ const nodeHelperObject = {
   localPhotoList: [],
   /** @type {number} */
   localPhotoPntr: 0,
+  uiRunner: null,
   start: function () {
     this.log_info("Starting module helper");
     this.config = {};
@@ -46,6 +47,7 @@ const nodeHelperObject = {
     this.photoRefreshPointer = 0;
     this.queue = null;
     this.initializeTimer = null;
+    this.frontendInitialized = false;
 
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
@@ -54,6 +56,7 @@ const nodeHelperObject = {
   },
 
   socketNotificationReceived: async function (notification, payload) {
+    this.log_debug("notification received", notification);
     switch (notification) {
       case "INIT":
         this.initializeAfterLoading(payload);
@@ -63,19 +66,14 @@ const nodeHelperObject = {
           this.log_debug("Image loaded:", payload);
         }
         break;
-      case "NEED_MORE_PICS":
-        {
-          this.log_info("Used last pic in list");
-          // How many photos to load for 20 minutes?
-          this.prepAndSendChunk(Math.ceil((20 * 60 * 1000) / this.config.updateInterval)).then(); // 20min * 60s * 1000ms / updateinterval in ms
-          this.savePhotoListCache();
-        }
+      case "MODULE_SUSPENDED":
+        this.uiRunner?.stop();
         break;
-      case "MODULE_SUSPENDED_SKIP_UPDATE":
-        this.log_debug("Module is suspended so skip the UI update");
+      case "MODULE_RESUMED":
+        this.uiRunner?.resume();
         break;
-      case "TRIGGER_SHOWING_PHOTO":
-        this.prepareShowPhoto(payload);
+      case "NEXT_PHOTO":
+        this.uiRunner?.skipToNext();
         break;
       default:
         this.log_error("Unknown notification received", notification);
@@ -112,10 +110,12 @@ const nodeHelperObject = {
       config: config,
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
+      this.uiRunner?.stop();
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
+      this.uiRunner?.resume();
     });
 
     this.albumsFilters = [];
@@ -127,6 +127,7 @@ const nodeHelperObject = {
       }
     }
 
+    this.startUIRenderClock();
     await this.tryToIntitialize();
   },
 
@@ -144,8 +145,8 @@ const nodeHelperObject = {
     const cacheResult = await this.loadCache();
 
     if (cacheResult) {
-      this.log_info("Show the first 5 photos from cache for fast startup");
-      await this.prepAndSendChunk(5); // only 5 for extra fast startup
+      this.log_info("Show photos from cache for fast startup");
+      this.uiRunner?.skipToNext();
     }
 
     this.log_info("Initialization complete!");
@@ -191,10 +192,13 @@ const nodeHelperObject = {
         const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
         this.selectedAlbums = JSON.parse(data.toString());
         this.log_debug("successfully loaded selectedAlbums");
-        this.sendSocketNotification("UPDATE_ALBUMS", this.selectedAlbums); // for fast startup
       } catch (err) {
         this.log_error("unable to load selectedAlbums cache", err);
       }
+    }
+    if (!Array.isArray(this.selectedAlbums) || this.selectedAlbums.length === 0) {
+      this.log_warn("No valid albums found. Skipping photo loading.");
+      return false;
     }
 
     //load cached list - if available
@@ -225,53 +229,6 @@ const nodeHelperObject = {
     return false;
   },
 
-  prepAndSendChunk: async function (desiredChunk = 20) {
-    this.log_debug("prepAndSendChunk");
-
-    try {
-      //find which ones to refresh
-      if (this.photoRefreshPointer < 0 || this.photoRefreshPointer >= this.localPhotoList.length) {
-        this.photoRefreshPointer = 0;
-      }
-      const numItemsToRefresh = Math.min(desiredChunk, this.localPhotoList.length - this.photoRefreshPointer);
-      this.log_debug(`Num to ref: ${numItemsToRefresh}, DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
-
-      if (numItemsToRefresh <= 0) {
-        this.log_warn(`No items to refresh. prepAndSendChunk skipped. DesChunk: ${desiredChunk}, TotalLength: ${this.localPhotoList.length}, Pntr: ${this.photoRefreshPointer}`);
-        return;
-      }
-
-      this.log_info(`Preparing to refresh ${numItemsToRefresh} photos`);
-
-      /**
-       * refresh them
-       * @type {OneDriveMediaItem[]}
-       */
-      const list = await oneDrivePhotosInstance.batchRequestRefresh(this.localPhotoList.slice(this.photoRefreshPointer, this.photoRefreshPointer + numItemsToRefresh));
-
-      if (list.length <= 0) {
-        this.log_error("No items from batchRequestRefresh. prepAndSendChunk skipped");
-        return;
-      }
-
-      // update the localList
-      this.localPhotoList.splice(this.photoRefreshPointer, list.length, ...list);
-
-      // send updated pics
-      this.sendSocketNotification("MORE_PICS", list);
-
-      // update pointer
-      this.photoRefreshPointer = this.photoRefreshPointer + list.length;
-      this.log_info("refreshed: ", list.length, ", totalLength: ", this.localPhotoList.length, ", Pntr: ", this.photoRefreshPointer);
-
-      this.log_info("prepAndSendChunk done");
-    } catch (err) {
-      this.log_error("failed to refresh and send chunk: ");
-      this.log_error(error_to_string(err));
-      throw err;
-    }
-  },
-
   /** @returns {Promise<microsoftgraph.DriveItem[]>} album */
   getAlbums: async function () {
     try {
@@ -284,6 +241,27 @@ const nodeHelperObject = {
     } catch (err) {
       this.log_error(error_to_string(err));
     }
+  },
+
+  startUIRenderClock: function () {
+    this.log_info("Starting UI render clock");
+
+    this.uiPhotoIndex = 0;
+
+    this.uiRunner = createIntervalRunner(async () => {
+      if (!this.localPhotoList || this.localPhotoList.length === 0) {
+        this.log_warn("Not ready to render UI. No photos in list.");
+        return;
+      }
+      const photo = this.localPhotoList[this.uiPhotoIndex];
+
+      await this.prepareShowPhoto({ photoId: photo.id });
+
+      this.uiPhotoIndex++;
+      if (this.uiPhotoIndex >= this.localPhotoList.length) {
+        this.uiPhotoIndex = 0;
+      }
+    }, this.config.updateInterval);
   },
 
   startScanning: function () {
@@ -300,14 +278,12 @@ const nodeHelperObject = {
   },
 
   scanJob: async function () {
-    this.log_info("Start Album scanning");
     this.queue = null;
     await this.getAlbumList();
     try {
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
         this.savePhotoListCache();
-
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
@@ -327,14 +303,14 @@ const nodeHelperObject = {
     /** 
      * @type {microsoftgraph.DriveItem[]} 
      */
-    let selectedAlbums = [];
+    const selectedAlbums = [];
     for (const ta of this.albumsFilters) {
       const matches = albums.filter((a) => {
         if (ta instanceof RE2) {
-          this.log_debug(`RE2 match ${ta.source} -> '${a.title}' : ${ta.test(a.title)}`);
-          return ta.test(a.title);
+          this.log_debug(`RE2 match ${ta.source} -> '${a.name}' : ${ta.test(a.name)}`);
+          return ta.test(a.name);
         } else {
-          return ta === a.title;
+          return ta === a.name;
         }
       });
       if (matches.length === 0) {
@@ -342,24 +318,22 @@ const nodeHelperObject = {
           ? ta.source
           : ta}" in your album list.`);
       } else {
-        selectedAlbums.push(...matches);
+        for (const match of matches) {
+          if (!selectedAlbums.some(a => a.id === match.id)) {
+            selectedAlbums.push(match);
+          }
+        }
       }
     }
-    selectedAlbums = Set(selectedAlbums).toArray();
     this.log_info("Finish Album scanning. Properly scanned :", selectedAlbums.length);
-    this.log_info("Albums:", selectedAlbums.map((a) => a.title).join(", "));
-
-    for (const album of selectedAlbums) {
-      album.coverPhotoBaseUrl = await oneDrivePhotosInstance.getAlbumThumbnail(album);
-    }
-
+    this.log_info("Albums:", selectedAlbums.map((a) => a.name).join(", "));
 
     this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selectedAlbums, null, 4), "Album list cache");
     this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
     for (const a of selectedAlbums) {
-      if (a.coverPhotoBaseUrl) {
-        const url = a.coverPhotoBaseUrl;
+      const url = await oneDrivePhotosInstance.getAlbumThumbnail(a);
+      if (url) {
         const fpath = path.join(this.path, "cache", a.id);
         const file = fs.createWriteStream(fpath);
         const response = await fetch(url);
@@ -368,7 +342,6 @@ const nodeHelperObject = {
     }
     this.selectedAlbums = selectedAlbums;
     this.log_info("getAlbumList done");
-    this.sendSocketNotification("INITIALIZED", selectedAlbums);
   },
 
   getImageList: async function () {
@@ -397,12 +370,12 @@ const nodeHelperObject = {
     const photos = [];
     try {
       for (const album of this.selectedAlbums) {
-        this.log_info(`Prepare to get photo list from '${album.title}'`);
+        this.log_info(`Prepare to get photo list from '${album.name}'`);
         const list = await oneDrivePhotosInstance.getImageFromAlbum(album.id, photoCondition);
         list.forEach((i) => {
-          i._albumTitle = album.title;
+          i._albumTitle = album.name;
         });
-        this.log_info(`Got ${list.length} photo(s) from '${album.title}'`);
+        this.log_info(`Got ${list.length} photo(s) from '${album.name}'`);
         photos.push(...list);
       }
       if (photos.length > 0) {
@@ -425,7 +398,6 @@ const nodeHelperObject = {
         if (this.photoRefreshPointer >= this.localPhotoList.length) {
           this.photoRefreshPointer = 0;
         }
-        await this.prepAndSendChunk(50);
       } else {
         this.log_warn("photos.length is 0");
       }
@@ -436,11 +408,13 @@ const nodeHelperObject = {
   },
 
   prepareShowPhoto: async function ({ photoId }) {
+
     const photo = this.localPhotoList.find((p) => p.id === photoId);
     if (!photo) {
       this.log_error(`Photo with id ${photoId} not found in local list`);
       return;
     }
+    this.log_info("Loading to UI:", { id: photoId, filename: photo.filename });
 
     if (photo?.baseUrlExpireDateTime) {
       const expireDt = new Date(photo.baseUrlExpireDateTime);
@@ -471,7 +445,7 @@ const nodeHelperObject = {
 
       const base64 = buffer.toString("base64");
 
-      this.log_debug("Image load:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+      this.log_debug("Image send to UI:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
     } catch (err) {
       if (err instanceof FetchHTTPError) {

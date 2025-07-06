@@ -1,6 +1,6 @@
-import { OneDriveMediaItem } from "../../types/type";
+import type { DriveItem } from "@microsoft/microsoft-graph-types";
 
-export type AutoInfoPositionFunction = boolean | ((album: string, target: OneDriveMediaItem) => (number | string)[]) | null;
+export type AutoInfoPositionFunction = boolean | ((album: DriveItem, target: DriveItem) => (number | string)[]) | null;
 export type Config = {
   albums: (string | RegExp)[];
   updateInterval: number;

@@ -22,7 +22,7 @@ const chunk = (arr, size) =>
     arr.slice(i * size, i * size + size)
   );
 
-const generateNewExpirationDate = () => new Date(Date.now() + 58 * 60 * 1000).toISOString();
+const generateNewExpirationDate = () => new Date(Date.now() + 55 * 60 * 1000).toISOString();
 
 class Auth extends EventEmitter {
   #debug = {};
@@ -142,9 +142,6 @@ class OneDrivePhotos extends EventEmitter {
 
   async getAlbums() {
     const albums = await this.getAlbumLoop();
-    albums.forEach(item => {
-      item.title = item.name;
-    });
     return albums;
   }
 
@@ -253,7 +250,7 @@ class OneDrivePhotos extends EventEmitter {
         const startTime = Date.now();
         try {
           /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-          const response = await this.request("getImage", pageUrl, "get");
+          const response = await this.request("getImages", pageUrl, "get");
           if (Array.isArray(response.value)) {
             /** @type {microsoftgraph.DriveItem[]} */
             const childrenItems = response.value;
@@ -380,7 +377,10 @@ class OneDrivePhotos extends EventEmitter {
 
     this.log("received: ", items.length, " to refresh");
 
-    let count = 0;
+    /**
+     * @type {[OneDriveMediaItem[]]}
+     */
+    const result = [];
 
     /**
      * https://learn.microsoft.com/en-us/graph/json-batching#batch-size-limitations
@@ -388,7 +388,7 @@ class OneDrivePhotos extends EventEmitter {
      */
     const chunkGroups = chunk(items, 20);
     for (const grp of chunkGroups) {
-      const requestsValue = grp.filter(i => i.parentReference).map((item, i) => ({
+      const requestsValue = grp.map((item, i) => ({
         id: i,
         method: "GET",
         url: getRelativeResourceUrl(protectedResources.getItem.endpoint.replace("$$userId$$", this.#userId).replace("$$itemId$$", item.id)),
@@ -401,9 +401,10 @@ class OneDrivePhotos extends EventEmitter {
         if (Array.isArray(response.responses)) {
           for (const r of response.responses) {
             if (r.status < 400) {
-              grp[r.id].baseUrl = r.body["@microsoft.graph.downloadUrl"];
-              grp[r.id].baseUrlExpireDateTime = generateNewExpirationDate();
-              count++;
+              const item = JSON.parse(JSON.stringify(grp[r.id]));
+              item.baseUrl = r.body["@microsoft.graph.downloadUrl"];
+              item.baseUrlExpireDateTime = generateNewExpirationDate();
+              result.push(item);
             } else {
               console.error(r);
             }
@@ -412,9 +413,9 @@ class OneDrivePhotos extends EventEmitter {
       }
     }
 
-    this.log("Batch request refresh done, total: ", count);
+    this.log("Batch request refresh done, total: ", result.length);
 
-    return items;
+    return result;
   }
 
   /**

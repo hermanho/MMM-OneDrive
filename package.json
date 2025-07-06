@@ -30,7 +30,6 @@
     "@microsoft/microsoft-graph-client": "^3.0.7",
     "exifreader": "^4.31.0",
     "heic-convert": "^2.1.0",
-    "immutable": "^5.0.3",
     "jpeg-js": "^0.4.4",
     "libheif-js": "^1.19.8",
     "moment": "^2.30.1",
