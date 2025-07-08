@@ -4,27 +4,26 @@
  * @param interval
  */
 function createIntervalRunner(render, interval) {
+  const state = { stopped: false, running: false };
   let skipWait = null;
-  let stopped = false;
-  let running = false; // To avoid multiple cycles
 
   /**
    *
    */
   async function cycle() {
-    if (stopped) {
-      running = false;
+    if (state.stopped) {
+      state.running = false;
       return;
     }
-    running = true;
+    state.running = true;
     await render();
     await new Promise((resolve) => {
       skipWait = resolve;
       setTimeout(resolve, interval);
     });
     skipWait = null;
-    if (!stopped) cycle();
-    else running = false;
+    if (!state.stopped) cycle();
+    else state.running = false;
   }
 
   // Start the first cycle
@@ -35,12 +34,12 @@ function createIntervalRunner(render, interval) {
       if (skipWait) skipWait();
     },
     stop: () => {
-      stopped = true;
+      state.stopped = true;
       if (skipWait) skipWait();
     },
     resume: () => {
-      if (!running) {
-        stopped = false;
+      if (!state.running) {
+        state.stopped = false;
         cycle();
       }
     },

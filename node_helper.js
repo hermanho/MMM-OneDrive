@@ -37,6 +37,7 @@ const nodeHelperObject = {
   /** @type {number} */
   localPhotoPntr: 0,
   uiRunner: null,
+  moduleSuspended: false,
   start: function () {
     this.log_info("Starting module helper");
     this.config = {};
@@ -66,13 +67,19 @@ const nodeHelperObject = {
         }
         break;
       case "MODULE_SUSPENDED":
+        this.log_info("Module suspended");
+        this.moduleSuspended = true;
         this.uiRunner?.stop();
         break;
       case "MODULE_RESUMED":
+        this.log_info("Module resumed");
+        this.moduleSuspended = false;
         this.uiRunner?.resume();
         break;
       case "NEXT_PHOTO":
-        this.uiRunner?.skipToNext();
+        if (!this.moduleSuspended) {
+          this.uiRunner?.skipToNext();
+        }
         break;
       default:
         this.log_error("Unknown notification received", notification);
@@ -80,19 +87,19 @@ const nodeHelperObject = {
   },
 
   log_debug: function (...args) {
-    Log.debug("[MMM-OneDrive] [node_helper]", ...args);
+    Log.debug(`[${this.name}] [node_helper]`, ...args);
   },
 
   log_info: function (...args) {
-    Log.info("[MMM-OneDrive] [node_helper]", ...args);
+    Log.info(`[${this.name}] [node_helper]`, ...args);
   },
 
   log_error: function (...args) {
-    Log.error("[MMM-OneDrive] [node_helper]", ...args);
+    Log.error(`[${this.name}] [node_helper]`, ...args);
   },
 
   log_warn: function (...args) {
-    Log.warn("[MMM-OneDrive] [node_helper]", ...args);
+    Log.warn(`[${this.name}] [node_helper]`, ...args);
   },
 
   initializeAfterLoading: async function (config) {
@@ -114,7 +121,9 @@ const nodeHelperObject = {
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
-      this.uiRunner?.resume();
+      if (!this.moduleSuspended) {
+        this.uiRunner?.resume();
+      }
     });
 
     this.albumsFilters = [];
@@ -248,6 +257,10 @@ const nodeHelperObject = {
     this.uiPhotoIndex = 0;
 
     this.uiRunner = createIntervalRunner(async () => {
+      if (this.moduleSuspended) {
+        this.log_warn("Module suspended and skipping UI render. The uiRunner should not be running, but something went wrong.");
+        return;
+      }
       if (!this.localPhotoList || this.localPhotoList.length === 0) {
         this.log_warn("Not ready to render UI. No photos in list.");
         return;
@@ -463,6 +476,7 @@ const nodeHelperObject = {
   },
 
   stop: function () {
+    this.log_info("Stopping module helper");
     clearInterval(this.scanTimer);
   },
 
