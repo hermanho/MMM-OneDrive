@@ -6,7 +6,6 @@ const libheif = require("./node_modules/libheif-js/libheif-wasm/libheif.js");
 const libheifWasmPath = path.resolve(__dirname, "./node_modules/libheif-js/libheif-wasm/libheif.wasm");
 const wasmBinary = fs.readFileSync(libheifWasmPath);
 const libheifFactory = libheif({ wasmBinary: wasmBinary });
-const heifDecoder = new libheifFactory.HeifDecoder();
 
 /**
  * Convert HEIC image to JPEG format.
@@ -17,15 +16,18 @@ const heifDecoder = new libheifFactory.HeifDecoder();
  * @returns {Promise<Buffer>} - The converted image buffer.
  */
 const convertHEIC = async ({ id, filename, url }) => {
-  let heifImage;
+  let heifDecoder;
+  let heifImages;
   try {
     Log.debug("[MMM-OneDrive] convertHEIC", { id, filename, url });
     const d = new Date().getTime();
     const resp = await fetch(url);
     const arrayBuffer = await resp.arrayBuffer();
     const inputBuffer = Buffer.from(arrayBuffer);
-    const heifImages = await heifDecoder.decode(inputBuffer);
-    heifImage = heifImages[0];
+    await libheifFactory.ready;
+    heifDecoder = new libheifFactory.HeifDecoder();
+    heifImages = await heifDecoder.decode(inputBuffer);
+    const heifImage = heifImages[0];
     const w = heifImage.get_width();
     const h = heifImage.get_height();
 
@@ -52,8 +54,15 @@ const convertHEIC = async ({ id, filename, url }) => {
     Log.error(err?.stack || err);
     throw err;
   } finally {
-    if (heifImage && typeof heifImage.free === "function") {
-      heifImage.free();
+    if (heifImages && Array.isArray(heifImages)) {
+      for (const heifImage of heifImages) {
+        if (heifImage) {
+          heifImage.free();
+        }
+      }
+    }
+    if (heifDecoder) {
+      heifDecoder.decoder.delete();
     }
   }
 };
