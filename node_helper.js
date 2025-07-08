@@ -47,7 +47,6 @@ const nodeHelperObject = {
     this.photoRefreshPointer = 0;
     this.queue = null;
     this.initializeTimer = null;
-    this.frontendInitialized = false;
 
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
