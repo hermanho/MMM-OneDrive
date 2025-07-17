@@ -26,6 +26,17 @@ const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
+
+const isJpgFn = (buffer) => {
+  if (!buffer || buffer.length < 3) {
+    return false;
+  }
+
+  return buffer[0] === 255
+    && buffer[1] === 216
+    && buffer[2] === 255;
+};
+
 /**
  * @type {OneDrivePhotos}
  */
@@ -63,7 +74,7 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOADED":
         {
-          this.log_debug("Image loaded:", payload);
+          this.log_info("Image loaded:", payload);
         }
         break;
       case "MODULE_SUSPENDED":
@@ -438,26 +449,36 @@ const nodeHelperObject = {
         this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
       }
     }
+    const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
 
     let buffer = null;
     try {
       switch (photo.mimeType) {
         case "image/heic": {
           buffer = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
+          const isJpg = isJpgFn(buffer);
+          if (!isJpg) {
+            this.log_error(`The output of convertHEIC is not a valid JPG:
+              ${photo.filename}, album: ${album.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
+          }
           break;
         }
         default: {
           const buf = await fetchToUint8Array(photo.baseUrl);
           buffer = Buffer.from(buf);
+          const isJpg = isJpgFn(buffer);
+          if (!isJpg) {
+            this.log_error(`The source image is not a valid JPG:
+              ${photo.filename}, album: ${album.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
+          }
           break;
         }
       }
 
-      const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
 
       const base64 = buffer.toString("base64");
 
-      this.log_debug("Image send to UI:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+      this.log_info("Image send to UI:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
     } catch (err) {
       if (err instanceof FetchHTTPError) {
