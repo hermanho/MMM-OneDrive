@@ -85,7 +85,7 @@ class OneDrivePhotos extends EventEmitter {
     this.emit("errorMessage", message);
   }
 
-  async onAuthReady() {
+  async onAuthReady(retryCount = 0) {
     const auth = new Auth(this.#debug);
 
     const authProvider = auth.AuthProvider;
@@ -107,6 +107,17 @@ class OneDrivePhotos extends EventEmitter {
       this.log("onAuthReady done");
     } catch (err) {
       this.logError("onAuthReady error", err);
+      if (retryCount < 3) {
+        this.logWarn("Retrying onAuthReady, retry count:", retryCount);
+        // UnknownError is GraphError
+        // TypeError is usually caused by network issues
+        if (["UnknownError", "TypeError"].includes(err.code)) {
+          // Sleep for 2 second and retry
+          await sleep(2000);
+          this.logWarn("Retrying onAuthReady");
+          return await this.onAuthReady(retryCount + 1);
+        }
+      }
       throw err;
     }
   }
