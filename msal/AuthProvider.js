@@ -95,8 +95,10 @@ class AuthProvider {
 
     if (authResponse) {
       this.account = authResponse.account;
+      this.logInfo("getToken done");
+    } else {
+      this.logError("Failed to acquire token, no authResponse returned.");
     }
-    this.logInfo("getToken done");
 
     return authResponse || null;
   }
@@ -117,8 +119,7 @@ class AuthProvider {
         this.logError("Silent token acquisition failed, acquiring token interactive");
       }
       return undefined;
-    }
-    finally {
+    } finally {
       this.logInfo("getTokenSilent done");
     }
   }

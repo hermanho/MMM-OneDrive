@@ -24,23 +24,15 @@ const chunk = (arr, size) =>
 
 const generateNewExpirationDate = () => new Date(Date.now() + 55 * 60 * 1000).toISOString();
 
-class Auth extends EventEmitter {
+class Auth {
   #debug = {};
   /** @type {AuthProvider} */
   #authProvider = null;
 
   constructor(debug = false) {
     super();
-    this.#debug = debug;
-    this.init().then(
-      () => process.nextTick(() =>
-        this.emit("ready")
-      ),
-      (err) => this.emit("error", err)
-    );
-  }
 
-  async init() {
+    this.#debug = debug;
     if (this.#debug) {
       msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
     }
@@ -95,36 +87,28 @@ class OneDrivePhotos extends EventEmitter {
 
   async onAuthReady() {
     const auth = new Auth(this.#debug);
-    return new Promise((resolve, reject) => {
-      auth.on("ready", async () => {
-        this.log("onAuthReady ready");
-        const authProvider = auth.AuthProvider;
-        const tokenRequest = {
-          scopes: protectedResources.graphMe.scopes,
-          correlationId: crypto.randomUUID(),
-        };
-        try {
-          const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
-          // this.log("onAuthReady token responded");
-          this.emit("authSuccess");
-          this.#graphClient = Client.init({
-            authProvider: (done) => {
-              done(null, tokenResponse.accessToken);
-            },
-          });
-          const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-          this.#userId = graphResponse.id;
-          this.log("onAuthReady done");
-          resolve();
-        } catch (err) {
-          this.logError("onAuthReady error", err);
-          reject(err);
-        }
+
+    const authProvider = auth.AuthProvider;
+    const tokenRequest = {
+      scopes: protectedResources.graphMe.scopes,
+      correlationId: crypto.randomUUID(),
+    };
+    try {
+      const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+      // this.log("onAuthReady token responded");
+      this.emit("authSuccess");
+      this.#graphClient = Client.init({
+        authProvider: (done) => {
+          done(null, tokenResponse.accessToken);
+        },
       });
-      auth.on("error", (error) => {
-        reject(error);
-      });
-    });
+      const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
+      this.#userId = graphResponse.id;
+      this.log("onAuthReady done");
+    } catch (err) {
+      this.logError("onAuthReady error", err);
+      throw err;
+    }
   }
 
   async request(logContext, url, method = "get", data = null) {
