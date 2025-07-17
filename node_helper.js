@@ -437,7 +437,9 @@ const nodeHelperObject = {
       this.log_error(`Photo with id ${photoId} not found in local list`);
       return;
     }
-    this.log_info("Loading to UI:", { id: photoId, filename: photo.filename });
+    const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
+
+    this.log_info("Loading to UI:", { id: photoId, filename: photo.filename, album: album?.name });
 
     if (photo?.baseUrlExpireDateTime) {
       const expireDt = new Date(photo.baseUrlExpireDateTime);
@@ -449,7 +451,6 @@ const nodeHelperObject = {
         this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
       }
     }
-    const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
 
     let buffer = null;
     try {
@@ -459,7 +460,7 @@ const nodeHelperObject = {
           const isJpg = isJpgFn(buffer);
           if (!isJpg) {
             this.log_error(`The output of convertHEIC is not a valid JPG:
-              ${photo.filename}, album: ${album.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
+              ${photo.filename}, album: ${album?.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
           }
           break;
         }
@@ -469,7 +470,7 @@ const nodeHelperObject = {
           const isJpg = isJpgFn(buffer);
           if (!isJpg) {
             this.log_error(`The source image is not a valid JPG:
-              ${photo.filename}, album: ${album.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
+              ${photo.filename}, album: ${album?.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
           }
           break;
         }
