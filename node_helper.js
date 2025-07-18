@@ -23,6 +23,7 @@ const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 const { createIntervalRunner } = require("./src/interval-runner");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
@@ -204,7 +205,7 @@ const nodeHelperObject = {
 
     //load cached album list - if available
     const cacheAlbumDt = new Date(await this.readCacheConfig("CACHE_ALBUMNS_PATH"));
-    const notExpiredCacheAlbum = cacheAlbumDt && (Date.now() - cacheAlbumDt.getTime() < ONE_DAY);
+    const notExpiredCacheAlbum = cacheAlbumDt && (Date.now() - cacheAlbumDt.getTime() < TWO_DAYS);
     this.log_debug("notExpiredCacheAlbum", { cacheAlbumDt, notExpiredCacheAlbum });
     if (notExpiredCacheAlbum && fs.existsSync(this.CACHE_ALBUMNS_PATH)) {
       this.log_info("Loading cached albumns list");
