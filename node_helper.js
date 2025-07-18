@@ -74,7 +74,8 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOADED":
         {
-          this.log_info("Image loaded:", payload);
+          this.log_info("Image loaded:");
+          this.log_info(JSON.stringify(payload));
         }
         break;
       case "MODULE_SUSPENDED":
@@ -479,7 +480,8 @@ const nodeHelperObject = {
 
       const base64 = buffer.toString("base64");
 
-      this.log_info("Image send to UI:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+      this.log_info("Image send to UI:");
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
     } catch (err) {
       if (err instanceof FetchHTTPError) {

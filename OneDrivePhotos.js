@@ -30,8 +30,6 @@ class Auth {
   #authProvider = null;
 
   constructor(debug = false) {
-    super();
-
     this.#debug = debug;
     if (this.#debug) {
       msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
