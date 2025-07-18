@@ -85,41 +85,48 @@ class OneDrivePhotos extends EventEmitter {
     this.emit("errorMessage", message);
   }
 
-  async onAuthReady(retryCount = 0) {
-    const auth = new Auth(this.#debug);
+  async onAuthReady(maxRetries = 3) {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+      const auth = new Auth(this.#debug);
 
-    const authProvider = auth.AuthProvider;
-    const tokenRequest = {
-      scopes: protectedResources.graphMe.scopes,
-      correlationId: crypto.randomUUID(),
-    };
-    try {
-      const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
-      // this.log("onAuthReady token responded");
-      this.emit("authSuccess");
-      this.#graphClient = Client.init({
-        authProvider: (done) => {
-          done(null, tokenResponse.accessToken);
-        },
-      });
-      const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-      this.#userId = graphResponse.id;
-      this.log("onAuthReady done");
-    } catch (err) {
-      this.logError("onAuthReady error", err);
-      if (retryCount < 3) {
-        this.logWarn("Retrying onAuthReady, retry count:", retryCount);
+      const authProvider = auth.AuthProvider;
+      const tokenRequest = {
+        scopes: protectedResources.graphMe.scopes,
+        correlationId: crypto.randomUUID(),
+      };
+      try {
+        const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+        // this.log("onAuthReady token responded");
+        this.emit("authSuccess");
+        this.#graphClient = Client.init({
+          authProvider: (done) => {
+            done(null, tokenResponse.accessToken);
+          },
+        });
+        const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
+        this.#userId = graphResponse.id;
+        this.log("onAuthReady done");
+        return;
+      } catch (err) {
+        this.logError("onAuthReady error", err);
+        this.logWarn("Retrying onAuthReady, retry count:", attempt);
         // UnknownError is GraphError
         // TypeError is usually caused by network issues
-        if (["UnknownError", "TypeError"].includes(err.code)) {
-          // Sleep for 2 second and retry
-          await sleep(2000);
-          this.logWarn("Retrying onAuthReady");
-          return await this.onAuthReady(retryCount + 1);
+        const shouldRetry = ["UnknownError", "TypeError"].includes(err.code);
+
+        if (!shouldRetry) {
+          this.logError("Not retrying onAuthReady due to unknown error");
+          throw err;
         }
+        attempt++;
+        // Sleep for 2 second and retry
+        await sleep(2000);
+        this.logWarn("Retrying onAuthReady");
       }
-      throw err;
     }
+    this.logError(`Failed to wait onAuthReady after ${maxRetries} attempts.`);
+    throw new Error(`Failed to wait onAuthReady after ${maxRetries} attempts.`);
   }
 
   async request(logContext, url, method = "get", data = null) {
