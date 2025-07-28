@@ -469,10 +469,12 @@ const nodeHelperObject = {
         default: {
           const buf = await fetchToUint8Array(photo.baseUrl);
           buffer = Buffer.from(buf);
-          const isJpg = isJpgFn(buffer);
-          if (!isJpg) {
-            this.log_error(`The source image is not a valid JPG:
+          if (photo.mimeType === "image/jpeg") {
+            const isJpg = isJpgFn(buffer);
+            if (!isJpg) {
+              this.log_error(`The source image is not a valid JPG:
               ${photo.filename}, album: ${album?.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
+            }
           }
           break;
         }
