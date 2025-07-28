@@ -304,8 +304,8 @@ const nodeHelperObject = {
 
   scanJob: async function () {
     this.queue = null;
-    await this.getAlbumList();
     try {
+      await this.getAlbumList();
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
         this.savePhotoListCache();
