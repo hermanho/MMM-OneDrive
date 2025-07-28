@@ -44,7 +44,7 @@ const fetchToUint8Array = async (url, maxRetries = 3) => {
     } catch (err) {
       console.error(`Error fetching ${url}:`);
       console.error(err);
-      console.warn("Retrying fetchToUint8Array, retry count:", attempt);
+      console.warn(`Retrying fetchToUint8Array for ${url}, retry count: ${attempt}`);
       const shouldRetry = [
         err instanceof TypeError && err.message.includes("Failed to fetch"),
         err instanceof FetchHTTPError,

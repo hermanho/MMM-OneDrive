@@ -104,15 +104,14 @@ class OneDrivePhotos extends EventEmitter {
         });
         const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
         this.#userId = graphResponse.id;
-        this.log("onAuthReady done");
+        this.log(`onAuthReady done, retry count: ${attempt}`);
         return;
       } catch (err) {
         this.logError("onAuthReady error", err);
-        this.logWarn("Retrying onAuthReady, retry count:", attempt);
+        this.logWarn(`Retrying onAuthReady, retry count: ${attempt}`);
         // UnknownError is GraphError
         // TypeError is usually caused by network issues
         const shouldRetry = ["UnknownError", "TypeError"].includes(err.code);
-
         if (!shouldRetry) {
           this.logError("Not retrying onAuthReady due to unknown error");
           throw err;
