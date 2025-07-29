@@ -36,17 +36,20 @@ function createIntervalRunner(render, interval) {
 
   return {
     skipToNext: () => {
-      if (skipWait) skipWait();
+      if (skipWait) {
+        console.info("[IntervalRunner]: Skip to next cycle");
+        skipWait();
+      }
     },
     stop: () => {
+      console.info("[IntervalRunner]: Stopping");
       state.stopped = true;
       if (skipWait) skipWait();
     },
     resume: () => {
-      if (!state.running) {
-        state.stopped = false;
-        cycle();
-      }
+      console.info("[IntervalRunner]: Resuming");
+      state.stopped = false;
+      cycle();
     },
   };
 }

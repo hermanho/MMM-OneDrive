@@ -41,20 +41,15 @@ class AuthProvider {
     console.error("[ONEDRIVE:AuthProvider]", ...args);
   }
 
+  logWarn(...args) {
+    console.warn("[ONEDRIVE:AuthProvider]", ...args);
+  }
+
+
   async logout() {
     if (!this.account) return;
 
     try {
-      /**
-       * If you would like to end the session with AAD, use the logout endpoint. You'll need to enable
-       * the optional token claim 'login_hint' for this to work as expected. For more information, visit:
-       * https://learn.microsoft.com/azure/active-directory/develop/v2-protocols-oidc#send-a-sign-out-request
-       */
-      if (this.account.idTokenClaims.hasOwnProperty("login_hint")) {
-        const { shell } = require("electron");
-        await shell.openExternal(`${this.msalConfig.auth.authority}/oauth2/v2.0/logout?logout_hint=${encodeURIComponent(this.account.idTokenClaims.login_hint)}`);
-      }
-
       await this.cache.removeAccount(this.account);
       this.account = null;
     } catch (error) {
@@ -80,6 +75,7 @@ class AuthProvider {
       authResponse = await this.getTokenSilent(tokenRequest);
     }
     if (!authResponse) {
+      this.logWarn("Failed to call getTokenSilent");
       if (forceAuthInteractive) {
         waitInteractiveCallback("Please switch to browser window and continue the authorization process.");
         authResponse = await this.getTokenInteractive(tokenRequest);
@@ -100,7 +96,7 @@ class AuthProvider {
       this.logError("Failed to acquire token, no authResponse returned.");
     }
 
-    return authResponse || null;
+    return authResponse;
   }
 
   /**
@@ -187,20 +183,25 @@ class AuthProvider {
    * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
    */
   async getAccount() {
-    const currentAccounts = await this.cache.getAllAccounts();
+    try {
+      const currentAccounts = await this.cache.getAllAccounts();
 
-    if (!currentAccounts) {
-      this.logError("No accounts detected");
-      return null;
-    }
+      if (!currentAccounts) {
+        this.logError("No accounts detected");
+        return null;
+      }
 
-    if (currentAccounts.length > 1) {
-      // Add choose account code here
-      console.log("Multiple accounts detected, need to add choose account code.");
-      return currentAccounts[0];
-    } else if (currentAccounts.length === 1) {
-      return currentAccounts[0];
-    } else {
+      if (currentAccounts.length > 1) {
+        // Add choose account code here
+        console.log("Multiple accounts detected, need to add choose account code.");
+        return currentAccounts[0];
+      } else if (currentAccounts.length === 1) {
+        return currentAccounts[0];
+      } else {
+        return null;
+      }
+    } catch (error) {
+      this.logError("Error getting account:", error);
       return null;
     }
   }
