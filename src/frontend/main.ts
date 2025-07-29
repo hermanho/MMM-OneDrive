@@ -168,7 +168,7 @@ Module.register<Config>("MMM-OneDrive", {
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
-      indexOfPhotos: target._indexOfPhotos,
+      index: target._indexOfPhotos,
     });
   },
 

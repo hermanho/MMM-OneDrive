@@ -1,8 +1,14 @@
-const sleep = require("./sleep");
+import sleep from "./sleep";
 
-class FetchHTTPError extends Error {
-  constructor(url, status, responseText) {
+export class FetchHTTPError extends Error {
+  public cause: string;
+  public url: string;
+  public status: number;
+  public responseText: string;
+
+  constructor(url: string, status: number, responseText: string) {
     super(`Failed to fetch url ${url}: ${status}, ${responseText}`);
+    this.name = "FetchHTTPError";
     this.cause = responseText;
     this.url = url;
     this.status = status;
@@ -11,11 +17,9 @@ class FetchHTTPError extends Error {
 }
 
 /**
- * Fetch a URL and return the response as a Uint8Array.
- * @param {string} url - The URL to fetch.
- * @returns {Promise<Uint8Array>} - The response data as a Uint8Array.
+ * Fetch a URL and return the response as an ArrayBuffer.
  */
-const fetchToUint8ArrayOnce = async (url) => {
+const fetchToArrayBufferOnce = async (url: string) => {
   const resp = await fetch(url);
   if (!resp.ok) {
     let text = "";
@@ -31,16 +35,13 @@ const fetchToUint8ArrayOnce = async (url) => {
 };
 
 /**
- * Fetch a URL and return the response as a Uint8Array.
- * @param {string} url - The URL to fetch.
- * @param maxRetries
- * @returns {Promise<Uint8Array>} - The response data as a Uint8Array.
+ * Fetch a URL and return the response as an ArrayBuffer.
  */
-const fetchToUint8Array = async (url, maxRetries = 3) => {
+export const fetchToArrayBuffer = async (url: string, maxRetries = 3) => {
   let attempt = 0;
   while (attempt < maxRetries) {
     try {
-      return await fetchToUint8ArrayOnce(url);
+      return await fetchToArrayBufferOnce(url);
     } catch (err) {
       console.error(`Error fetching ${url}:`);
       console.error(err);
@@ -60,9 +61,4 @@ const fetchToUint8Array = async (url, maxRetries = 3) => {
   }
   console.error(`Failed to fetch ${url} after ${maxRetries} attempts.`);
   throw new Error(`Failed to fetch url ${url} after ${maxRetries} attempts.`);
-};
-
-module.exports = {
-  FetchHTTPError,
-  fetchToUint8Array,
 };

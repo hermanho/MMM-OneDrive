@@ -18,25 +18,14 @@ const OneDrivePhotos = require("./OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
 const { cachePath } = require("./msal/authConfig.js");
-const { convertHEIC } = require("./photosConverter-node");
-const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 const { createIntervalRunner } = require("./src/interval-runner");
+const { urlToImageBase64 } = require("./lib/lib");
 
 const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
-
-const isJpgFn = (buffer) => {
-  if (!buffer || buffer.length < 3) {
-    return false;
-  }
-
-  return buffer[0] === 255
-    && buffer[1] === 216
-    && buffer[2] === 255;
-};
 
 /**
  * @type {OneDrivePhotos}
@@ -378,7 +367,7 @@ const nodeHelperObject = {
     const photoCondition = (photo) => {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
       const data = photo.mediaMetadata;
-      if (!photo.mimeType.startsWith("image/")) return false;
+      // if (!photo.mimeType.startsWith("image/")) return false;
       const ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
@@ -454,40 +443,14 @@ const nodeHelperObject = {
       }
     }
 
-    let buffer = null;
     try {
-      switch (photo.mimeType) {
-        case "image/heic": {
-          buffer = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
-          const isJpg = isJpgFn(buffer);
-          if (!isJpg) {
-            this.log_error(`The output of convertHEIC is not a valid JPG:
-              ${photo.filename}, album: ${album?.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
-          }
-          break;
-        }
-        default: {
-          const buf = await fetchToUint8Array(photo.baseUrl);
-          buffer = Buffer.from(buf);
-          if (photo.mimeType === "image/jpeg") {
-            const isJpg = isJpgFn(buffer);
-            if (!isJpg) {
-              this.log_error(`The source image is not a valid JPG:
-              ${photo.filename}, album: ${album?.name}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
-            }
-          }
-          break;
-        }
-      }
-
-
-      const base64 = buffer.toString("base64");
+      const base64 = await urlToImageBase64(photo);
 
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
     } catch (err) {
-      if (err instanceof FetchHTTPError) {
+      if (err?.name === "FetchHTTPError") {
         // silently skip the error
         return;
       }
@@ -496,10 +459,7 @@ const nodeHelperObject = {
         this.log_error("error", err?.message, err?.name);
         this.log_error(err?.stack || err);
       }
-
-
     }
-
   },
 
   stop: function () {
