@@ -118,11 +118,13 @@ const nodeHelperObject = {
       config: config,
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
+      this.log_info("Stop UI runner");
       this.uiRunner?.stop();
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
+      this.log_info("Resume UI runner");
       if (!this.moduleSuspended) {
         this.uiRunner?.resume();
       }

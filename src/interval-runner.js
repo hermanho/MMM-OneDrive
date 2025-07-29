@@ -47,9 +47,12 @@ function createIntervalRunner(render, interval) {
       if (skipWait) skipWait();
     },
     resume: () => {
-      console.info("[IntervalRunner]: Resuming");
-      state.stopped = false;
-      cycle();
+      console.info("[IntervalRunner]: To resume");
+      if (!state.running) {
+        console.info("[IntervalRunner]: Resuming");
+        state.stopped = false;
+        cycle();
+      }
     },
   };
 }

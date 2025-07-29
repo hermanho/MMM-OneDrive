@@ -96,7 +96,6 @@ class OneDrivePhotos extends EventEmitter {
       try {
         const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
         // this.log("onAuthReady token responded");
-        this.emit("authSuccess");
         this.#graphClient = Client.init({
           authProvider: (done) => {
             done(null, tokenResponse.accessToken);
@@ -105,6 +104,7 @@ class OneDrivePhotos extends EventEmitter {
         const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
         this.#userId = graphResponse.id;
         this.log(`onAuthReady done, retry count: ${attempt}`);
+        this.emit("authSuccess");
         return;
       } catch (err) {
         this.logError("onAuthReady error", err);
