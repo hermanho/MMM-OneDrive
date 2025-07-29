@@ -11,35 +11,22 @@ const fs = require("fs");
  */
 const cachePlugin = (CACHE_LOCATION) => {
   const beforeCacheAccess = async (cacheContext) => {
-    return new Promise((resolve, reject) => {
+    try {
       if (fs.existsSync(CACHE_LOCATION)) {
-        fs.readFile(CACHE_LOCATION, "utf-8", (err, data) => {
-          if (err) {
-            reject();
-          } else {
-            cacheContext.tokenCache.deserialize(data);
-            resolve();
-          }
-        });
+        const data = await fs.promises.readFile(CACHE_LOCATION, "utf-8");
+        cacheContext.tokenCache.deserialize(data);
       } else {
-        fs.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize(), (err) => {
-          if (err) {
-            reject();
-          } else {
-            resolve();
-          }
-        });
+        await fs.promises.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize());
       }
-    });
+    } catch {
+      // if cache file doesn't exists, create it
+      await fs.promises.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize());
+    }
   };
 
   const afterCacheAccess = async (cacheContext) => {
     if (cacheContext.cacheHasChanged) {
-      fs.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize(), (err) => {
-        if (err) {
-          console.log(err);
-        }
-      });
+      await fs.promises.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize());
     }
   };
 

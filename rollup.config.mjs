@@ -43,13 +43,13 @@ export default [
     input: "./src/backend/lib.ts",
     external: ["node_helper", "logger", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
     plugins: [typescript({
-      tsconfig: "./src/backend/tsconfig.json"
+      tsconfig: "./src/backend/tsconfig.json",
     }), nodeResolve({
       preferBuiltins: true,
       browser: false,
     }), commonjs(), terser({
       mangle: false,
-      format:{
+      format: {
         indent_level: 2,
         braces: true,
         beautify: true,

@@ -18,8 +18,8 @@ jest.mock("./OneDrivePhotos.js", () =>
   jest.fn(() => ({
     batchRequestRefresh: jest.fn((arr) => Promise.resolve(arr)),
     on: jest.fn(),
-    getAlbums: async () => [],
-    getAlbumThumbnail: async () => "mock-thumbnail-url",
+    getAlbums: async () => Promise.resolve([]),
+    getAlbumThumbnail: async () => Promise.resolve("mock-thumbnail-url"),
     getImageFromAlbum: mockGetImageFromAlbum,
   }))
 );

@@ -11,46 +11,43 @@ const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = r
  */
 
 class AuthProvider {
-  msalConfig;
   clientApplication;
   /** @type {import("@azure/msal-node").AccountInfo} */
   account;
-  cache;
 
   constructor(msalConfig) {
     /**
      * Initialize a public client application. For more information, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md
      */
-    this.msalConfig = msalConfig;
-    this.clientApplication = new PublicClientApplication(this.msalConfig);
+    this.clientApplication = new PublicClientApplication(msalConfig);
 
-    this.cache = this.clientApplication.getTokenCache();
     this.account = null;
   }
 
   logDebug(...args) {
-    console.debug("[ONEDRIVE:AuthProvider]", ...args);
+    console.debug("[MMM-OneDrive] [AuthProvider]", ...args);
   }
 
   logInfo(...args) {
-    console.info("[ONEDRIVE:AuthProvider]", ...args);
+    console.info("[MMM-OneDrive] [AuthProvider]", ...args);
   }
 
   logError(...args) {
-    console.error("[ONEDRIVE:AuthProvider]", ...args);
+    console.error("[MMM-OneDrive] [AuthProvider]", ...args);
   }
 
   logWarn(...args) {
-    console.warn("[ONEDRIVE:AuthProvider]", ...args);
+    console.warn("[MMM-OneDrive] [AuthProvider]", ...args);
   }
 
 
   async logout() {
     if (!this.account) return;
 
+    const cache = this.clientApplication.getTokenCache();
     try {
-      await this.cache.removeAccount(this.account);
+      await cache.removeAccount(this.account);
       this.account = null;
     } catch (error) {
       this.logError(error);
@@ -116,7 +113,7 @@ class AuthProvider {
       }
       return undefined;
     } finally {
-      this.logInfo("getTokenSilent done");
+      this.logInfo("getTokenSilent end");
     }
   }
 
@@ -184,7 +181,8 @@ class AuthProvider {
    */
   async getAccount() {
     try {
-      const currentAccounts = await this.cache.getAllAccounts();
+      const cache = this.clientApplication.getTokenCache();
+      const currentAccounts = await cache.getAllAccounts();
 
       if (!currentAccounts) {
         this.logError("No accounts detected");

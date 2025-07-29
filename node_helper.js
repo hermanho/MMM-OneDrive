@@ -56,7 +56,7 @@ const nodeHelperObject = {
     this.log_info("Started");
   },
 
-  socketNotificationReceived: async function (notification, payload) {
+  socketNotificationReceived: function (notification, payload) {
     this.log_debug("notification received", notification);
     switch (notification) {
       case "INIT":

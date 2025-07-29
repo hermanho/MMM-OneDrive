@@ -24,25 +24,6 @@ const chunk = (arr, size) =>
 
 const generateNewExpirationDate = () => new Date(Date.now() + 55 * 60 * 1000).toISOString();
 
-class Auth {
-  #debug = {};
-  /** @type {AuthProvider} */
-  #authProvider = null;
-
-  constructor(debug = false) {
-    this.#debug = debug;
-    if (this.#debug) {
-      msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
-    }
-    this.#authProvider = new AuthProvider(msalConfig);
-    Log.info("[ONEDRIVE:CORE] Auth -> AuthProvider created");
-  }
-
-  get AuthProvider() {
-    return this.#authProvider;
-  }
-}
-
 class OneDrivePhotos extends EventEmitter {
   /** @type {Client} */
   #graphClient = null;
@@ -55,22 +36,40 @@ class OneDrivePhotos extends EventEmitter {
     this.options = options;
     this.#debug = options.debug ? options.debug : this.debug;
     this.config = options.config;
+
+    let authProviderInstance;
+    /**
+     * @returns {AuthProvider} AuthProvider instance
+     */
+    this.getAuthProvider = () => {
+      if (authProviderInstance) {
+        this.log("Get AuthProvider from cache");
+        return authProviderInstance;
+      }
+      this.log("Initializing AuthProvider");
+      if (this.#debug) {
+        msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
+      }
+      authProviderInstance = new AuthProvider(msalConfig);
+      this.log("AuthProvider created");
+      return authProviderInstance;
+    }
   }
 
   log(...args) {
-    Log.info("[ONEDRIVE:CORE]", ...args);
+    Log.info("[MMM-OneDrive] [OneDrivePhotos]", ...args);
   }
 
   logError(...args) {
-    Log.error("[ONEDRIVE:CORE]", ...args);
+    Log.error("[MMM-OneDrive] [OneDrivePhotos]", ...args);
   }
 
   logDebug(...args) {
-    Log.debug("[ONEDRIVE:CORE]", ...args);
+    Log.debug("[MMM-OneDrive] [OneDrivePhotos]", ...args);
   }
 
   logWarn(...args) {
-    Log.warn("[ONEDRIVE:CORE]", ...args);
+    Log.warn("[MMM-OneDrive] [OneDrivePhotos]", ...args);
   }
 
   /**
@@ -86,15 +85,12 @@ class OneDrivePhotos extends EventEmitter {
   async onAuthReady(maxRetries = 3) {
     let attempt = 0;
     while (attempt < maxRetries) {
-      const auth = new Auth(this.#debug);
-
-      const authProvider = auth.AuthProvider;
       const tokenRequest = {
         scopes: protectedResources.graphMe.scopes,
         correlationId: crypto.randomUUID(),
       };
       try {
-        const tokenResponse = await authProvider.getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+        const tokenResponse = await this.getAuthProvider().getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
         // this.log("onAuthReady token responded");
         this.#graphClient = Client.init({
           authProvider: (done) => {
@@ -111,7 +107,7 @@ class OneDrivePhotos extends EventEmitter {
         this.logWarn(`Retrying onAuthReady, retry count: ${attempt}`);
 
         if (err.code === "InvalidAuthenticationToken") {
-          await authProvider.logout()
+          await this.getAuthProvider().logout();
         }
 
         // UnknownError is GraphError
