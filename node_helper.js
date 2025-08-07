@@ -252,6 +252,11 @@ const nodeHelperObject = {
   },
 
   startUIRenderClock: function () {
+    if (this.uiRunner) {
+      this.log_info("UI render clock is already running. Skipped to re-create.");
+      this.uiRunner.skipToNext();
+      return;
+    }
     this.log_info("Starting UI render clock");
 
     this.uiPhotoIndex = 0;
@@ -277,20 +282,22 @@ const nodeHelperObject = {
   },
 
   startScanning: function () {
-    const fn = () => {
+    if (this.scanTimer) {
+      this.log_info("Scan album and photo now");
+      this.scanTimer.skipToNext();
+      return;
+    }
+
+    this.scanTimer = createIntervalRunner(async () => {
       const nextScanDt = new Date(Date.now() + this.config.scanInterval);
-      this.scanJob().then(() => {
-        this.log_info("Next scan will be at", nextScanDt.toLocaleString());
-      });
-    };
-    // set up interval, then 1 fail won't stop future scans
-    this.scanTimer = setInterval(fn, this.config.scanInterval);
-    // call for first time
-    fn();
+      await this.scanJob();
+      this.log_info("Next scan will be at", nextScanDt.toLocaleString());
+    }, this.config.scanInterval);
   },
 
   scanJob: async function () {
     this.queue = null;
+    this.log_info("Run scanJob");
     await this.getAlbumList();
     try {
       if (this.selectedAlbums.length > 0) {

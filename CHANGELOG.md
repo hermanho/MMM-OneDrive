@@ -1,5 +1,8 @@
 # MMM-OneDrive Change Log
 
+**`[1.5.4] - 2025/08/08`**
+- Fixed: UI render timer re-create when front end is refreshed #28
+
 **`[1.5.3] - 2025/07/09`**
 - Fixed: module suspend (MMM-ModuleScheduler) not working
 

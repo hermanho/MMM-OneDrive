@@ -1,6 +1,6 @@
 /*! *****************************************************************************
   mmm-onedrive
-  Version 1.5.3
+  Version 1.5.4
 
   MagicMirror² module to display your photos from OneDrive.
   Please submit bugs at https://github.com/hermanho/MMM-OneDrive/issues
