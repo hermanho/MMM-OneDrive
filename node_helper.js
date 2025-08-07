@@ -284,7 +284,7 @@ const nodeHelperObject = {
   startScanning: function () {
     if (this.scanTimer) {
       this.log_info("Scan album and photo now");
-      this.scanTimer?.skipToNext();
+      this.scanTimer.skipToNext();
       return;
     }
 
