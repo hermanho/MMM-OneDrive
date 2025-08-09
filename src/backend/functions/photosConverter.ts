@@ -1,14 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import fs from "fs";
-// import path from "path";
 import Log from "logger";
 import jpegJs from "jpeg-js";
-import libheifModule from "libheif-js/libheif-wasm/libheif.js";
 import { Jimp } from "./customJimp";
-// const libheifWasmPath = path.resolve(__dirname, "./node_modules/libheif-js/libheif-wasm/libheif.wasm");
-const libheifWasmPath = require.resolve("libheif-js/libheif-wasm/libheif.wasm");
-const wasmBinary = fs.readFileSync(libheifWasmPath);
-const libheifFactoryPromise: Promise<any> = (libheifModule as any)({ wasmBinary });
+import { getLibheifFactory } from "./externals/libheifJS";
 
 export interface ConvertHEICParams {
   filename: string;
@@ -53,8 +47,7 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
     const d = Date.now();
     const inputBuffer = Buffer.from(arrayBuffer);
 
-    const libheifFactory = await libheifFactoryPromise;
-    await libheifFactory.ready;
+    const libheifFactory = await getLibheifFactory();
     heifDecoder = new libheifFactory.HeifDecoder();
     heifImages = await heifDecoder.decode(inputBuffer);
 
