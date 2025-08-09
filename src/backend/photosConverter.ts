@@ -24,7 +24,7 @@ const encodeJpeg = (buffer: ArrayBuffer, w: number, h: number) => {
     width: w,
     height: h,
     data: buffer,
-  }, 0.8);
+  }, 80);
   return jpegBuffRet.data;
 };
 
@@ -82,6 +82,8 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
       w: size.width,
       h: size.height,
     } : undefined);
+
+    // const outputBuffer = encodeJpeg(decodedData.data, w, h);
     Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d });
     return outputBuffer;
   } catch (err: any) {
