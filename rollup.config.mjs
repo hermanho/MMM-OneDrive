@@ -39,40 +39,42 @@ export default [
       },
     },
   },
-  {
-    input: "./src/backend/lib.ts",
-    external: ["node_helper", "logger", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
-    plugins: [typescript({
-      tsconfig: "./src/backend/tsconfig.json",
-    }), nodeResolve({
-      preferBuiltins: true,
-      browser: false,
-    }), commonjs(), terser({
-      mangle: false,
-      format: {
-        indent_level: 2,
-        braces: true,
-        beautify: true,
-      },
-      toplevel: true,
-    }), banner2(() => bannerText)],
-    output: {
-      file: "./lib/lib.js",
-      format: "cjs",
-      globals: {
-        logger: "Log",
-      },
-    },
-  },
-  {
-    input: "./src/backend/lib.ts",
-    external: ["node_helper", "logger", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
-    plugins: [dts()],
-    output: {
-      file: "./lib/lib.d.ts",
-      globals: {
-        logger: "Log",
+  ...["lib", "OneDrivePhotos"].flatMap((file) => [
+    {
+      input: `./src/backend/${file}.ts`,
+      external: ["node_helper", "logger", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
+      plugins: [typescript({
+        tsconfig: "./src/backend/tsconfig.json",
+      }), nodeResolve({
+        preferBuiltins: true,
+        browser: false,
+      }), commonjs(), terser({
+        mangle: false,
+        format: {
+          indent_level: 2,
+          braces: true,
+          beautify: true,
+        },
+        toplevel: true,
+      }), banner2(() => bannerText)],
+      output: {
+        file: `./lib/${file}.js`,
+        format: "cjs",
+        globals: {
+          logger: "Log",
+        },
       },
     },
-  },
+    {
+      input: `./src/backend/${file}.ts`,
+      external: ["node_helper", "logger", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
+      plugins: [dts()],
+      output: {
+        file: `./lib/${file}.d.ts`,
+        globals: {
+          logger: "Log",
+        },
+      },
+    },
+  ]),
 ];

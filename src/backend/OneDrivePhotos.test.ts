@@ -1,5 +1,5 @@
-import OneDrivePhotos from "./OneDrivePhotos.js";
-import * as logger from "./tests/logger.mock";
+import { OneDrivePhotos } from "./OneDrivePhotos";
+import * as logger from "../../tests/logger.mock.js";
 import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 
 describe("OneDrivePhotos", () => {

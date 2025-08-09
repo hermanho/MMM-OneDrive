@@ -14,10 +14,9 @@ const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
-const OneDrivePhotos = require("./OneDrivePhotos.js");
+const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
-const { cachePath } = require("./msal/authConfig.js");
 const { createIntervalRunner } = require("./src/interval-runner");
 const { urlToImageBase64 } = require("./lib/lib");
 
@@ -26,6 +25,7 @@ const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
+const cachePath = path.resolve(__dirname, "./msal/token.json");
 
 /**
  * @type {OneDrivePhotos}
@@ -116,6 +116,7 @@ const nodeHelperObject = {
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
+      authTokenCachePath: cachePath,
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
       this.log_info("Stop UI runner");

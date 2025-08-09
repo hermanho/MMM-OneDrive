@@ -1,16 +1,8 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-const fs = require("fs");
+import fs from "fs";
+import type { ICachePlugin, TokenCacheContext } from "@azure/msal-node";
 
-/**
- * 
- * @param {string} CACHE_LOCATION 
- * @returns {import("@azure/msal-node").ICachePlugin}
- */
-const cachePlugin = (CACHE_LOCATION) => {
-  const beforeCacheAccess = async (cacheContext) => {
+export const cachePlugin = (CACHE_LOCATION: string): ICachePlugin => {
+  const beforeCacheAccess = async (cacheContext: TokenCacheContext) => {
     try {
       if (fs.existsSync(CACHE_LOCATION)) {
         const data = await fs.promises.readFile(CACHE_LOCATION, "utf-8");
@@ -24,7 +16,7 @@ const cachePlugin = (CACHE_LOCATION) => {
     }
   };
 
-  const afterCacheAccess = async (cacheContext) => {
+  const afterCacheAccess = async (cacheContext: TokenCacheContext) => {
     if (cacheContext.cacheHasChanged) {
       await fs.promises.writeFile(CACHE_LOCATION, cacheContext.tokenCache.serialize());
     }
@@ -35,8 +27,3 @@ const cachePlugin = (CACHE_LOCATION) => {
     afterCacheAccess,
   };
 };
-
-module.exports = {
-  cachePlugin,
-};
-

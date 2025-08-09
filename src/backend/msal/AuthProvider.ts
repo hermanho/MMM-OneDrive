@@ -1,17 +1,5 @@
-/*
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-
-const { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError } = require("@azure/msal-node");
-
-
-function sleep(ms = 1000) {
-  return new Promise((resolve) => {
-    setTimeout(resolve, ms);
-  });
-}
-
+import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError } from "@azure/msal-node";
+import sleep from "../functions/sleep";
 
 /**
  * @typedef {object} TokenRequestCommon
@@ -140,6 +128,7 @@ class AuthProvider {
   async getTokenInteractive(tokenRequest) {
     const openBrowser = async (url) => {
       try {
+        // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { shell } = require("electron");
         await shell.openExternal(url);
       } catch (e) {
@@ -221,4 +210,4 @@ class AuthProvider {
   }
 }
 
-module.exports = AuthProvider;
+export default AuthProvider;

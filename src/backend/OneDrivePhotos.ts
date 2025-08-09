@@ -1,19 +1,19 @@
 "use strict";
 
-/**
- * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
- */
-
-const EventEmitter = require("events");
-const crypto = require("crypto");
-const { Client } = require("@microsoft/microsoft-graph-client");
-const { LogLevel } = require("@azure/msal-node");
-const ExifReader = require("exifreader");
-const Log = require("logger");
-const { error_to_string } = require("./error_to_string");
-const { msalConfig, protectedResources, getRelativeResourceUrl } = require("./msal/authConfig");
-const AuthProvider = require("./msal/AuthProvider");
-const sleep = require("./sleep");
+import { EventEmitter } from "events";
+import crypto from "crypto";
+import { BatchResponseBody, Client, PageCollection } from "@microsoft/microsoft-graph-client";
+import { LogLevel } from "@azure/msal-node";
+import ExifReader from "exifreader";
+import Log from "logger";
+import { error_to_string } from "./functions/error_to_string";
+import { msalConfig, protectedResources, getRelativeResourceUrl } from "./msal/authConfig";
+import AuthProvider from "./msal/AuthProvider";
+import sleep from "./functions/sleep";
+import { ConfigTransformed } from "../types/config";
+import { OneDriveMediaItem } from "../types/onedrive";
+import { DriveItem } from "@microsoft/microsoft-graph-types";
+import { cachePlugin } from "./msal/CachePlugin";
 
 const chunk = (arr, size) =>
   Array.from({
@@ -24,23 +24,25 @@ const chunk = (arr, size) =>
 
 const generateNewExpirationDate = () => new Date(Date.now() + 55 * 60 * 1000).toISOString();
 
-class OneDrivePhotos extends EventEmitter {
-  /** @type {Client} */
-  #graphClient = null;
-  /** @type {string} */
-  #userId = null;
-  #debug = false;
+interface OneDrivePhotosParams {
+  debug: boolean;
+  config: ConfigTransformed;
+  authTokenCachePath: string;
+}
 
-  constructor(options) {
+export class OneDrivePhotos extends EventEmitter {
+  #graphClient: Client | null = null;
+  #userId: string | null = null;
+  #debug = false;
+  config: ConfigTransformed;
+  getAuthProvider: () => AuthProvider;
+
+  constructor(options: OneDrivePhotosParams) {
     super();
-    this.options = options;
-    this.#debug = options.debug ? options.debug : this.debug;
+    this.#debug = options.debug ? options.debug : false;
     this.config = options.config;
 
-    let authProviderInstance;
-    /**
-     * @returns {AuthProvider} AuthProvider instance
-     */
+    let authProviderInstance: AuthProvider | null = null;
     this.getAuthProvider = () => {
       if (authProviderInstance) {
         this.log("Get AuthProvider from cache");
@@ -50,10 +52,15 @@ class OneDrivePhotos extends EventEmitter {
       if (this.#debug) {
         msalConfig.system.loggerOptions.logLevel = LogLevel.Trace;
       }
-      authProviderInstance = new AuthProvider(msalConfig);
+      authProviderInstance = new AuthProvider({
+        ...msalConfig,
+        cache: {
+          cachePlugin: cachePlugin(options.authTokenCachePath),
+        },
+      });
       this.log("AuthProvider created");
       return authProviderInstance;
-    }
+    };
   }
 
   log(...args) {
@@ -127,11 +134,11 @@ class OneDrivePhotos extends EventEmitter {
     throw new Error(`Failed to wait onAuthReady after ${maxRetries} attempts.`);
   }
 
-  async request(logContext, url, method = "get", data = null) {
+  async request<T>(logContext, url, method = "get", data = null) {
     this.logDebug((logContext ? `[${logContext}]` : "") + ` request ${method} URL: ${url}`);
     try {
       const ret = await this.#graphClient.api(url)[method](data);
-      return ret;
+      return ret as T;
     } catch (error) {
       this.logError((logContext ? `[${logContext}]` : "") + ` request fail ${method} URL: ${url}`);
       this.logError((logContext ? `[${logContext}]` : "") + " data: ", JSON.stringify(data));
@@ -159,11 +166,9 @@ class OneDrivePhotos extends EventEmitter {
     const getAlbum = async (pageUrl) => {
       this.log("Getting Album info chunks.");
       try {
-        /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-        const response = await this.request("getAlbum", pageUrl, "get", null);
+        const response = await this.request<PageCollection>("getAlbum", pageUrl, "get", null);
         if (Array.isArray(response.value)) {
-          /** @type {microsoftgraph.DriveItem[]} */
-          const arrayValue = response.value;
+          const arrayValue = response.value as DriveItem[];
           this.logDebug("found album:");
           this.logDebug("name\t\tid");
           arrayValue.map(a => `${a.name}\t${a.id}`).forEach(s => this.logDebug(s));
@@ -197,7 +202,7 @@ class OneDrivePhotos extends EventEmitter {
     }
     try {
       const thumbnailUrl = protectedResources.getThumbnail.endpoint.replace("$$itemId$$", album.bundle.album.coverImageItemId);
-      const response2 = await this.request("getAlbumThumbnail", thumbnailUrl, "get", null);
+      const response2 = await this.request<PageCollection>("getAlbumThumbnail", thumbnailUrl, "get", null);
       if (Array.isArray(response2.value) && response2.value.length > 0) {
         const thumbnail = response2.value[0];
         const thumbnailUrl = thumbnail.mediumSquare?.url || thumbnail.medium?.url;
@@ -232,33 +237,26 @@ class OneDrivePhotos extends EventEmitter {
     const url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId).replace("$$albumId$$", albumId);
 
     this.log("Indexing photos. album:", albumId);
-    /**
-     * @type {OneDriveMediaItem[]}
-     */
-    const list = [];
+
+    const list: OneDriveMediaItem[] = [];
     let loopCycle = 0;
     /**
      * Single-loop version of getImages
-     * @param {string} startUrl
-     * @returns {Promise<OneDriveMediaItem[]>}
      */
-    const getImages = async (startUrl) => {
+    const getImages = async (startUrl: string) => {
       let pageUrl = startUrl;
       let done = false;
       while (!done) {
         this.log(`getImages loop cycle: ${loopCycle}`);
         const startTime = Date.now();
         try {
-          /** @type {import("@microsoft/microsoft-graph-client").PageCollection} */
-          const response = await this.request("getImages", pageUrl, "get");
+          const response = await this.request<PageCollection>("getImages", pageUrl, "get");
           if (Array.isArray(response.value)) {
-            /** @type {microsoftgraph.DriveItem[]} */
-            const childrenItems = response.value;
+            const childrenItems = response.value as DriveItem[];
             this.log(`Parsing ${childrenItems.length} items in ${albumId}`);
             let validCount = 0;
             for (const item of childrenItems) {
-              /** @type {OneDriveMediaItem} */
-              const itemVal = {
+              const itemVal: OneDriveMediaItem = {
                 id: item.id,
                 _albumId: albumId,
                 mimeType: item.file?.mimeType || "",
@@ -296,11 +294,11 @@ class OneDrivePhotos extends EventEmitter {
                         : null,
                   };
                 }
-                if (item.video) {
-                  itemVal.mediaMetadata.width = item.video.width;
-                  itemVal.mediaMetadata.height = item.video.height;
-                  itemVal.mediaMetadata.video = item.video;
-                }
+                // if (item.video) {
+                //   itemVal.mediaMetadata.width = item.video.width;
+                //   itemVal.mediaMetadata.height = item.video.height;
+                //   itemVal.mediaMetadata.video = item.video;
+                // }
 
                 // It looks very slow to download the image and get EXIF data...
                 // if (itemVal.mimeType.startsWith("image/") && !item.photo?.takenDateTime) {
@@ -397,7 +395,7 @@ class OneDrivePhotos extends EventEmitter {
         const requestsPayload = {
           requests: requestsValue,
         };
-        const response = await this.request("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
+        const response = await this.request<BatchResponseBody>("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
         if (Array.isArray(response.responses)) {
           for (const r of response.responses) {
             if (r.status < 400) {
@@ -418,12 +416,7 @@ class OneDrivePhotos extends EventEmitter {
     return result;
   }
 
-  /**
-   *
-   * @param {OneDriveMediaItem} item
-   * @returns {Promise<OneDriveMediaItem>} item
-   */
-  async refreshItem(item) {
+  async refreshItem(item: OneDriveMediaItem) {
     if (!item) {
       return null;
     }
@@ -448,4 +441,3 @@ class OneDrivePhotos extends EventEmitter {
   }
 }
 
-module.exports = OneDrivePhotos;
