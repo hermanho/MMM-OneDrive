@@ -3,7 +3,15 @@
  * Licensed under the MIT License.
  */
 
-const { PublicClientApplication, InteractionRequiredAuthError, ServerError } = require("@azure/msal-node");
+const { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError } = require("@azure/msal-node");
+
+
+function sleep(ms = 1000) {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
+
 
 /**
  * @typedef {object} TokenRequestCommon
@@ -100,21 +108,29 @@ class AuthProvider {
    * 
    * @param {Partial<import("@azure/msal-node").SilentFlowRequest> & TokenRequestCommon} tokenRequest 
    */
-  async getTokenSilent(tokenRequest) {
-    try {
-      return await this.clientApplication.acquireTokenSilent(tokenRequest);
-    } catch (error) {
-      this.logError(error);
-      if (error instanceof InteractionRequiredAuthError) {
-        this.logError("Silent token acquisition failed, acquiring token interactive");
+  async getTokenSilent(tokenRequest, maxRetries = 3) {
+    let attempt = 0;
+    while (attempt < maxRetries) {
+      try {
+        return await this.clientApplication.acquireTokenSilent(tokenRequest);
+      } catch (error) {
+        this.logError(error);
+        if (error instanceof InteractionRequiredAuthError) {
+          this.logError("Silent token acquisition failed");
+        }
+        if (error instanceof ServerError && error.errorCode === "invalid_grant") {
+          this.logError("Silent token acquisition failed");
+        }
+        if (error instanceof ClientAuthError && error.errorCode === "network_error") {
+          this.logWarn("Network error occurred, waiting 60 seconds before retrying...");
+          await sleep(60000);
+        }
+        attempt++;
+        this.logWarn(`getTokenSilent failed, attempt ${attempt}/${maxRetries}.`);
+        await sleep(2000);
       }
-      if (error instanceof ServerError && error.errorCode === "invalid_grant") {
-        this.logError("Silent token acquisition failed, acquiring token interactive");
-      }
-      return undefined;
-    } finally {
-      this.logInfo("getTokenSilent end");
     }
+    return undefined;
   }
 
   /**
