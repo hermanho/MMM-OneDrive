@@ -1,8 +1,8 @@
 import imageTypeFn from "image-type";
 import Log from "logger";
 import { OneDriveMediaItem } from "../../types/type";
-import { fetchToArrayBuffer } from "./fetchItem";
-import { convertHEIC } from "./photosConverter";
+import { fetchToArrayBuffer } from "./functions/fetchItem";
+import { convertHEIC } from "./functions/photosConverter";
 
 class FileError extends Error {
   constructor(message: string) {
