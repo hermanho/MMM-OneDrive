@@ -128,6 +128,8 @@ const nodeHelperObject = {
       this.log_info("Resume UI runner");
       if (!this.moduleSuspended) {
         this.uiRunner?.resume();
+      } else {
+        this.log_info("Module is suspended, skipping resume");
       }
     });
 

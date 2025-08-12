@@ -110,7 +110,7 @@ Module.register<Config>("MMM-OneDrive", {
 
   render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
     if (this.suspended) {
-      console.debug("[MMM-OneDrive] Module is suspended, skipping render");
+      console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;
     }
     const startDt = new Date();
