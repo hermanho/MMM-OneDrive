@@ -455,7 +455,7 @@ const nodeHelperObject = {
     }
 
     try {
-      const base64 = await urlToImageBase64(photo);
+      const base64 = await urlToImageBase64(photo, { width: this.config.showWidth, height: this.config.showHeight });
 
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
