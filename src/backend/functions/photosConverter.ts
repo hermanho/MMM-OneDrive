@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import Log from "logger";
-import jpegJs from "jpeg-js";
-import { Jimp } from "./customJimp";
+import sharp from "sharp";
 import { getLibheifFactory } from "./externals/libheifJS";
 
 export interface ConvertHEICParams {
@@ -9,35 +8,6 @@ export interface ConvertHEICParams {
   arrayBuffer: ArrayBuffer;
   size?: { width: number; height: number };
 }
-
-const encodeJpeg = (buffer: ArrayBuffer, w: number, h: number) => {
-  const jpegBuffRet = jpegJs.encode({
-    width: w,
-    height: h,
-    data: buffer,
-  }, 80);
-  return jpegBuffRet.data;
-};
-
-const resize = async (buffer: ArrayBuffer, oldSize: { w: number; h: number }, newSize?: { w: number; h: number }) => {
-  if (newSize) {
-    try {
-      // Resize the image if size is provided
-      const image = await Jimp.fromBuffer(buffer);
-      if (oldSize.w > oldSize.h) {
-        image.resize({ w: newSize.w });
-      } else {
-        image.resize({ h: newSize.h });
-      }
-      const outputBuffer = await image.getBuffer("image/jpeg", { quality: 80 });
-      return outputBuffer;
-    } catch {
-      return encodeJpeg(buffer, oldSize.w, oldSize.h);
-    }
-  } else {
-    return encodeJpeg(buffer, oldSize.w, oldSize.h);
-  }
-};
 
 export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICParams) => {
   let heifDecoder: any;
@@ -68,13 +38,27 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
       });
     });
 
-    const outputBuffer = await resize(decodedData.data, { w, h }, size ? {
-      w: size.width,
-      h: size.height,
-    } : undefined);
+
+    let sharpBuffer = sharp(decodedData.data, {
+      raw: {
+        width: w,
+        height: h,
+        channels: 4,
+      },
+    });
+
+    if (size) {
+      if (w > h) {
+        sharpBuffer = sharpBuffer.resize(size.width);
+      } else {
+        sharpBuffer = sharpBuffer.resize(null, size.height);
+      }
+    }
+
+    const outputBuffer = await sharpBuffer.toFormat("jpeg", { quality: 80 }).toBuffer();
 
     // const outputBuffer = encodeJpeg(decodedData.data, w, h);
-    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d });
+    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
     return outputBuffer;
   } catch (err: any) {
     Log.error("[MMM-OneDrive] [convertHEIC] Error", { filename });
