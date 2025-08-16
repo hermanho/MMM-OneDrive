@@ -113,10 +113,6 @@ export class OneDrivePhotos extends EventEmitter {
         this.logError("onAuthReady error", err);
         this.logWarn(`Retrying onAuthReady, retry count: ${attempt}`);
 
-        if (err.code === "InvalidAuthenticationToken") {
-          await this.getAuthProvider().logout();
-        }
-
         // UnknownError is GraphError
         // TypeError is usually caused by network issues
         const shouldRetry = ["UnknownError", "TypeError", "InvalidAuthenticationToken"].includes(err.code);

@@ -1,15 +1,15 @@
-import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError } from "@azure/msal-node";
+import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, InteractiveRequest, DeviceCodeRequest } from "@azure/msal-node";
+import { DeviceCodeResponse } from "@azure/msal-common";
 import sleep from "../functions/sleep";
 
-/**
- * @typedef {object} TokenRequestCommon
- * @property {string} scopes - The scopes requested for the token.
- */
+interface TokenRequestCommon {
+  account: AccountInfo;
+  scopes: string[];
+}
 
 class AuthProvider {
-  clientApplication;
-  /** @type {import("@azure/msal-node").AccountInfo} */
-  account;
+  clientApplication: PublicClientApplication;
+  account: AccountInfo;
 
   constructor(msalConfig) {
     /**
@@ -50,18 +50,14 @@ class AuthProvider {
     }
   }
 
-  /**
-   * @param {TokenRequestCommon} tokenRequest
-   * @param {boolean} forceAuthInteractive
-   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} deviceCodeCallback 
-   * @param {(message: string) => void} waitInteractiveCallback
-   */
-  async getToken(tokenRequest, forceAuthInteractive, deviceCodeCallback = null, waitInteractiveCallback = null) {
-    /**
-     * @type {import("@azure/msal-node").AuthenticationResult}
-     */
-    let authResponse;
+  async getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback: (response: DeviceCodeResponse) => void = null, waitInteractiveCallback: (message: string) => void = null) {
+    let authResponse: AuthenticationResult | undefined;
     const account = this.account || (await this.getAccount());
+
+    const tokenRequest: TokenRequestCommon = {
+      ...request,
+      account: null,
+    };
 
     if (account) {
       tokenRequest.account = account;
@@ -82,7 +78,7 @@ class AuthProvider {
       }
     }
 
-    if (authResponse) {
+    if (authResponse && authResponse.account) {
       this.account = authResponse.account;
       this.logInfo("getToken done");
     } else {
@@ -92,11 +88,7 @@ class AuthProvider {
     return authResponse;
   }
 
-  /**
-   * 
-   * @param {Partial<import("@azure/msal-node").SilentFlowRequest> & TokenRequestCommon} tokenRequest 
-   */
-  async getTokenSilent(tokenRequest, maxRetries = 3) {
+  async getTokenSilent(tokenRequest: SilentFlowRequest & TokenRequestCommon, maxRetries = 3) {
     let attempt = 0;
     while (attempt < maxRetries) {
       try {
@@ -121,12 +113,8 @@ class AuthProvider {
     return undefined;
   }
 
-  /**
-   * 
-   * @param {Partial<import("@azure/msal-node").InteractiveRequest> & TokenRequestCommon} tokenRequest 
-   */
-  async getTokenInteractive(tokenRequest) {
-    const openBrowser = async (url) => {
+  async getTokenInteractive(tokenRequest: Omit<InteractiveRequest, "openBrowser" | "successTemplate" | "errorTemplate"> & TokenRequestCommon) {
+    const openBrowser = async (url: string) => {
       try {
         // eslint-disable-next-line @typescript-eslint/no-require-imports
         const { shell } = require("electron");
@@ -152,16 +140,8 @@ class AuthProvider {
     return authResponse;
   }
 
-  /**
-   * 
-   * @param {Partial<import("@azure/msal-node").DeviceCodeRequest> & TokenRequestCommon} tokenRequest 
-   * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} callback 
-   */
-  async getTokenDeviceCode(tokenRequest, callback = null) {
-    /**
-     * @type {import("@azure/msal-node").DeviceCodeRequest} 
-     */
-    const deviceCodeRequest = {
+  async getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback"> & TokenRequestCommon, callback: (response: DeviceCodeResponse) => void = null) {
+    const deviceCodeRequest: DeviceCodeRequest = {
       ...tokenRequest,
       deviceCodeCallback: (response) => {
         this.logInfo(response.message);

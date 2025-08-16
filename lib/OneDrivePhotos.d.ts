@@ -1,48 +1,30 @@
 import { EventEmitter } from 'events';
+import { PublicClientApplication, AccountInfo, AuthenticationResult, SilentFlowRequest, InteractiveRequest, DeviceCodeRequest } from '@azure/msal-node';
+import { DeviceCodeResponse } from '@azure/msal-common';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
-/**
- * @typedef {object} TokenRequestCommon
- * @property {string} scopes - The scopes requested for the token.
- */
+interface TokenRequestCommon {
+    account: AccountInfo;
+    scopes: string[];
+}
 declare class AuthProvider {
-    clientApplication: any;
-    /** @type {import("@azure/msal-node").AccountInfo} */
-    account: any;
+    clientApplication: PublicClientApplication;
+    account: AccountInfo;
     constructor(msalConfig: any);
     logDebug(...args: any[]): void;
     logInfo(...args: any[]): void;
     logError(...args: any[]): void;
     logWarn(...args: any[]): void;
     logout(): Promise<void>;
-    /**
-     * @param {TokenRequestCommon} tokenRequest
-     * @param {boolean} forceAuthInteractive
-     * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} deviceCodeCallback
-     * @param {(message: string) => void} waitInteractiveCallback
-     */
-    getToken(tokenRequest: any, forceAuthInteractive: any, deviceCodeCallback?: any, waitInteractiveCallback?: any): Promise<any>;
-    /**
-     *
-     * @param {Partial<import("@azure/msal-node").SilentFlowRequest> & TokenRequestCommon} tokenRequest
-     */
-    getTokenSilent(tokenRequest: any, maxRetries?: number): Promise<any>;
-    /**
-     *
-     * @param {Partial<import("@azure/msal-node").InteractiveRequest> & TokenRequestCommon} tokenRequest
-     */
-    getTokenInteractive(tokenRequest: any): Promise<any>;
-    /**
-     *
-     * @param {Partial<import("@azure/msal-node").DeviceCodeRequest> & TokenRequestCommon} tokenRequest
-     * @param {(response: import("@azure/msal-common").DeviceCodeResponse) => void} callback
-     */
-    getTokenDeviceCode(tokenRequest: any, callback?: any): Promise<any>;
+    getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback?: (response: DeviceCodeResponse) => void, waitInteractiveCallback?: (message: string) => void): Promise<AuthenticationResult>;
+    getTokenSilent(tokenRequest: SilentFlowRequest & TokenRequestCommon, maxRetries?: number): Promise<AuthenticationResult>;
+    getTokenInteractive(tokenRequest: Omit<InteractiveRequest, "openBrowser" | "successTemplate" | "errorTemplate"> & TokenRequestCommon): Promise<AuthenticationResult>;
+    getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback"> & TokenRequestCommon, callback?: (response: DeviceCodeResponse) => void): Promise<AuthenticationResult>;
     /**
      * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
-    getAccount(): Promise<any>;
+    getAccount(): Promise<AccountInfo>;
 }
 
 type AutoInfoPositionFunction = boolean | ((album: DriveItem, target: DriveItem) => (number | string)[]) | null;
