@@ -39,7 +39,7 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
     });
 
 
-    let sharpBuffer = sharp(decodedData.data, {
+    const sharpBuffer = sharp(decodedData.data, {
       raw: {
         width: w,
         height: h,
@@ -47,17 +47,7 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
       },
     });
 
-    if (size) {
-      if (w > h) {
-        sharpBuffer = sharpBuffer.resize(size.width);
-      } else {
-        sharpBuffer = sharpBuffer.resize(null, size.height);
-      }
-    }
-
-    const outputBuffer = await sharpBuffer.toFormat("jpeg", { quality: 80 }).toBuffer();
-
-    // const outputBuffer = encodeJpeg(decodedData.data, w, h);
+    const outputBuffer = await sharpBuffer.jpeg({ quality: 100, chromaSubsampling: "4:4:4" }).toBuffer();
     Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
     return outputBuffer;
   } catch (err: any) {
