@@ -299,6 +299,11 @@ const nodeHelperObject = {
       const nextScanDt = new Date(Date.now() + this.config.scanInterval);
       await this.scanJob();
       this.log_info("Next scan will be at", nextScanDt.toLocaleString());
+
+      if (this.uiRunner) {
+        this.uiRunner.skipToNext();
+      }
+
     }, this.config.scanInterval);
   },
 
