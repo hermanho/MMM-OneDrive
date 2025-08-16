@@ -309,8 +309,9 @@ const nodeHelperObject = {
 
   scanJob: async function () {
     this.queue = null;
+    const startDt = Date.now();
     this.log_info("Run scanJob");
-    await this.getAlbumList();
+    this.sendSocketNotification("UPDATE_STATUS", "Refreshing cache from OneDrive...");
     try {
       await this.getAlbumList();
       if (this.selectedAlbums.length > 0) {
@@ -323,6 +324,9 @@ const nodeHelperObject = {
       }
     } catch (err) {
       this.log_error(error_to_string(err));
+    } finally {
+      this.log_info("Run scanJob done, duration:", Date.now() - startDt);
+      this.sendSocketNotification("UPDATE_STATUS", "");
     }
   },
 

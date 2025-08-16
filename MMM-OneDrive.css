@@ -56,14 +56,27 @@
   filter: blur(10px) sepia(80%) brightness(40%);
 }
 
+#ONEDRIVE_PHOTO_OVERLAY {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  inset: 0;
+  padding: 8px;
+  gap: 8px;
+}
+
+#ONEDRIVE_PHOTO_INFO_WRAPPER {
+  flex-grow: 1;
+  position: relative;
+}
+
 #ONEDRIVE_PHOTO_INFO {
   position: absolute;
   top: var(--top);
   left: var(--left);
   bottom: var(--bottom);
   right: var(--right);
-  margin: 10px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.3);
   padding: 10px;
   border-radius: 36px;
   line-height: 100%;
@@ -96,4 +109,21 @@
   font-size: 18px;
   line-height: 100%;
   color: #fff;
+}
+
+#ONEDRIVE_PHOTO_STATUS_WRAPPER {
+  display: flex;
+  flex-direction: row-reverse;
+}
+
+#ONEDRIVE_PHOTO_STATUS {
+  background-color: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
+  font-size: small;
+}
+
+#ONEDRIVE_PHOTO_STATUS:empty {
+  display: none;
 }
