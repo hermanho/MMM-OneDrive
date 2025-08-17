@@ -268,12 +268,20 @@ const nodeHelperObject = {
       }
       const photo = this.localPhotoList[this.uiPhotoIndex];
 
-      await this.prepareShowPhoto({ photoId: photo.id });
+      const ret = await this.prepareShowPhoto({ photoId: photo.id });
 
       this.uiPhotoIndex++;
       if (this.uiPhotoIndex >= this.localPhotoList.length) {
         this.uiPhotoIndex = 0;
       }
+
+      if (!ret) {
+setTimeout(() => {
+        this.log_warn("Trigger to next cycle");
+        this.uiRunner.skipToNext();
+}, 3000);
+      }
+
     }, this.config.updateInterval);
   },
 
@@ -440,11 +448,10 @@ const nodeHelperObject = {
   },
 
   prepareShowPhoto: async function ({ photoId }) {
-
     const photo = this.localPhotoList.find((p) => p.id === photoId);
     if (!photo) {
       this.log_error(`Photo with id ${photoId} not found in local list`);
-      return;
+      return false;
     }
     const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
 
@@ -467,17 +474,20 @@ const nodeHelperObject = {
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+      return true;
     } catch (err) {
+      const errorMessages = [`Image loading fails: ${photo.id}, ${photo.filename}, ${photo.baseUrl}`];
       if (err?.name === "FetchHTTPError") {
         // silently skip the error
-        return;
+        return false;
       }
-      this.log_error("Image loading fails:", photo.id, photo.filename, photo.baseUrl);
       if (err) {
-        this.log_error("error", err?.message, err?.name);
-        this.log_error(err?.stack || err);
+        errorMessages.push(` > ${err?.name}, ${err?.message}, ${err?.name}`);
+        errorMessages.push(err?.stack || err);
       }
+      this.log_error(errorMessages.join("\n"));
     }
+    return false;
   },
 
   stop: function () {
