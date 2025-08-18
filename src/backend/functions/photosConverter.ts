@@ -5,21 +5,24 @@ import { getLibheifFactory } from "./externals/libheifJS";
 
 export interface ConvertHEICParams {
   filename: string;
-  arrayBuffer: ArrayBuffer;
+  data: ArrayBuffer;
   size?: { width: number; height: number };
 }
 
-export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICParams) => {
+type HeifImageDisplay = {
+  data: Uint8ClampedArray;
+};
+
+
+export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) => {
   let heifDecoder: any;
   let heifImages: any[] | undefined;
   try {
     Log.debug("[MMM-OneDrive] [convertHEIC]", { filename });
     const d = Date.now();
-    const inputBuffer = Buffer.from(arrayBuffer);
-
     const libheifFactory = await getLibheifFactory();
     heifDecoder = new libheifFactory.HeifDecoder();
-    heifImages = await heifDecoder.decode(inputBuffer);
+    heifImages = heifDecoder.decode(data);
 
     if (!heifImages || heifImages.length === 0) {
       throw new Error(`No HEIF images found in ${filename}.`);
@@ -29,8 +32,8 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
     const w = heifImage.get_width();
     const h = heifImage.get_height();
 
-    const decodedData: any = await new Promise((resolve, reject) => {
-      heifImage.display({ data: new Uint8ClampedArray(w * h * 4), w, h }, (displayData: any) => {
+    const decodedData: HeifImageDisplay = await new Promise((resolve, reject) => {
+      heifImage.display({ data: new Uint8ClampedArray(w * h * 4) }, (displayData: HeifImageDisplay) => {
         if (!displayData) {
           return reject(new Error("HEIF processing error"));
         }
@@ -47,9 +50,15 @@ export const convertHEIC = async ({ filename, arrayBuffer, size }: ConvertHEICPa
       },
     });
 
-    const outputBuffer = await sharpBuffer.jpeg({ quality: 100, chromaSubsampling: "4:4:4" }).toBuffer();
+    const jpegData = await sharpBuffer
+      .jpeg({ quality: 100, chromaSubsampling: "4:4:4" })
+      .keepMetadata()
+      .toBuffer();
+
     Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
-    return outputBuffer;
+    const outputArraybuffer = new ArrayBuffer(jpegData.byteLength);
+    jpegData.copy(new Uint8Array(outputArraybuffer));
+    return outputArraybuffer;
   } catch (err: any) {
     Log.error("[MMM-OneDrive] [convertHEIC] Error", { filename });
     Log.error(err?.stack || err);

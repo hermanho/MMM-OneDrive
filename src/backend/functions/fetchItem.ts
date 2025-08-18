@@ -17,9 +17,9 @@ export class FetchHTTPError extends Error {
 }
 
 /**
- * Fetch a URL and return the response as an ArrayBuffer.
+ * Fetch a URL and return the response as a ArrayBuffer.
  */
-const fetchToArrayBufferOnce = async (url: string) => {
+const fetchArrayBufferOnce = async (url: string) => {
   const resp = await fetch(url);
   if (!resp.ok) {
     let text = "";
@@ -30,18 +30,18 @@ const fetchToArrayBufferOnce = async (url: string) => {
     }
     throw new FetchHTTPError(url, resp.status, text);
   }
-  const arrayBuffer = await resp.arrayBuffer();
-  return arrayBuffer;
+  const buffer = await resp.arrayBuffer();
+  return buffer.transferToFixedLength();
 };
 
 /**
- * Fetch a URL and return the response as an ArrayBuffer.
+ * Fetch a URL and return the response as a ArrayBuffer.
  */
 export const fetchToArrayBuffer = async (url: string, maxRetries = 3) => {
   let attempt = 0;
   while (attempt < maxRetries) {
     try {
-      return await fetchToArrayBufferOnce(url);
+      return await fetchArrayBufferOnce(url);
     } catch (err) {
       console.error(`Error fetching ${url}:`);
       console.error(err);

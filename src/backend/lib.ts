@@ -11,34 +11,36 @@ class FileError extends Error {
   }
 }
 
-const isJpgFn = <T>(buffer: ArrayLike<T>) => {
-  if (!buffer || buffer.length < 3) {
+const isJpgFn = (buffer: ArrayBuffer) => {
+  if (!buffer || buffer.byteLength < 3) {
     return false;
   }
 
-  return buffer[0] === 255
-    && buffer[1] === 216
-    && buffer[2] === 255;
+  const view = new Uint8Array(buffer);
+  return view[0] === 255
+    && view[1] === 216
+    && view[2] === 255;
 };
 
 export const urlToImageBase64 = async (photo: OneDriveMediaItem, size: { width: number; height: number }) => {
-  const arrayBuf = await fetchToArrayBuffer(photo.baseUrl);
-  const imageType = await imageTypeFn(arrayBuf);
+
+  let photoArrayBuffer = await fetchToArrayBuffer(photo.baseUrl);
+  const imageType = await imageTypeFn(photoArrayBuffer);
   if (!imageType) {
     throw new FileError(`Could not determine image type for ${photo.filename}`);
   }
   Log.debug(`[MMM-OneDrive] [urlToImageBase64] Image type: ${imageType.ext}, mimeType: ${imageType.mime}`);
 
-  let buffer: Buffer<ArrayBufferLike> = Buffer.from(arrayBuf);
   if (imageType.ext === "heic") {
-    buffer = await convertHEIC({ filename: photo.filename, arrayBuffer: arrayBuf, size });
-    const isJpg = isJpgFn(buffer);
+    photoArrayBuffer = await convertHEIC({ filename: photo.filename, data: photoArrayBuffer, size });
+    const isJpg = isJpgFn(photoArrayBuffer);
     if (!isJpg) {
       throw new FileError(`The output of convertHEIC is not a valid JPG:
                 ${photo.filename}, mimeType: ${photo.mimeType}, url: ${photo.baseUrl}`);
     }
   }
 
-  const base64 = buffer.toString("base64");
+  const base64 = Buffer.from(photoArrayBuffer).toString("base64");
+  photoArrayBuffer = null;
   return base64;
 };

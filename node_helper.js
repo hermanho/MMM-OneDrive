@@ -266,6 +266,10 @@ const nodeHelperObject = {
         this.log_warn("Not ready to render UI. No photos in list.");
         return;
       }
+
+      if (this.uiPhotoIndex >= this.localPhotoList.length) {
+        this.uiPhotoIndex = 0;
+      }
       const photo = this.localPhotoList[this.uiPhotoIndex];
 
       const ret = await this.prepareShowPhoto({ photoId: photo.id });
@@ -276,10 +280,10 @@ const nodeHelperObject = {
       }
 
       if (!ret) {
-setTimeout(() => {
-        this.log_warn("Trigger to next cycle");
-        this.uiRunner.skipToNext();
-}, 3000);
+        setTimeout(() => {
+          this.log_warn("Trigger to next cycle");
+          this.uiRunner.skipToNext();
+        }, 3000);
       }
 
     }, this.config.updateInterval);
@@ -393,7 +397,7 @@ setTimeout(() => {
     const photoCondition = (photo) => {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
       const data = photo.mediaMetadata;
-      // if (!photo.mimeType.startsWith("image/")) return false;
+      if (photo.mimeType.startsWith("video/")) return false;
       const ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
