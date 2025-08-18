@@ -14,6 +14,7 @@ const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
+const bytes = require("bytes");
 const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
@@ -257,6 +258,8 @@ const nodeHelperObject = {
 
     this.uiPhotoIndex = 0;
 
+    const initRss = process.memoryUsage().rss;
+
     this.uiRunner = createIntervalRunner(async () => {
       if (this.moduleSuspended) {
         this.log_warn("Module suspended and skipping UI render. The uiRunner should not be running, but something went wrong.");
@@ -285,6 +288,9 @@ const nodeHelperObject = {
           this.uiRunner.skipToNext();
         }, 3000);
       }
+
+      const memory = process.memoryUsage();
+      this.log_debug(`rss=${bytes(memory.rss)}, delta=${bytes(memory.rss - initRss)}, gc=${!!global.gc}`);
 
     }, this.config.updateInterval);
   },
@@ -472,8 +478,13 @@ const nodeHelperObject = {
       }
     }
 
+    let memory = process.memoryUsage();
+    this.log_debug(`[rss] new cycle rss=${bytes(memory.rss)}`);
     try {
       const base64 = await urlToImageBase64(photo, { width: this.config.showWidth, height: this.config.showHeight });
+
+      memory = process.memoryUsage();
+      this.log_debug(`[rss] 2 rss=${bytes(memory.rss)}`);
 
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));

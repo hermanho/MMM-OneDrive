@@ -32,6 +32,7 @@
     "@jimp/js-jpeg": "^1.6.0",
     "@jimp/plugin-resize": "^1.6.0",
     "@microsoft/microsoft-graph-client": "^3.0.7",
+    "bytes": "^3.1.2",
     "exifreader": "^4.31.0",
     "heic-convert": "^2.1.0",
     "image-type": "^6.0.0",

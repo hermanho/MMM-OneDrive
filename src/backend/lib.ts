@@ -1,5 +1,6 @@
 import imageTypeFn from "image-type";
 import Log from "logger";
+import bytes from "bytes";
 import { OneDriveMediaItem } from "../../types/type";
 import { fetchToArrayBuffer } from "./functions/fetchItem";
 import { convertHEIC } from "./functions/photosConverter";
@@ -24,12 +25,26 @@ const isJpgFn = (buffer: ArrayBuffer) => {
 
 export const urlToImageBase64 = async (photo: OneDriveMediaItem, size: { width: number; height: number }) => {
 
+  let memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-1 rss=${bytes(memory.rss)}`);
+
   let photoArrayBuffer = await fetchToArrayBuffer(photo.baseUrl);
+
+  memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-2 rss=${bytes(memory.rss)}`);
+
   const imageType = await imageTypeFn(photoArrayBuffer);
+
+  memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-3 rss=${bytes(memory.rss)}`);
+
   if (!imageType) {
     throw new FileError(`Could not determine image type for ${photo.filename}`);
   }
   Log.debug(`[MMM-OneDrive] [urlToImageBase64] Image type: ${imageType.ext}, mimeType: ${imageType.mime}`);
+
+  memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-4 rss=${bytes(memory.rss)}`);
 
   if (imageType.ext === "heic") {
     photoArrayBuffer = await convertHEIC({ filename: photo.filename, data: photoArrayBuffer, size });
@@ -40,7 +55,14 @@ export const urlToImageBase64 = async (photo: OneDriveMediaItem, size: { width: 
     }
   }
 
+  memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-5 rss=${bytes(memory.rss)}`);
+
   const base64 = Buffer.from(photoArrayBuffer).toString("base64");
+
   photoArrayBuffer = null;
+
+  memory = process.memoryUsage();
+  Log.debug(`[MMM-OneDrive] [rss] 3-6 rss=${bytes(memory.rss)}`);
   return base64;
 };
