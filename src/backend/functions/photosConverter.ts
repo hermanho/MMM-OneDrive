@@ -57,7 +57,7 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
 
     Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
     const outputArraybuffer = new ArrayBuffer(jpegData.byteLength);
-    jpegData.copy(new Uint8Array(outputArraybuffer));
+    new Uint8Array(outputArraybuffer).set(new Uint8Array(jpegData));
     return outputArraybuffer;
   } catch (err: any) {
     Log.error("[MMM-OneDrive] [convertHEIC] Error", { filename });
