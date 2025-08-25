@@ -87,8 +87,8 @@ Module.register<Config>("MMM-OneDrive", {
       current.textContent = "";
     }
     if (noti === "UPDATE_STATUS") {
-      const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
-      info.innerHTML = String(payload);
+      const statusMessage = document.getElementById("ONEDRIVE_PHOTO_STATUS");
+      statusMessage.innerHTML = String(payload);
     }
     if (noti === "RENDER_PHOTO") {
       this.state = {
@@ -110,7 +110,7 @@ Module.register<Config>("MMM-OneDrive", {
 
   render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
     if (this.suspended) {
-      console.debug("[MMM-OneDrive] Module is suspended, skipping render");
+      console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;
     }
     const startDt = new Date();
@@ -168,7 +168,7 @@ Module.register<Config>("MMM-OneDrive", {
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
       filename: target.filename,
-      indexOfPhotos: target._indexOfPhotos,
+      index: target._indexOfPhotos,
     });
   },
 
@@ -186,12 +186,24 @@ Module.register<Config>("MMM-OneDrive", {
     current.addEventListener("animationend", () => {
       current.classList.remove("animated");
     });
+    const overlayPresentation = document.createElement("div");
+    overlayPresentation.id = "ONEDRIVE_PHOTO_OVERLAY";
+    const statusMessageWrapper = document.createElement("div");
+    statusMessageWrapper.id = "ONEDRIVE_PHOTO_STATUS_WRAPPER";
+    const statusMessage = document.createElement("div");
+    statusMessage.id = "ONEDRIVE_PHOTO_STATUS";
+    statusMessage.innerHTML = "Loading...";
+    const infoWrapper = document.createElement("div");
+    infoWrapper.id = "ONEDRIVE_PHOTO_INFO_WRAPPER";
     const info = document.createElement("div");
     info.id = "ONEDRIVE_PHOTO_INFO";
-    info.innerHTML = "Loading...";
     wrapper.appendChild(back);
     wrapper.appendChild(current);
-    wrapper.appendChild(info);
+    wrapper.appendChild(overlayPresentation);
+    overlayPresentation.appendChild(infoWrapper);
+    infoWrapper.appendChild(info);
+    overlayPresentation.appendChild(statusMessageWrapper);
+    statusMessageWrapper.appendChild(statusMessage);
     console.info("[MMM-OneDrive] Dom updated!");
     return wrapper;
   },
@@ -201,6 +213,8 @@ Module.register<Config>("MMM-OneDrive", {
     this.suspended = true;
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     info.innerHTML = "";
+    const statusMessage = document.getElementById("ONEDRIVE_PHOTO_STATUS");
+    statusMessage.innerHTML = "";
   },
 
   resume() {

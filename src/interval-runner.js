@@ -1,6 +1,6 @@
 /**
  *
- * @param render
+ * @param {(() => Promise<*>)} render 
  * @param interval
  */
 function createIntervalRunner(render, interval) {
@@ -16,7 +16,12 @@ function createIntervalRunner(render, interval) {
       return;
     }
     state.running = true;
-    await render();
+    try {
+      await render();
+    } catch (err) {
+      console.error("Error in render function in IntervalRunner:");
+      console.error(err);
+    }
     await new Promise((resolve) => {
       skipWait = resolve;
       setTimeout(resolve, interval);
@@ -31,14 +36,20 @@ function createIntervalRunner(render, interval) {
 
   return {
     skipToNext: () => {
-      if (skipWait) skipWait();
+      if (skipWait) {
+        console.info("[IntervalRunner]: Skip to next cycle");
+        skipWait();
+      }
     },
     stop: () => {
+      console.info("[IntervalRunner]: Stopping");
       state.stopped = true;
       if (skipWait) skipWait();
     },
     resume: () => {
+      console.info("[IntervalRunner]: To resume");
       if (!state.running) {
+        console.info("[IntervalRunner]: Resuming");
         state.stopped = false;
         cycle();
       }

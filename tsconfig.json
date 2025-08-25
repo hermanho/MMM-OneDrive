@@ -1,18 +1,11 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "module": "ESNext",
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noImplicitThis": true,
     "target": "es6",
-    "lib": [
-      "DOM",
-      "ESNext"
-    ],
-    "esModuleInterop": true
-  },
-  "include": [
-    "src",
-    "types"
-  ]
+    "esModuleInterop": true,
+    "moduleResolution": "bundler"
+  }
 }

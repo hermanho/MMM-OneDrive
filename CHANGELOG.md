@@ -1,5 +1,13 @@
 # MMM-OneDrive Change Log
 
+**`[1.6.0] - 2025/08/25`**
+- Feat: Refactored `OneDrivePhotos` to TypeScript for improved maintainability.
+- Feat: Replaced Jimp with Sharp for faster and more reliable image processing.
+- Feat: Improved error handling and retry logic for network and authentication failures.
+- Fixed: Filtered out video files by MIME type.
+- Fixed: Issues with photo display, scan timing, and error handling in rendering.
+- Fixed: Various bug fixes and code cleanups.
+
 **`[1.5.4] - 2025/08/08`**
 - Fixed: UI render timer re-create when front end is refreshed #28
 

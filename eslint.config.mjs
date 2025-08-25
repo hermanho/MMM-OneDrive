@@ -7,13 +7,29 @@ import tseslint from "typescript-eslint";
 import stylistic from "@stylistic/eslint-plugin";
 
 export default defineConfig([
-  globalIgnores(["./MMM-OneDrive.js"]),
+  globalIgnores(["./MMM-OneDrive.js", "**/*.d.ts", "./lib/**/*.js"]),
   eslint.configs.recommended,
   tseslint.configs.recommended,
   {
-    files: ["**/*.js"],
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
+  {
+    files: ["**/*.js", "**/*.mjs"],
+    // ...tseslint.configs.disableTypeChecked,
+    ...jsdoc.configs["flat/recommended"],
+    ...jsdoc.configs["flat/recommended-typescript-flavor"],
     rules: {
       "@typescript-eslint/no-require-imports": "off",
+      "@typescript-eslint/no-unsafe-argument": "off",
+      "@typescript-eslint/no-unsafe-call": "off",
+      "@typescript-eslint/no-unsafe-member-access": "off",
+      "@typescript-eslint/no-unsafe-return": "off",
+      "@typescript-eslint/no-unsafe-assignment": "off",
     },
   },
   {
@@ -24,8 +40,6 @@ export default defineConfig([
     },
   },
   js.configs.recommended,
-  jsdoc.configs["flat/recommended"],
-  jsdoc.configs["flat/recommended-typescript-flavor"],
   {
     plugins: {
       jsdoc,
@@ -71,10 +85,15 @@ export default defineConfig([
       "jsdoc/require-param-description": "off",
       "prefer-const": "error",
       semi: "error",
+      "prefer-promise-reject-errors": "off",
+      "@typescript-eslint/prefer-promise-reject-errors": "error",
+      "require-await": "off",
+      "@typescript-eslint/require-await": "error",
       "@typescript-eslint/no-unused-vars": [
         "error",
         { argsIgnorePattern: "^_", varsIgnorePattern: "^_" },
       ],
+      "@typescript-eslint/no-unnecessary-template-expression": "error",
       "@stylistic/indent": ["error", 2],
       "@stylistic/quotes": ["error", "double"],
       "@stylistic/newline-per-chained-call": "error",

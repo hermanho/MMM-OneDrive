@@ -14,17 +14,18 @@ const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("crypto");
-const OneDrivePhotos = require("./OneDrivePhotos.js");
+const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
-const { cachePath } = require("./msal/authConfig.js");
-const { convertHEIC } = require("./photosConverter-node");
-const { fetchToUint8Array, FetchHTTPError } = require("./fetchItem-node");
 const { createIntervalRunner } = require("./src/interval-runner");
+const { urlToImageBase64 } = require("./lib/lib");
 
-const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+// const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
+// const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
+
+const cachePath = path.resolve(__dirname, "./msal/token.json");
 
 /**
  * @type {OneDrivePhotos}
@@ -55,7 +56,7 @@ const nodeHelperObject = {
     this.log_info("Started");
   },
 
-  socketNotificationReceived: async function (notification, payload) {
+  socketNotificationReceived: function (notification, payload) {
     this.log_debug("notification received", notification);
     switch (notification) {
       case "INIT":
@@ -63,7 +64,8 @@ const nodeHelperObject = {
         break;
       case "IMAGE_LOADED":
         {
-          this.log_debug("Image loaded:", payload);
+          this.log_info("Image loaded:");
+          this.log_info(JSON.stringify(payload));
         }
         break;
       case "MODULE_SUSPENDED":
@@ -114,15 +116,20 @@ const nodeHelperObject = {
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
+      authTokenCachePath: cachePath,
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
+      this.log_info("Stop UI runner");
       this.uiRunner?.stop();
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
       this.sendSocketNotification("CLEAR_ERROR");
+      this.log_info("Resume UI runner");
       if (!this.moduleSuspended) {
         this.uiRunner?.resume();
+      } else {
+        this.log_info("Module is suspended, skipping resume");
       }
     });
 
@@ -191,49 +198,42 @@ const nodeHelperObject = {
     this.sendSocketNotification("UPDATE_STATUS", "Loading from cache");
 
     //load cached album list - if available
-    const cacheAlbumDt = new Date(await this.readCacheConfig("CACHE_ALBUMNS_PATH"));
-    const notExpiredCacheAlbum = cacheAlbumDt && (Date.now() - cacheAlbumDt.getTime() < ONE_DAY);
-    this.log_debug("notExpiredCacheAlbum", { cacheAlbumDt, notExpiredCacheAlbum });
-    if (notExpiredCacheAlbum && fs.existsSync(this.CACHE_ALBUMNS_PATH)) {
-      this.log_info("Loading cached albumns list");
-      try {
-        const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
-        this.selectedAlbums = JSON.parse(data.toString());
-        this.log_debug("successfully loaded selectedAlbums");
-      } catch (err) {
-        this.log_error("unable to load selectedAlbums cache", err);
-      }
+    this.log_info("Loading cached albumns list");
+    try {
+      const data = await readFile(this.CACHE_ALBUMNS_PATH, "utf-8");
+      this.selectedAlbums = JSON.parse(data.toString());
+      this.log_debug("successfully loaded selectedAlbums");
+    } catch (err) {
+      this.log_error("unable to load selectedAlbums cache", err);
     }
     if (!Array.isArray(this.selectedAlbums) || this.selectedAlbums.length === 0) {
       this.log_warn("No valid albums found. Skipping photo loading.");
+      this.sendSocketNotification("UPDATE_STATUS", "");
       return false;
     }
 
     //load cached list - if available
-    const cachePhotoListDt = new Date(await this.readCacheConfig("CACHE_PHOTOLIST_PATH"));
-    const notExpiredCachePhotoList = cachePhotoListDt && (Date.now() - cachePhotoListDt.getTime() < ONE_DAY);
-    this.log_debug("notExpiredCachePhotoList", { cachePhotoListDt, notExpiredCachePhotoList });
-    if (notExpiredCachePhotoList && fs.existsSync(this.CACHE_PHOTOLIST_PATH)) {
-      this.log_info("Loading cached list");
-      try {
-        const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
-        const cachedPhotoList = JSON.parse(data.toString());
-        // check if the cached photo list is empty
-        if (Array.isArray(cachedPhotoList) && cachedPhotoList.length > 0) {
-          if (this.config.sort === "random") {
-            shuffle(cachedPhotoList);
-          }
-          this.localPhotoList = [...cachedPhotoList].map((photo, index) => {
-            photo._indexOfPhotos = index;
-            return photo;
-          });
-          this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
-          return true;
+    this.log_info("Loading cached list");
+    try {
+      const data = await readFile(this.CACHE_PHOTOLIST_PATH, "utf-8");
+      const cachedPhotoList = JSON.parse(data.toString());
+      // check if the cached photo list is empty
+      if (Array.isArray(cachedPhotoList) && cachedPhotoList.length > 0) {
+        if (this.config.sort === "random") {
+          shuffle(cachedPhotoList);
         }
-      } catch (err) {
-        this.log_error("unable to load photo list cache", err);
+        this.localPhotoList = [...cachedPhotoList].map((photo, index) => {
+          photo._indexOfPhotos = index;
+          return photo;
+        });
+        this.log_info("successfully loaded photo list cache of ", this.localPhotoList.length, " photos");
+        this.sendSocketNotification("UPDATE_STATUS", "");
+        return true;
       }
+    } catch (err) {
+      this.log_error("unable to load photo list cache", err);
     }
+    this.sendSocketNotification("UPDATE_STATUS", "");
     return false;
   },
 
@@ -241,10 +241,6 @@ const nodeHelperObject = {
   getAlbums: async function () {
     try {
       const r = await oneDrivePhotosInstance.getAlbums();
-      const configHash = await this.calculateConfigHash();
-      if (configHash) {
-        await this.saveCacheConfig("CACHE_HASH", configHash);
-      }
       return r;
     } catch (err) {
       this.log_error(error_to_string(err));
@@ -270,14 +266,26 @@ const nodeHelperObject = {
         this.log_warn("Not ready to render UI. No photos in list.");
         return;
       }
+
+      if (this.uiPhotoIndex >= this.localPhotoList.length) {
+        this.uiPhotoIndex = 0;
+      }
       const photo = this.localPhotoList[this.uiPhotoIndex];
 
-      await this.prepareShowPhoto({ photoId: photo.id });
+      const ret = await this.prepareShowPhoto({ photoId: photo.id });
 
       this.uiPhotoIndex++;
       if (this.uiPhotoIndex >= this.localPhotoList.length) {
         this.uiPhotoIndex = 0;
       }
+
+      if (!ret) {
+        setTimeout(() => {
+          this.log_warn("Trigger to next cycle");
+          this.uiRunner.skipToNext();
+        }, 3000);
+      }
+
     }, this.config.updateInterval);
   },
 
@@ -292,17 +300,32 @@ const nodeHelperObject = {
       const nextScanDt = new Date(Date.now() + this.config.scanInterval);
       await this.scanJob();
       this.log_info("Next scan will be at", nextScanDt.toLocaleString());
+
+      if (this.uiRunner) {
+        this.uiRunner.skipToNext();
+      }
+
     }, this.config.scanInterval);
   },
 
   scanJob: async function () {
     this.queue = null;
+    const startDt = Date.now();
     this.log_info("Run scanJob");
-    await this.getAlbumList();
+    this.sendSocketNotification("UPDATE_STATUS", "Refreshing cache from OneDrive...");
     try {
+      await this.getAlbumList();
       if (this.selectedAlbums.length > 0) {
         await this.getImageList();
         this.savePhotoListCache();
+
+        // fire and forgot
+        this.calculateConfigHash().then(async (hash) => {
+          if (hash) {
+            await this.saveCacheConfig("CACHE_HASH", hash);
+          }
+        });
+
         return true;
       } else {
         this.log_warn("There is no album to get photos.");
@@ -310,6 +333,9 @@ const nodeHelperObject = {
       }
     } catch (err) {
       this.log_error(error_to_string(err));
+    } finally {
+      this.log_info("Run scanJob done, duration:", Date.now() - startDt);
+      this.sendSocketNotification("UPDATE_STATUS", "");
     }
   },
 
@@ -348,7 +374,6 @@ const nodeHelperObject = {
     this.log_info("Albums:", selectedAlbums.map((a) => a.name).join(", "));
 
     this.writeFileSafe(this.CACHE_ALBUMNS_PATH, JSON.stringify(selectedAlbums, null, 4), "Album list cache");
-    this.saveCacheConfig("CACHE_ALBUMNS_PATH", new Date().toISOString());
 
     for (const a of selectedAlbums) {
       const url = await oneDrivePhotosInstance.getAlbumThumbnail(a);
@@ -372,7 +397,7 @@ const nodeHelperObject = {
     const photoCondition = (photo) => {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
       const data = photo.mediaMetadata;
-      if (!photo.mimeType.startsWith("image/")) return false;
+      if (photo.mimeType.startsWith("video/")) return false;
       const ct = moment(data.dateTimeOriginal);
       if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
       if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
@@ -427,13 +452,14 @@ const nodeHelperObject = {
   },
 
   prepareShowPhoto: async function ({ photoId }) {
-
     const photo = this.localPhotoList.find((p) => p.id === photoId);
     if (!photo) {
       this.log_error(`Photo with id ${photoId} not found in local list`);
-      return;
+      return false;
     }
-    this.log_info("Loading to UI:", { id: photoId, filename: photo.filename });
+    const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
+
+    this.log_info("Loading to UI:", { id: photoId, filename: photo.filename, album: album?.name });
 
     if (photo?.baseUrlExpireDateTime) {
       const expireDt = new Date(photo.baseUrlExpireDateTime);
@@ -446,40 +472,26 @@ const nodeHelperObject = {
       }
     }
 
-    let buffer = null;
     try {
-      switch (photo.mimeType) {
-        case "image/heic": {
-          buffer = await convertHEIC({ id: photo.id, filename: photo.filename, url: photo.baseUrl });
-          break;
-        }
-        default: {
-          const buf = await fetchToUint8Array(photo.baseUrl);
-          buffer = Buffer.from(buf);
-          break;
-        }
-      }
+      const base64 = await urlToImageBase64(photo, { width: this.config.showWidth, height: this.config.showHeight });
 
-      const album = this.selectedAlbums.find((a) => a.id === photo._albumId);
-
-      const base64 = buffer.toString("base64");
-
-      this.log_debug("Image send to UI:", { id: photo.id, filename: photo.filename, index: photo._indexOfPhotos });
+      this.log_info("Image send to UI:");
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
       this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+      return true;
     } catch (err) {
-      if (err instanceof FetchHTTPError) {
+      const errorMessages = [`Image loading fails: ${photo.id}, ${photo.filename}, ${photo.baseUrl}`];
+      if (err?.name === "FetchHTTPError") {
         // silently skip the error
-        return;
+        return false;
       }
-      this.log_error("Image loading fails:", photo.id, photo.filename, photo.baseUrl);
       if (err) {
-        this.log_error("error", err?.message, err?.name);
-        this.log_error(err?.stack || err);
+        errorMessages.push(` > ${err?.name}, ${err?.message}, ${err?.name}`);
+        errorMessages.push(err?.stack || err);
       }
-
-
+      this.log_error(errorMessages.join("\n"));
     }
-
+    return false;
   },
 
   stop: function () {
@@ -490,7 +502,6 @@ const nodeHelperObject = {
   savePhotoListCache: function () {
     (async () => {
       await this.writeFileSafe(this.CACHE_PHOTOLIST_PATH, JSON.stringify(this.localPhotoList, null, 4), "Photo list cache");
-      await this.saveCacheConfig("CACHE_PHOTOLIST_PATH", new Date().toISOString());
     })();
   },
 

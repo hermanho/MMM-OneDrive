@@ -6,3 +6,4 @@ cache/*
 .idea
 msal/token.json
 .DS_Store
+*.bak
