@@ -1,6 +1,6 @@
 {
   "name": "mmm-onedrive",
-  "version": "1.5.4",
+  "version": "1.6.0",
   "description": "MagicMirror² module to display your photos from OneDrive.",
   "license": "MIT",
   "author": "hermanho",
