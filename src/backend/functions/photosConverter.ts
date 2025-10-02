@@ -6,7 +6,6 @@ import { getLibheifFactory } from "./externals/libheifJS";
 export interface ConvertHEICParams {
   filename: string;
   data: ArrayBuffer;
-  size?: { width: number; height: number };
 }
 
 type HeifImageDisplay = {
@@ -14,7 +13,7 @@ type HeifImageDisplay = {
 };
 
 
-export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) => {
+export const convertHEIC = async ({ filename, data }: ConvertHEICParams) => {
   let heifDecoder: any;
   let heifImages: any[] | undefined;
   try {
@@ -55,7 +54,7 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
       .keepMetadata()
       .toBuffer();
 
-    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
+    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d });
     const outputArraybuffer = new ArrayBuffer(jpegData.byteLength);
     new Uint8Array(outputArraybuffer).set(new Uint8Array(jpegData));
     return outputArraybuffer;

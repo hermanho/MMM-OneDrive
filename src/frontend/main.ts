@@ -95,9 +95,7 @@ Module.register<Config>("MMM-OneDrive", {
         type: "newPhoto",
         payload,
       };
-      const { photo, photoBase64, album } = payload;
-      const mimeType = photo.mimeType === "image/heic" ? "image/jpeg" : photo.mimeType;
-      const url = `data:${mimeType};base64,${photoBase64}`;
+      const { photo, album, url } = payload;
       this.render(url, photo, album);
     }
   },
@@ -113,7 +111,6 @@ Module.register<Config>("MMM-OneDrive", {
       console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;
     }
-    const startDt = new Date();
     const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
     const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
     current.textContent = "";
@@ -163,7 +160,6 @@ Module.register<Config>("MMM-OneDrive", {
       JSON.stringify({
         id: target.id,
         filename: target.filename,
-        duration: new Date().getTime() - startDt.getTime(),
       }));
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,

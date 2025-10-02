@@ -30,9 +30,18 @@ interface OneDriveMediaItem {
   _indexOfPhotos: number;
 }
 
-declare const urlToImageBase64: (photo: OneDriveMediaItem, size: {
-    width: number;
-    height: number;
-}) => Promise<string>;
+declare function createIntervalRunner(render: (() => Promise<unknown>), interval: number): {
+    skipToNext: () => void;
+    stop: () => void;
+    resume: () => void;
+    state: () => {
+        stopped: boolean;
+        running: boolean;
+    };
+};
 
-export { urlToImageBase64 };
+declare const urlToImageBase64: (photo: OneDriveMediaItem) => Promise<string>;
+declare const urlToDisk: (photo: OneDriveMediaItem, dest: string) => Promise<void>;
+declare const createDirIfNotExists: (dir: string) => Promise<void>;
+
+export { createDirIfNotExists, createIntervalRunner, urlToDisk, urlToImageBase64 };

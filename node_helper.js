@@ -4,28 +4,28 @@
  * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
  */
 
-const fs = require("fs");
-const { writeFile, readFile, mkdir } = require("fs/promises");
-const path = require("path");
+const fs = require("node:fs");
+const { writeFile, readFile, mkdir } = require("node:fs/promises");
+const path = require("node:path");
 const moment = require("moment");
-const { Readable } = require("stream");
-const { finished } = require("stream/promises");
+const { Readable } = require("node:stream");
+const { finished } = require("node:stream/promises");
 const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
-const crypto = require("crypto");
+const crypto = require("node:crypto");
 const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
-const { createIntervalRunner } = require("./src/interval-runner");
-const { urlToImageBase64 } = require("./lib/lib");
+const { createDirIfNotExists, createIntervalRunner } = require("./lib/lib");
+const { urlToDisk } = require("./lib/lib");
+const { DiskCaching } = require("./lib/DiskCaching");
 
 // const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 // const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
-const cachePath = path.resolve(__dirname, "./msal/token.json");
 
 /**
  * @type {OneDrivePhotos}
@@ -39,6 +39,8 @@ const nodeHelperObject = {
   localPhotoPntr: 0,
   uiRunner: null,
   moduleSuspended: false,
+  /** @type {DiskCaching} */
+  cleanUpTimer: null,
   start: function () {
     this.log_info("Starting module helper");
     this.config = {};
@@ -53,7 +55,30 @@ const nodeHelperObject = {
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
     this.CACHE_CONFIG = path.resolve(this.path, "cache", "config.json");
+
+    createDirIfNotExists(this.photoCacheDirPath());
+    this.cleanUpTimer = new DiskCaching(this.photoCacheDirPath(), 1000 * 30);
+    this.cleanUpTimer.removeAll();
+
+    this.setupHttpEndpoint();
+
     this.log_info("Started");
+  },
+
+  setupHttpEndpoint: function () {
+    /**
+     * @type {import("express").Express}
+     */
+    const express = this.expressApp;
+    express.get(`/${this.name.toLowerCase()}/photos/:filename`, (req, res) => {
+      const filename = req.params.filename;
+      const fullPath = path.join(this.photoCacheDirPath(), filename);
+      if (fs.existsSync(fullPath)) {
+        res.sendFile(fullPath);
+      } else {
+        res.status(404).send("File not found");
+      }
+    });
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -104,6 +129,14 @@ const nodeHelperObject = {
     Log.warn(`[${this.name}] [node_helper]`, ...args);
   },
 
+  tokenPath: function () {
+    return path.join(this.path, "msal/token.json");
+  },
+
+  photoCacheDirPath: function () {
+    return path.join(this.path, "cache", "photos");
+  },
+
   initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
@@ -116,7 +149,7 @@ const nodeHelperObject = {
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
-      authTokenCachePath: cachePath,
+      authTokenCachePath: this.tokenPath(),
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
       this.log_info("Stop UI runner");
@@ -171,7 +204,7 @@ const nodeHelperObject = {
   },
 
   calculateConfigHash: async function () {
-    const tokenStr = await this.readFileSafe(cachePath, "MSAL Token");
+    const tokenStr = await this.readFileSafe(this.tokenPath(), "MSAL Token");
     if (!tokenStr) {
       return undefined;
     }
@@ -273,6 +306,10 @@ const nodeHelperObject = {
       const photo = this.localPhotoList[this.uiPhotoIndex];
 
       const ret = await this.prepareShowPhoto({ photoId: photo.id });
+
+      if (ret) {
+        this.cleanUpTimer.push(photo.filename.toLowerCase());
+      }
 
       this.uiPhotoIndex++;
       if (this.uiPhotoIndex >= this.localPhotoList.length) {
@@ -472,12 +509,15 @@ const nodeHelperObject = {
       }
     }
 
-    try {
-      const base64 = await urlToImageBase64(photo, { width: this.config.showWidth, height: this.config.showHeight });
+    const photoLocalPath = path.join(this.photoCacheDirPath(), photo.filename.toLocaleLowerCase());
 
+    try {
+      await urlToDisk(photo, photoLocalPath);
+
+      const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(photo.filename.toLocaleLowerCase())}`;
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
-      this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+      this.sendSocketNotification("RENDER_PHOTO", { photo, album, url });
       return true;
     } catch (err) {
       const errorMessages = [`Image loading fails: ${photo.id}, ${photo.filename}, ${photo.baseUrl}`];
@@ -497,6 +537,7 @@ const nodeHelperObject = {
   stop: function () {
     this.log_info("Stopping module helper");
     clearInterval(this.scanTimer);
+    this.uiRunner?.stop();
   },
 
   savePhotoListCache: function () {
