@@ -57,7 +57,7 @@ const nodeHelperObject = {
     this.CACHE_CONFIG = path.resolve(this.path, "cache", "config.json");
 
     createDirIfNotExists(this.photoCacheDirPath());
-    this.cleanUpTimer = new DiskCaching(this.photoCacheDirPath(), 1000 * 30);
+    this.cleanUpTimer = new DiskCaching(this.photoCacheDirPath());
     this.cleanUpTimer.removeAll();
 
     this.setupHttpEndpoint();
