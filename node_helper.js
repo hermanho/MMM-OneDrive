@@ -14,6 +14,7 @@ const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
 const crypto = require("node:crypto");
+const os = require("node:os");
 const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
@@ -518,6 +519,9 @@ const nodeHelperObject = {
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
       this.sendSocketNotification("RENDER_PHOTO", { photo, album, url });
+
+      this.logMemoryUsage();
+
       return true;
     } catch (err) {
       const errorMessages = [`Image loading fails: ${photo.id}, ${photo.filename}, ${photo.baseUrl}`];
@@ -613,6 +617,18 @@ const nodeHelperObject = {
       this.log_error("unable to write Cache Config");
       this.log_error(error_to_string(err));
     }
+  },
+
+  logMemoryUsage: function () {
+    const totalRam = (os.totalmem() / 1024 / 1024).toFixed(2);
+    const freeRam = (os.freemem() / 1024 / 1024).toFixed(2);
+    const usedRam = ((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(2);
+
+    const messages = [
+      `- RAM:      total: ${totalRam} MB; free: ${freeRam} MB; used: ${usedRam} MB`,
+      `- OTHERS:   uptime: ${Math.floor(os.uptime() / 60)} minutes; timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    ].join("\n");
+    this.log_info(messages);
   },
 };
 
