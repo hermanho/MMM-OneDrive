@@ -95,8 +95,8 @@ Module.register<Config>("MMM-OneDrive", {
         type: "newPhoto",
         payload,
       };
-      const { photo, album, url } = payload;
-      this.render(url, photo, album);
+      const { photo, album, url, gpu } = payload;
+      this.render(url, photo, album, gpu);
     }
   },
 
@@ -106,7 +106,7 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
+  render: function (url: string, target: OneDriveMediaItem, album: DriveItem, gpu: boolean) {
     if (this.suspended) {
       console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;
@@ -116,7 +116,9 @@ Module.register<Config>("MMM-OneDrive", {
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
-    current.classList.add("animated");
+    if (gpu) {
+      current.classList.add("animated");
+    };
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     if (this.config.autoInfoPosition) {
       let op: AutoInfoPositionFunction = (_album, _target) => {

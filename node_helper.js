@@ -516,9 +516,10 @@ const nodeHelperObject = {
       await urlToDisk(photo, photoLocalPath);
 
       const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(photo.filename.toLocaleLowerCase())}`;
+      const payload = { photo, album, url, gpu: process.env.ELECTRON_ENABLE_GPU === "1" };
       this.log_info("Image send to UI:");
-      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
-      this.sendSocketNotification("RENDER_PHOTO", { photo, album, url });
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, gpu: payload.gpu }));
+      this.sendSocketNotification("RENDER_PHOTO", payload);
 
       this.logMemoryUsage();
 
