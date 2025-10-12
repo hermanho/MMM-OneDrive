@@ -67,6 +67,9 @@ export const urlToDisk = async (photo: OneDriveMediaItem, dest: string) => {
   }
 
   await fs.writeFile(dest, Buffer.from(photoArrayBuffer));
+
+  const stats = await fs.stat(dest);
+  return stats.size;
 };
 
 export const createDirIfNotExists = async (dir: string) => {

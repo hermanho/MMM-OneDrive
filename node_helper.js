@@ -309,7 +309,7 @@ const nodeHelperObject = {
       const ret = await this.prepareShowPhoto({ photoId: photo.id });
 
       if (ret) {
-        this.cleanUpTimer.push(photo.filename.toLowerCase());
+        this.cleanUpTimer.push(photo.filename.toLocaleLowerCase() + "-cache.jpg");
       }
 
       this.uiPhotoIndex++;
@@ -510,15 +510,18 @@ const nodeHelperObject = {
       }
     }
 
-    const photoLocalPath = path.join(this.photoCacheDirPath(), photo.filename.toLocaleLowerCase());
+    const cacheFilename = photo.filename.toLocaleLowerCase() + "-cache.jpg";
+
+    const photoLocalPath = path.join(this.photoCacheDirPath(), cacheFilename);
 
     try {
-      await urlToDisk(photo, photoLocalPath);
+      const fileSize = await urlToDisk(photo, photoLocalPath);
+      const fileSizeInKB = (fileSize / 1024).toFixed(2);
 
-      const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(photo.filename.toLocaleLowerCase())}`;
+      const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(cacheFilename)}`;
       const payload = { photo, album, url, gpu: process.env.ELECTRON_ENABLE_GPU === "1" };
       this.log_info("Image send to UI:");
-      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, gpu: payload.gpu }));
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, gpu: payload.gpu, fileSizeInKB }));
       this.sendSocketNotification("RENDER_PHOTO", payload);
 
       this.logMemoryUsage();

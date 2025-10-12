@@ -116,9 +116,9 @@ Module.register<Config>("MMM-OneDrive", {
     current.textContent = "";
     back.style.backgroundImage = `url(${url})`;
     current.style.backgroundImage = `url(${url})`;
-    if (gpu) {
-      current.classList.add("animated");
-    };
+    // if (gpu) {
+    current.classList.add("animated");
+    // };
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     if (this.config.autoInfoPosition) {
       let op: AutoInfoPositionFunction = (_album, _target) => {
