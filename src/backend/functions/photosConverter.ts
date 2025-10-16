@@ -3,17 +3,17 @@ import Log from "logger";
 import sharp from "sharp";
 import { getLibheifFactory } from "./externals/libheifJS";
 
-export interface ConvertHEICParams {
-  filename: string;
-  data: ArrayBuffer;
-}
-
 type HeifImageDisplay = {
   data: Uint8ClampedArray;
 };
 
+export interface ConvertHEICParams {
+  filename: string;
+  data: ArrayBuffer;
+  size?: { width: number; height: number };
+}
 
-export const convertHEIC = async ({ filename, data }: ConvertHEICParams) => {
+export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) => {
   let heifDecoder: any;
   let heifImages: any[] | undefined;
   try {
@@ -41,7 +41,7 @@ export const convertHEIC = async ({ filename, data }: ConvertHEICParams) => {
     });
 
 
-    const sharpBuffer = sharp(decodedData.data, {
+    let sharpBuffer = sharp(decodedData.data, {
       raw: {
         width: w,
         height: h,
@@ -49,12 +49,21 @@ export const convertHEIC = async ({ filename, data }: ConvertHEICParams) => {
       },
     });
 
+    // Resize if size is provided and oversized with the decoded image dimensions
+    if (size && size.width > 0 && size.height > 0 && (w > size.width || h > size.height)) {
+      if (w > h) {
+        sharpBuffer = sharpBuffer.resize(size.width);
+      } else {
+        sharpBuffer = sharpBuffer.resize(null, size.height);
+      }
+    }
+
     const jpegData = await sharpBuffer
       .jpeg({ quality: 95, chromaSubsampling: "4:4:4", progressive: true })
       .keepMetadata()
       .toBuffer();
 
-    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d });
+    Log.debug("[MMM-OneDrive] [convertHEIC] Done", { duration: Date.now() - d, size: size !== undefined });
     const outputArraybuffer = new ArrayBuffer(jpegData.byteLength);
     new Uint8Array(outputArraybuffer).set(new Uint8Array(jpegData));
     return outputArraybuffer;

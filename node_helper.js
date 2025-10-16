@@ -21,6 +21,7 @@ const { error_to_string } = require("./error_to_string.js");
 const { createDirIfNotExists, createIntervalRunner, internetStatusListener } = require("./lib/lib");
 const { urlToDisk } = require("./lib/lib");
 const { DiskCaching } = require("./lib/DiskCaching");
+const { getCompleteMemoryInfo } = require("./memory");
 
 // const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 // const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
@@ -528,7 +529,7 @@ const nodeHelperObject = {
     const photoLocalPath = path.join(this.photoCacheDirPath(), cacheFilename);
 
     try {
-      const fileSize = await urlToDisk(photo, photoLocalPath);
+      const fileSize = await urlToDisk(photo, photoLocalPath, { width: this.config.showWidth * 2, height: this.config.showHeight * 2 });
       const fileSizeInKB = (fileSize / 1024).toFixed(2);
 
       const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(cacheFilename)}`;
@@ -637,12 +638,12 @@ const nodeHelperObject = {
   },
 
   logMemoryUsage: function () {
-    const totalRam = (os.totalmem() / 1024 / 1024).toFixed(2);
-    const freeRam = (os.freemem() / 1024 / 1024).toFixed(2);
-    const usedRam = ((os.totalmem() - os.freemem()) / 1024 / 1024).toFixed(2);
+    const memInfo = getCompleteMemoryInfo();
 
     const messages = [
-      `- RAM:      total: ${totalRam} MB; free: ${freeRam} MB; used: ${usedRam} MB`,
+      `- RAM:      total: ${memInfo.ram.total} MB; free: ${memInfo.ram.free} MB; used: ${memInfo.ram.used} MB`,
+      `- SWAP:     total: ${memInfo.swap.total} MB; free: ${memInfo.swap.free} MB; used: ${memInfo.swap.used} MB; cached: ${memInfo.swap.cached} MB`,
+      `- GPU:     allocated: ${memInfo.gpu.allocated} MB; reloc: ${memInfo.gpu.reloc} MB (used: ~${memInfo.gpu.used} MB; free: ~${memInfo.gpu.free} MB)`,
       `- OTHERS:   uptime: ${Math.floor(os.uptime() / 60)} minutes; timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
     ].join("\n");
     this.log_info(messages);

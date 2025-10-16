@@ -44,8 +44,10 @@ declare function createIntervalRunner(render: (() => Promise<unknown>), interval
 
 declare const internetStatusListener: EventEmitter<[never]>;
 
-declare const urlToImageBase64: (photo: OneDriveMediaItem) => Promise<string>;
-declare const urlToDisk: (photo: OneDriveMediaItem, dest: string) => Promise<number>;
+declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size: {
+    width: number;
+    height: number;
+}) => Promise<number>;
 declare const createDirIfNotExists: (dir: string) => Promise<void>;
 
-export { createDirIfNotExists, createIntervalRunner, internetStatusListener, urlToDisk, urlToImageBase64 };
+export { createDirIfNotExists, createIntervalRunner, internetStatusListener, urlToDisk };
