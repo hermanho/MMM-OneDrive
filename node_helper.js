@@ -18,7 +18,7 @@ const os = require("node:os");
 const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
-const { createDirIfNotExists, createIntervalRunner } = require("./lib/lib");
+const { createDirIfNotExists, createIntervalRunner, internetStatusListener } = require("./lib/lib");
 const { urlToDisk } = require("./lib/lib");
 const { DiskCaching } = require("./lib/DiskCaching");
 
@@ -344,6 +344,10 @@ const nodeHelperObject = {
       }
 
     }, this.config.scanInterval);
+    internetStatusListener.on("online", () => {
+      this.log_info("Internet is back. Trigger scan job.");
+      this.scanTimer?.skipToNext();
+    });
   },
 
   scanJob: async function () {
@@ -383,6 +387,10 @@ const nodeHelperObject = {
      * @type {microsoftgraph.DriveItem[]} 
      */
     const albums = await this.getAlbums();
+    if (!albums || albums.length === 0) {
+      this.log_warn("No albums found in your OneDrive. Re-use the old album list.");
+      return;
+    }
     /** 
      * @type {microsoftgraph.DriveItem[]} 
      */

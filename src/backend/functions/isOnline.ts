@@ -1,3 +1,7 @@
+import { EventEmitter } from "node:stream";
+
+export const internetStatusListener = new EventEmitter();
+
 export const isOnline = async (timeout = 25000): Promise<boolean> => {
   const testUrls = [
     "http://connectivity-check.ubuntu.com/",
@@ -31,8 +35,19 @@ export const isOnline = async (timeout = 25000): Promise<boolean> => {
     await Promise.any(attempts);
     return true;
   } catch {
+    checkInternetIsBack();
     return false;
   } finally {
     clearTimeout(timer);
+  }
+};
+
+const checkInternetIsBack = async () => {
+  const status = await isOnline();
+
+  if (status) {
+    internetStatusListener.emit("online");
+  } else {
+    setTimeout(checkInternetIsBack, 30000);
   }
 };

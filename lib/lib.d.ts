@@ -1,3 +1,5 @@
+import { EventEmitter } from 'node:stream';
+
 interface OneDriveMediaItem {
   id: string;
   baseUrl?: string;
@@ -40,8 +42,10 @@ declare function createIntervalRunner(render: (() => Promise<unknown>), interval
     };
 };
 
+declare const internetStatusListener: EventEmitter<[never]>;
+
 declare const urlToImageBase64: (photo: OneDriveMediaItem) => Promise<string>;
 declare const urlToDisk: (photo: OneDriveMediaItem, dest: string) => Promise<number>;
 declare const createDirIfNotExists: (dir: string) => Promise<void>;
 
-export { createDirIfNotExists, createIntervalRunner, urlToDisk, urlToImageBase64 };
+export { createDirIfNotExists, createIntervalRunner, internetStatusListener, urlToDisk, urlToImageBase64 };
