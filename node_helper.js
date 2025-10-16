@@ -504,6 +504,11 @@ const nodeHelperObject = {
       if (!isNaN(+expireDt) && expireDt.getTime() < Date.now()) {
         this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
         const p = await oneDrivePhotosInstance.refreshItem(photo);
+        if (!p) {
+          this.log_error(`Failed to refresh image ${photo.filename}`);
+          return false;
+        }
+
         photo.baseUrl = p.baseUrl;
         photo.baseUrlExpireDateTime = p.baseUrlExpireDateTime;
         this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
@@ -519,9 +524,9 @@ const nodeHelperObject = {
       const fileSizeInKB = (fileSize / 1024).toFixed(2);
 
       const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(cacheFilename)}`;
-      const payload = { photo, album, url, gpu: process.env.ELECTRON_ENABLE_GPU === "1" };
+      const payload = { photo, album, url };
       this.log_info("Image send to UI:");
-      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, gpu: payload.gpu, fileSizeInKB }));
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, fileSizeInKB }));
       this.sendSocketNotification("RENDER_PHOTO", payload);
 
       this.logMemoryUsage();

@@ -95,8 +95,8 @@ Module.register<Config>("MMM-OneDrive", {
         type: "newPhoto",
         payload,
       };
-      const { photo, album, url, gpu } = payload;
-      this.render(url, photo, album, gpu);
+      const { photo, album, url } = payload;
+      this.render(url, photo, album);
     }
   },
 
@@ -106,7 +106,7 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
-  render: function (url: string, target: OneDriveMediaItem, album: DriveItem, gpu: boolean) {
+  render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
     if (this.suspended) {
       console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;

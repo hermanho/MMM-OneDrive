@@ -2,25 +2,26 @@
 
 import { EventEmitter } from "events";
 import crypto from "crypto";
-import { BatchResponseBody, Client, PageCollection } from "@microsoft/microsoft-graph-client";
+import { Client, PageCollection } from "@microsoft/microsoft-graph-client";
 import { LogLevel } from "@azure/msal-node";
 import ExifReader from "exifreader";
 import Log from "logger";
 import { error_to_string } from "./functions/error_to_string";
-import { msalConfig, protectedResources, getRelativeResourceUrl } from "./msal/authConfig";
+import { msalConfig, protectedResources } from "./msal/authConfig";
 import AuthProvider from "./msal/AuthProvider";
 import sleep from "./functions/sleep";
 import { ConfigTransformed } from "../types/config";
 import { OneDriveMediaItem } from "../types/onedrive";
 import { DriveItem } from "@microsoft/microsoft-graph-types";
 import { cachePlugin } from "./msal/CachePlugin";
+import { isOnline } from "./functions/isOnline";
 
-const chunk = (arr, size) =>
-  Array.from({
-    length: Math.ceil(arr.length / size),
-  }, (v, i) =>
-    arr.slice(i * size, i * size + size)
-  );
+// const chunk = (arr, size) =>
+//   Array.from({
+//     length: Math.ceil(arr.length / size),
+//   }, (v, i) =>
+//     arr.slice(i * size, i * size + size)
+//   );
 
 const generateNewExpirationDate = () => new Date(Date.now() + 55 * 60 * 1000).toISOString();
 
@@ -89,7 +90,7 @@ export class OneDrivePhotos extends EventEmitter {
     this.emit("errorMessage", message);
   }
 
-  async onAuthReady(maxRetries = 3) {
+  private async onAuthReady(maxRetries = 3) {
     let attempt = 0;
     while (attempt < maxRetries) {
       const tokenRequest = {
@@ -97,7 +98,7 @@ export class OneDrivePhotos extends EventEmitter {
         correlationId: crypto.randomUUID(),
       };
       try {
-        const tokenResponse = await this.getAuthProvider().getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r), (message) => this.emit("errorMessage", message));
+        const tokenResponse = await this.getAuthProvider().getToken(tokenRequest, this.config.forceAuthInteractive, (r) => this.deviceCodeCallback(r));
         // this.log("onAuthReady token responded");
         this.#graphClient = Client.init({
           authProvider: (done) => {
@@ -130,7 +131,7 @@ export class OneDrivePhotos extends EventEmitter {
     throw new Error(`Failed to wait onAuthReady after ${maxRetries} attempts.`);
   }
 
-  async request<T>(logContext, url, method = "get", data = null) {
+  private async request<T>(logContext, url, method = "get", data = null) {
     this.logDebug((logContext ? `[${logContext}]` : "") + ` request ${method} URL: ${url}`);
     try {
       const ret = await this.#graphClient.api(url)[method](data);
@@ -144,11 +145,16 @@ export class OneDrivePhotos extends EventEmitter {
   }
 
   async getAlbums() {
+    if (!(await isOnline())) {
+      this.logError("Device is offline, skip getAlbums");
+      return [];
+    }
+
     const albums = await this.getAlbumLoop();
     return albums;
   }
 
-  async getAlbumLoop() {
+  private async getAlbumLoop() {
     await this.onAuthReady();
     const url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId);
     /** @type {microsoftgraph.DriveItem[]} */
@@ -358,64 +364,12 @@ export class OneDrivePhotos extends EventEmitter {
     return await getImages(url);
   }
 
-  /**
-   *
-   * @param {OneDriveMediaItem[]} items
-   * @returns {Promise<OneDriveMediaItem[]>} items
-   */
-  async batchRequestRefresh(items) {
-    if (items.length <= 0) {
-      return [];
-    }
-    await this.onAuthReady();
-
-    this.log("received: ", items.length, " to refresh");
-
-    /**
-     * @type {[OneDriveMediaItem[]]}
-     */
-    const result = [];
-
-    /**
-     * https://learn.microsoft.com/en-us/graph/json-batching#batch-size-limitations
-     * @type {[OneDriveMediaItem[]]}
-     */
-    const chunkGroups = chunk(items, 20);
-    for (const grp of chunkGroups) {
-      const requestsValue = grp.map((item, i) => ({
-        id: i,
-        method: "GET",
-        url: getRelativeResourceUrl(protectedResources.getItem.endpoint.replace("$$userId$$", this.#userId).replace("$$itemId$$", item.id)),
-      }));
-      if (requestsValue.length > 0) {
-        const requestsPayload = {
-          requests: requestsValue,
-        };
-        const response = await this.request<BatchResponseBody>("batchRequestRefresh", protectedResources.$batch.endpoint, "post", requestsPayload);
-        if (Array.isArray(response.responses)) {
-          for (const r of response.responses) {
-            if (r.status < 400) {
-              const item = JSON.parse(JSON.stringify(grp[r.id]));
-              item.baseUrl = r.body["@microsoft.graph.downloadUrl"];
-              item.baseUrlExpireDateTime = generateNewExpirationDate();
-              result.push(item);
-            } else {
-              console.error(r);
-            }
-          }
-        }
-      }
-    }
-
-    this.log("Batch request refresh done, total: ", result.length);
-
-    return result;
-  }
-
   async refreshItem(item: OneDriveMediaItem) {
-    if (!item) {
+    if (!(await isOnline())) {
+      this.logError("Device is offline, skip refreshItem for ", item.id, item.filename);
       return null;
     }
+
     await this.onAuthReady();
     this.log("received: ", item.id, " to refresh");
     const url = protectedResources.getItem.endpoint.replace("$$userId$$", this.#userId).replace("$$itemId$$", item.id);
