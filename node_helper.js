@@ -62,25 +62,7 @@ const nodeHelperObject = {
     this.cleanUpTimer = new DiskCaching(this.photoCacheDirPath());
     this.cleanUpTimer.removeAll();
 
-    this.setupHttpEndpoint();
-
     this.log_info("Started");
-  },
-
-  setupHttpEndpoint: function () {
-    /**
-     * @type {import("express").Express}
-     */
-    const express = this.expressApp;
-    express.get(`/${this.name.toLowerCase()}/photos/:filename`, (req, res) => {
-      const filename = req.params.filename;
-      const fullPath = path.join(this.photoCacheDirPath(), filename);
-      if (fs.existsSync(fullPath)) {
-        res.sendFile(fullPath);
-      } else {
-        res.status(404).send("File not found");
-      }
-    });
   },
 
   socketNotificationReceived: function (notification, payload) {
@@ -142,6 +124,7 @@ const nodeHelperObject = {
   initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
+    this.log_info(`Debug mode ${this.debug}`);
     if (!this.config.scanInterval) {
       this.config.scanInterval = DEFAULT_SCAN_INTERVAL;
     }
@@ -159,7 +142,6 @@ const nodeHelperObject = {
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
-      this.sendSocketNotification("CLEAR_ERROR");
       this.log_info("Resume UI runner");
       if (!this.moduleSuspended) {
         this.uiRunner?.resume();
@@ -529,16 +511,19 @@ const nodeHelperObject = {
     const photoLocalPath = path.join(this.photoCacheDirPath(), cacheFilename);
 
     try {
-      const fileSize = await urlToDisk(photo, photoLocalPath, { width: this.config.showWidth * 2, height: this.config.showHeight * 2 });
+      // const fileSize = await urlToDisk(photo, photoLocalPath, { width: this.config.showWidth * 2, height: this.config.showHeight * 2 });
+      const fileSize = await urlToDisk(photo, photoLocalPath);
       const fileSizeInKB = (fileSize / 1024).toFixed(2);
 
-      const url = `/${this.name.toLowerCase()}/photos/${encodeURIComponent(cacheFilename)}`;
+      const url = `modules/${this.name}/cache/photos/${encodeURIComponent(cacheFilename)}`;
       const payload = { photo, album, url };
       this.log_info("Image send to UI:");
       this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, fileSizeInKB }));
       this.sendSocketNotification("RENDER_PHOTO", payload);
 
-      this.logMemoryUsage();
+      if (this.debug) {
+        this.logMemoryUsage();
+      }
 
       return true;
     } catch (err) {

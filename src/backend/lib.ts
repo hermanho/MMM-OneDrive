@@ -49,7 +49,7 @@ const isJpgFn = (buffer: ArrayBuffer) => {
 //   return base64;
 // };
 
-export const urlToDisk = async (photo: OneDriveMediaItem, dest: string, size: { width: number; height: number }) => {
+export const urlToDisk = async (photo: OneDriveMediaItem, dest: string, size?: { width: number; height: number }) => {
 
   let photoArrayBuffer = await fetchToArrayBuffer(photo.baseUrl);
   const imageType = await imageTypeFn(photoArrayBuffer);

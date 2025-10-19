@@ -44,7 +44,7 @@ declare function createIntervalRunner(render: (() => Promise<unknown>), interval
 
 declare const internetStatusListener: EventEmitter<[never]>;
 
-declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size: {
+declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size?: {
     width: number;
     height: number;
 }) => Promise<number>;

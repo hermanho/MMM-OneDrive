@@ -44,15 +44,31 @@
   animation-duration: 2s;
 }
 
+#ONEDRIVE_PHOTO_CURRENT img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  max-width: none;
+  object-fit: contain;
+  object-position: center;
+}
+
 #ONEDRIVE_PHOTO_BACKDROP {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+}
+
+
+#ONEDRIVE_PHOTO_BACKDROP img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
   filter: blur(10px) sepia(80%) brightness(40%);
 }
 
@@ -86,11 +102,17 @@
 #ONEDRIVE_PHOTO_INFO .albumCover {
   width: 48px;
   height: 48px;
-  border-radius: 50%;
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
   float: left;
+}
+
+#ONEDRIVE_PHOTO_INFO .albumCover img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  display: block;
+  max-width: none;
+  object-fit: cover;
+  object-position: center;
 }
 
 #ONEDRIVE_PHOTO_INFO .albumTitle {
