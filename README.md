@@ -8,7 +8,10 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
 
 ## Installation & Upgrade
 
-[INSTALL.md](INSTALL.md)
+[docs/INSTALL.md](docs/INSTALL.md)
+
+## Memory & Swap Size
+[docs/MEMORY_SWAP.md](docs/MEMORY_SWAP.md)
 
 ## Configuration
 
