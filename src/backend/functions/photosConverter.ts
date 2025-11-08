@@ -49,7 +49,7 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
       },
     });
 
-    // Resize if size is provided and oversized with the decoded image dimensions
+    // Resize if a target size is provided and the decoded image dimensions exceed the target size
     if (size && size.width > 0 && size.height > 0 && (w > size.width || h > size.height)) {
       if (w > h) {
         Log.debug("[MMM-OneDrive] [convertHEIC] resize w > h");
