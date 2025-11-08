@@ -2,8 +2,8 @@
 
 This module performs photo caching and occasional image processing which can use a non-trivial amount of memory. To ensure stable operation we recommend the following minimum memory configuration:
 
-- Recommended: at least **4 GB** of physical (RAM).
-- If the system has **less than 4 GB** of physical RAM, you must provide at least **2 GB** of swap space.
+- Recommended: **4 GB** or above physical memory.
+- If the system has **less than 4 GB** of physical memory, you must provide at least **2 GB** of swap space.
 
 ## Why this matters
 

@@ -11,6 +11,8 @@ Display your photos from album of OneDrive on [MagicMirror²](https://github.com
 [docs/INSTALL.md](docs/INSTALL.md)
 
 ## Memory & Swap Size
+> Note: If you're running this on a Raspberry Pi with less than **4 GB** of physical memory, read `docs/MEMORY_SWAP.md` for swap configuration and recommendations.
+
 [docs/MEMORY_SWAP.md](docs/MEMORY_SWAP.md)
 
 ## Configuration
