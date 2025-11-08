@@ -22,7 +22,7 @@ export class DiskCaching {
   }
 
   private async cleanup() {
-    // Delete all files expect last 3 in the fileList
+    // Delete all files except last 3 in the fileList
     const listCount = this.fileList.length;
     if (listCount <= 3) {
       return;
