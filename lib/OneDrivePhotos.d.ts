@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { PublicClientApplication, AccountInfo, AuthenticationResult, SilentFlowRequest, InteractiveRequest, DeviceCodeRequest } from '@azure/msal-node';
+import { PublicClientApplication, AccountInfo, AuthenticationResult } from '@azure/msal-node';
 import { DeviceCodeResponse } from '@azure/msal-common';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
@@ -16,10 +16,9 @@ declare class AuthProvider {
     logError(...args: any[]): void;
     logWarn(...args: any[]): void;
     logout(): Promise<void>;
-    getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback?: (response: DeviceCodeResponse) => void, waitInteractiveCallback?: (message: string) => void): Promise<AuthenticationResult>;
-    getTokenSilent(tokenRequest: SilentFlowRequest & TokenRequestCommon, maxRetries?: number): Promise<AuthenticationResult>;
-    getTokenInteractive(tokenRequest: Omit<InteractiveRequest, "openBrowser" | "successTemplate" | "errorTemplate"> & TokenRequestCommon): Promise<AuthenticationResult>;
-    getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback"> & TokenRequestCommon, callback?: (response: DeviceCodeResponse) => void): Promise<AuthenticationResult>;
+    getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback?: (response: DeviceCodeResponse) => void): Promise<AuthenticationResult>;
+    private getTokenSilent;
+    private getTokenDeviceCode;
     /**
      * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
@@ -104,10 +103,10 @@ declare class OneDrivePhotos extends EventEmitter {
      * @param {import("@azure/msal-common").DeviceCodeResponse} response
      */
     deviceCodeCallback(response: any): void;
-    onAuthReady(maxRetries?: number): Promise<void>;
-    request<T>(logContext: any, url: any, method?: string, data?: any): Promise<T>;
+    private onAuthReady;
+    private request;
     getAlbums(): Promise<any[]>;
-    getAlbumLoop(): Promise<any[]>;
+    private getAlbumLoop;
     /**
      *
      * @param {microsoftgraph.DriveItem} album
@@ -120,12 +119,6 @@ declare class OneDrivePhotos extends EventEmitter {
      */
     getEXIF(imageUrl: any): Promise<{}>;
     getImageFromAlbum(albumId: any, isValid?: any, maxNum?: number): Promise<OneDriveMediaItem[]>;
-    /**
-     *
-     * @param {OneDriveMediaItem[]} items
-     * @returns {Promise<OneDriveMediaItem[]>} items
-     */
-    batchRequestRefresh(items: any): Promise<any[]>;
     refreshItem(item: OneDriveMediaItem): Promise<{
         baseUrl: any;
         baseUrlExpireDateTime: string;

@@ -4,28 +4,30 @@
  * @typedef {import("./types/type").OneDriveMediaItem} OneDriveMediaItem
  */
 
-const fs = require("fs");
-const { writeFile, readFile, mkdir } = require("fs/promises");
-const path = require("path");
+const fs = require("node:fs");
+const { writeFile, readFile, mkdir } = require("node:fs/promises");
+const path = require("node:path");
 const moment = require("moment");
-const { Readable } = require("stream");
-const { finished } = require("stream/promises");
+const { Readable } = require("node:stream");
+const { finished } = require("node:stream/promises");
 const { RE2 } = require("re2-wasm");
 const NodeHelper = require("node_helper");
 const Log = require("logger");
-const crypto = require("crypto");
+const crypto = require("node:crypto");
+const os = require("node:os");
 const { OneDrivePhotos } = require("./lib/OneDrivePhotos.js");
 const { shuffle } = require("./shuffle.js");
 const { error_to_string } = require("./error_to_string.js");
-const { createIntervalRunner } = require("./src/interval-runner");
-const { urlToImageBase64 } = require("./lib/lib");
+const { createDirIfNotExists, createIntervalRunner, internetStatusListener } = require("./lib/lib");
+const { urlToDisk } = require("./lib/lib");
+const { DiskCaching } = require("./lib/DiskCaching");
+const { getCompleteMemoryInfo } = require("./memory");
 
 // const ONE_DAY = 24 * 60 * 60 * 1000; // 1 day in milliseconds
 // const TWO_DAYS = 2 * ONE_DAY; // 2 days in milliseconds
 const DEFAULT_SCAN_INTERVAL = 1000 * 60 * 55;
 const MINIMUM_SCAN_INTERVAL = 1000 * 60 * 10;
 
-const cachePath = path.resolve(__dirname, "./msal/token.json");
 
 /**
  * @type {OneDrivePhotos}
@@ -39,6 +41,8 @@ const nodeHelperObject = {
   localPhotoPntr: 0,
   uiRunner: null,
   moduleSuspended: false,
+  /** @type {DiskCaching} */
+  cleanUpTimer: null,
   start: function () {
     this.log_info("Starting module helper");
     this.config = {};
@@ -53,6 +57,11 @@ const nodeHelperObject = {
     this.CACHE_ALBUMNS_PATH = path.resolve(this.path, "cache", "selectedAlbumsCache.json");
     this.CACHE_PHOTOLIST_PATH = path.resolve(this.path, "cache", "photoListCache.json");
     this.CACHE_CONFIG = path.resolve(this.path, "cache", "config.json");
+
+    createDirIfNotExists(this.photoCacheDirPath());
+    this.cleanUpTimer = new DiskCaching(this.photoCacheDirPath());
+    this.cleanUpTimer.removeAll();
+
     this.log_info("Started");
   },
 
@@ -104,9 +113,18 @@ const nodeHelperObject = {
     Log.warn(`[${this.name}] [node_helper]`, ...args);
   },
 
+  tokenPath: function () {
+    return path.join(this.path, "msal/token.json");
+  },
+
+  photoCacheDirPath: function () {
+    return path.join(this.path, "cache", "photos");
+  },
+
   initializeAfterLoading: async function (config) {
     this.config = config;
     this.debug = config.debug ? config.debug : false;
+    this.log_info(`Debug mode ${this.debug}`);
     if (!this.config.scanInterval) {
       this.config.scanInterval = DEFAULT_SCAN_INTERVAL;
     }
@@ -116,7 +134,7 @@ const nodeHelperObject = {
     oneDrivePhotosInstance = new OneDrivePhotos({
       debug: this.debug,
       config: config,
-      authTokenCachePath: cachePath,
+      authTokenCachePath: this.tokenPath(),
     });
     oneDrivePhotosInstance.on("errorMessage", (message) => {
       this.log_info("Stop UI runner");
@@ -124,7 +142,6 @@ const nodeHelperObject = {
       this.sendSocketNotification("ERROR", message);
     });
     oneDrivePhotosInstance.on("authSuccess", () => {
-      this.sendSocketNotification("CLEAR_ERROR");
       this.log_info("Resume UI runner");
       if (!this.moduleSuspended) {
         this.uiRunner?.resume();
@@ -171,7 +188,7 @@ const nodeHelperObject = {
   },
 
   calculateConfigHash: async function () {
-    const tokenStr = await this.readFileSafe(cachePath, "MSAL Token");
+    const tokenStr = await this.readFileSafe(this.tokenPath(), "MSAL Token");
     if (!tokenStr) {
       return undefined;
     }
@@ -274,6 +291,10 @@ const nodeHelperObject = {
 
       const ret = await this.prepareShowPhoto({ photoId: photo.id });
 
+      if (ret) {
+        this.cleanUpTimer.push(photo.filename.toLocaleLowerCase() + "-cache.jpg");
+      }
+
       this.uiPhotoIndex++;
       if (this.uiPhotoIndex >= this.localPhotoList.length) {
         this.uiPhotoIndex = 0;
@@ -306,6 +327,10 @@ const nodeHelperObject = {
       }
 
     }, this.config.scanInterval);
+    internetStatusListener.on("online", () => {
+      this.log_info("Internet is back. Trigger scan job.");
+      this.scanTimer?.skipToNext();
+    });
   },
 
   scanJob: async function () {
@@ -345,6 +370,10 @@ const nodeHelperObject = {
      * @type {microsoftgraph.DriveItem[]} 
      */
     const albums = await this.getAlbums();
+    if (!albums || albums.length === 0) {
+      this.log_warn("No albums found in your OneDrive. Re-use the old album list.");
+      return;
+    }
     /** 
      * @type {microsoftgraph.DriveItem[]} 
      */
@@ -466,18 +495,36 @@ const nodeHelperObject = {
       if (!isNaN(+expireDt) && expireDt.getTime() < Date.now()) {
         this.log_info(`Image ${photo.filename} url expired ${photo.baseUrlExpireDateTime}, refreshing...`);
         const p = await oneDrivePhotosInstance.refreshItem(photo);
+        if (!p) {
+          this.log_error(`Failed to refresh image ${photo.filename}`);
+          return false;
+        }
+
         photo.baseUrl = p.baseUrl;
         photo.baseUrlExpireDateTime = p.baseUrlExpireDateTime;
         this.log_info(`Image ${photo.filename} url refreshed new baseUrlExpireDateTime: ${photo.baseUrlExpireDateTime}`);
       }
     }
 
-    try {
-      const base64 = await urlToImageBase64(photo, { width: this.config.showWidth, height: this.config.showHeight });
+    const cacheFilename = photo.filename.toLocaleLowerCase() + "-cache.jpg";
 
+    const photoLocalPath = path.join(this.photoCacheDirPath(), cacheFilename);
+
+    try {
+      // const fileSize = await urlToDisk(photo, photoLocalPath, { width: this.config.showWidth * 2, height: this.config.showHeight * 2 });
+      const fileSize = await urlToDisk(photo, photoLocalPath);
+      const fileSizeInKB = (fileSize / 1024).toFixed(2);
+
+      const url = `modules/${this.name}/cache/photos/${encodeURIComponent(cacheFilename)}`;
+      const payload = { photo, album, url };
       this.log_info("Image send to UI:");
-      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos }));
-      this.sendSocketNotification("RENDER_PHOTO", { photoBase64: base64, photo, album, info: null, errorMessage: null });
+      this.log_info(JSON.stringify({ id: photo.id, filename: photo.filename, index: photo._indexOfPhotos, fileSizeInKB }));
+      this.sendSocketNotification("RENDER_PHOTO", payload);
+
+      if (this.debug) {
+        this.logMemoryUsage();
+      }
+
       return true;
     } catch (err) {
       const errorMessages = [`Image loading fails: ${photo.id}, ${photo.filename}, ${photo.baseUrl}`];
@@ -497,6 +544,7 @@ const nodeHelperObject = {
   stop: function () {
     this.log_info("Stopping module helper");
     clearInterval(this.scanTimer);
+    this.uiRunner?.stop();
   },
 
   savePhotoListCache: function () {
@@ -572,6 +620,18 @@ const nodeHelperObject = {
       this.log_error("unable to write Cache Config");
       this.log_error(error_to_string(err));
     }
+  },
+
+  logMemoryUsage: function () {
+    const memInfo = getCompleteMemoryInfo();
+
+    const messages = [
+      `- RAM:      total: ${memInfo.ram.total} MB; free: ${memInfo.ram.free} MB; used: ${memInfo.ram.used} MB`,
+      `- SWAP:     total: ${memInfo.swap.total} MB; free: ${memInfo.swap.free} MB; used: ${memInfo.swap.used} MB; cached: ${memInfo.swap.cached} MB`,
+      `- GPU:     allocated: ${memInfo.gpu.allocated} MB; reloc: ${memInfo.gpu.reloc} MB (used: ~${memInfo.gpu.used} MB; free: ~${memInfo.gpu.free} MB)`,
+      `- OTHERS:   uptime: ${Math.floor(os.uptime() / 60)} minutes; timeZone: ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,
+    ].join("\n");
+    this.log_info(messages);
   },
 };
 

@@ -3,16 +3,15 @@ import Log from "logger";
 import sharp from "sharp";
 import { getLibheifFactory } from "./externals/libheifJS";
 
+type HeifImageDisplay = {
+  data: Uint8ClampedArray;
+};
+
 export interface ConvertHEICParams {
   filename: string;
   data: ArrayBuffer;
   size?: { width: number; height: number };
 }
-
-type HeifImageDisplay = {
-  data: Uint8ClampedArray;
-};
-
 
 export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) => {
   let heifDecoder: any;
@@ -42,7 +41,7 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
     });
 
 
-    const sharpBuffer = sharp(decodedData.data, {
+    let sharpBuffer = sharp(decodedData.data, {
       raw: {
         width: w,
         height: h,
@@ -50,8 +49,19 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
       },
     });
 
+    // Resize if a target size is provided and the decoded image dimensions exceed the target size
+    if (size && size.width > 0 && size.height > 0 && (w > size.width || h > size.height)) {
+      if (w > h) {
+        Log.debug("[MMM-OneDrive] [convertHEIC] resize w > h");
+        sharpBuffer = sharpBuffer.resize(size.width);
+      } else {
+        Log.debug("[MMM-OneDrive] [convertHEIC] resize h > w");
+        sharpBuffer = sharpBuffer.resize(null, size.height);
+      }
+    }
+
     const jpegData = await sharpBuffer
-      .jpeg({ quality: 100, chromaSubsampling: "4:4:4" })
+      .jpeg({ quality: 95, chromaSubsampling: "4:4:4", progressive: true })
       .keepMetadata()
       .toBuffer();
 

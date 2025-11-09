@@ -1,6 +1,5 @@
 import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
 import nodeHelperObj from "./node_helper.js";
-import logger from "./tests/logger.mock";
 import type { OneDriveMediaItem } from "./types/type";
 
 const createMockOneDrivePhotos = (num: number) => Array(num).fill({})
@@ -16,7 +15,6 @@ const mockGetImageFromAlbum = jest.fn();
 
 jest.mock("./OneDrivePhotos.js", () =>
   jest.fn(() => ({
-    batchRequestRefresh: jest.fn((arr) => Promise.resolve(arr)),
     on: jest.fn(),
     getAlbums: async () => Promise.resolve([]),
     getAlbumThumbnail: async () => Promise.resolve("mock-thumbnail-url"),
@@ -117,13 +115,6 @@ describe("nodeHelperObj", () => {
       helper.photoRefreshPointer = -10;
       await helper.prepAndSendChunk(5);
       expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-    });
-
-    it("should not call batchRequestRefresh if no items to refresh", async () => {
-      helper.localPhotoList = [];
-      helper.photoRefreshPointer = 0;
-      await helper.prepAndSendChunk(5);
-      expect(logger.error).toHaveBeenCalledWith("[ONEDRIVE] [node_helper]", "couldn't send ", 0, " pics");
     });
   });
 });

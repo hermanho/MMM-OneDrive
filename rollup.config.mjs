@@ -39,10 +39,10 @@ export default [
       },
     },
   },
-  ...["lib", "OneDrivePhotos"].flatMap((file) => [
+  ...["lib", "OneDrivePhotos", "DiskCaching"].flatMap((file) => [
     {
       input: `./src/backend/${file}.ts`,
-      external: ["node_helper", "logger", "sharp", /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
+      external: ["node_helper", "logger", "sharp", /node_modules\/libheif-js/],
       plugins: [typescript({
         tsconfig: "./src/backend/tsconfig.json",
       }), nodeResolve({

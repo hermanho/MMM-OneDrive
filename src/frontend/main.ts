@@ -84,7 +84,9 @@ Module.register<Config>("MMM-OneDrive", {
     }
     if (noti === "CLEAR_ERROR") {
       const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
-      current.textContent = "";
+      if (current) {
+        current.textContent = "";
+      }
     }
     if (noti === "UPDATE_STATUS") {
       const statusMessage = document.getElementById("ONEDRIVE_PHOTO_STATUS");
@@ -95,9 +97,7 @@ Module.register<Config>("MMM-OneDrive", {
         type: "newPhoto",
         payload,
       };
-      const { photo, photoBase64, album } = payload;
-      const mimeType = photo.mimeType === "image/heic" ? "image/jpeg" : photo.mimeType;
-      const url = `data:${mimeType};base64,${photoBase64}`;
+      const { photo, album, url } = payload;
       this.render(url, photo, album);
     }
   },
@@ -108,18 +108,64 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
+  cleanUpAlbumCoverMemory: function () {
+    const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
+    if (!info) {
+      return;
+    }
+    info.innerHTML = "";
+  },
+  cleanUpPresentPhotoMemory: function () {
+    // MEMORY CLEANUP: Clear previous background images to free memory
+    const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
+    const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+    if (back) {
+      // Clear src of all images before removing them
+      const backdropImgs = back.querySelectorAll("img");
+      backdropImgs.forEach((img) => {
+        try {
+          (img as HTMLImageElement).src = "";
+        } catch {
+          // ignore
+        }
+      });
+      back.innerHTML = "";
+    }
+    if (current) {
+      // Clear src of all images before removing them
+      const currentImgs = current.querySelectorAll("img");
+      currentImgs.forEach((img) => {
+        try {
+          (img as HTMLImageElement).src = "";
+        } catch {
+          // ignore
+        }
+      });
+      current.innerHTML = "";
+    }
+  },
+
   render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
     if (this.suspended) {
       console.info("[MMM-OneDrive] Module is suspended, skipping render");
       return;
     }
-    const startDt = new Date();
-    const back = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
-    const current = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
-    current.textContent = "";
-    back.style.backgroundImage = `url(${url})`;
-    current.style.backgroundImage = `url(${url})`;
-    current.classList.add("animated");
+
+    this.cleanUpPresentPhotoMemory();
+    this.cleanUpAlbumCoverMemory();
+
+    const backDiv = document.getElementById("ONEDRIVE_PHOTO_BACKDROP");
+    const backimg = document.createElement("img");
+    backimg.src = url;
+    backDiv.appendChild(backimg);
+
+    const currentDiv = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
+    const img = document.createElement("img");
+    img.id = "ONEDRIVE_PHOTO_IMG";
+    currentDiv.appendChild(img);
+    img.src = url;
+    currentDiv.classList.add("animated");
+
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     if (this.config.autoInfoPosition) {
       let op: AutoInfoPositionFunction = (_album, _target) => {
@@ -142,28 +188,33 @@ Module.register<Config>("MMM-OneDrive", {
       info.style.setProperty("--bottom", String(bottom));
       info.style.setProperty("--right", String(right));
     }
-    info.innerHTML = "";
+
     const albumCover = document.createElement("div");
     albumCover.classList.add("albumCover");
-    albumCover.style.backgroundImage = `url(modules/MMM-OneDrive/cache/${album.id})`;
+    const albumImg = document.createElement("img");
+    albumImg.src = `modules/MMM-OneDrive/cache/${album.id}`;
+    albumCover.appendChild(albumImg);
+    info.appendChild(albumCover);
+
     const albumTitle = document.createElement("div");
     albumTitle.classList.add("albumTitle");
     albumTitle.innerHTML = album.name;
+
     const photoTime = document.createElement("div");
     photoTime.classList.add("photoTime");
     photoTime.innerHTML = this.config.timeFormat === "relative" ? moment(target.mediaMetadata.dateTimeOriginal).fromNow() : moment(target.mediaMetadata.dateTimeOriginal).format(this.config.timeFormat);
+
     const infoText = document.createElement("div");
     infoText.classList.add("infoText");
 
-    info.appendChild(albumCover);
     infoText.appendChild(albumTitle);
     infoText.appendChild(photoTime);
+
     info.appendChild(infoText);
     console.debug("[MMM-OneDrive] render image done",
       JSON.stringify({
         id: target.id,
         filename: target.filename,
-        duration: new Date().getTime() - startDt.getTime(),
       }));
     this.sendSocketNotification("IMAGE_LOADED", {
       id: target.id,
@@ -173,6 +224,14 @@ Module.register<Config>("MMM-OneDrive", {
   },
 
   getDom: function () {
+    // MEMORY CLEANUP: Remove old wrapper if it exists
+    this.cleanUpPresentPhotoMemory();
+    this.cleanUpAlbumCoverMemory();
+    const oldWrapper = document.getElementById("ONEDRIVE_PHOTO");
+    if (oldWrapper) {
+      oldWrapper.remove();
+    }
+
     const wrapper = document.createElement("div");
     wrapper.id = "ONEDRIVE_PHOTO";
     const back = document.createElement("div");
@@ -197,11 +256,14 @@ Module.register<Config>("MMM-OneDrive", {
     infoWrapper.id = "ONEDRIVE_PHOTO_INFO_WRAPPER";
     const info = document.createElement("div");
     info.id = "ONEDRIVE_PHOTO_INFO";
+
     wrapper.appendChild(back);
     wrapper.appendChild(current);
     wrapper.appendChild(overlayPresentation);
+
     overlayPresentation.appendChild(infoWrapper);
     infoWrapper.appendChild(info);
+
     overlayPresentation.appendChild(statusMessageWrapper);
     statusMessageWrapper.appendChild(statusMessage);
     console.info("[MMM-OneDrive] Dom updated!");
@@ -211,10 +273,13 @@ Module.register<Config>("MMM-OneDrive", {
   suspend() {
     this.sendSocketNotification("MODULE_SUSPENDED", undefined);
     this.suspended = true;
-    const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
-    info.innerHTML = "";
+
+    this.cleanUpPresentPhotoMemory();
+    this.cleanUpAlbumCoverMemory();
+
     const statusMessage = document.getElementById("ONEDRIVE_PHOTO_STATUS");
     statusMessage.innerHTML = "";
+
   },
 
   resume() {

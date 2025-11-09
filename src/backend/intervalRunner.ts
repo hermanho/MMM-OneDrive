@@ -1,9 +1,5 @@
-/**
- *
- * @param {(() => Promise<*>)} render 
- * @param interval
- */
-function createIntervalRunner(render, interval) {
+
+export function createIntervalRunner(render: (() => Promise<unknown>), interval: number) {
   const state = { stopped: false, running: false };
   let skipWait = null;
 
@@ -54,9 +50,8 @@ function createIntervalRunner(render, interval) {
         cycle();
       }
     },
+    state: () => ({ ...state }),
   };
 }
 
-module.exports = {
-  createIntervalRunner,
-};
+export type IntervalRunner = ReturnType<typeof createIntervalRunner>;
