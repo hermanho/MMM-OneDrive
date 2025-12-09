@@ -154,7 +154,9 @@ Module.register<Config>("MMM-OneDrive", {
 
     img.addEventListener("load", () => {
       img.style.visibility = "";
-      void img.offsetWidth; // force reflow so CSS animations restart reliably
+      // Intentionally trigger a browser reflow/layout recalculation by reading offsetWidth.
+      // This ensures that CSS animations restart properly after the style change.
+      void img.offsetWidth;
       requestAnimationFrame(() => {
         currentDiv.classList.add("animated");
       });
