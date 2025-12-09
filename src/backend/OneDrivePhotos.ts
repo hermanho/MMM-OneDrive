@@ -4,7 +4,6 @@ import { EventEmitter } from "events";
 import crypto from "crypto";
 import { Client, PageCollection } from "@microsoft/microsoft-graph-client";
 import { LogLevel } from "@azure/msal-node";
-import ExifReader from "exifreader";
 import Log from "logger";
 import { error_to_string } from "./functions/error_to_string";
 import { msalConfig, protectedResources } from "./msal/authConfig";
@@ -214,23 +213,6 @@ export class OneDrivePhotos extends EventEmitter {
     } catch (err) {
       this.logError("Error in getAlbumThumbnail(), ignore", err);
       return null;
-    }
-  }
-
-  /**
-   * @param {string} imageUrl
-   * @returns {Promise<ExifReader.Tags>} EXIF data
-   */
-  async getEXIF(imageUrl) {
-    try {
-      const response = await fetch(imageUrl);
-      if (!response.ok) throw new Error(`Failed to fetch image: ${response.statusText}`);
-      const buffer = Buffer.from(await response.arrayBuffer());
-      const exifTags = ExifReader.load(buffer);
-      return exifTags;
-    } catch (err) {
-      this.logError("getEXIF error:", err);
-      return {};
     }
   }
 

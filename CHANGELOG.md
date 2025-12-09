@@ -1,5 +1,23 @@
 # MMM-OneDrive Change Log
 
+**`[1.8.1] - 2025/11/10`**
+- Fixed: photo loading animation effect
+- Feat: remove progressive jpg when convert from heic for better image quality
+- Build(deps): dependencies update
+
+**`[1.8.0] - 2025/11/09`**
+- Feat: replace backgroundImage css with img tag for improved reliability and memory management
+- Feat: add memory cleanup logic in render to prevent memory leaks
+- Feat: add isOnline function to check internet status
+- Feat: add DiskCaching class to manage cached files with periodic cleanup
+- Feat: reduce css animation when GPU is disabled
+- Feat: save jpg image to disk instead of base64 in socketio to reduce memory usage
+- Fixed: reduce caching file size
+- Fixed: msal directory is not existed
+- Docs: add MEMORY_SWAP.md with memory and swap configuration guidance for Raspberry Pi
+- Docs: move INSTALL.md to docs/ directory
+- Build(deps): dependencies update
+
 **`[1.6.0] - 2025/08/25`**
 - Feat: Refactored `OneDrivePhotos` to TypeScript for improved maintainability.
 - Feat: Replaced Jimp with Sharp for faster and more reliable image processing.
