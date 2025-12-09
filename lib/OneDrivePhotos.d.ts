@@ -113,11 +113,6 @@ declare class OneDrivePhotos extends EventEmitter {
      * @returns {Promise<string | null>}
      */
     getAlbumThumbnail(album: any): Promise<any>;
-    /**
-     * @param {string} imageUrl
-     * @returns {Promise<ExifReader.Tags>} EXIF data
-     */
-    getEXIF(imageUrl: any): Promise<{}>;
     getImageFromAlbum(albumId: any, isValid?: any, maxNum?: number): Promise<OneDriveMediaItem[]>;
     refreshItem(item: OneDriveMediaItem): Promise<{
         baseUrl: any;
