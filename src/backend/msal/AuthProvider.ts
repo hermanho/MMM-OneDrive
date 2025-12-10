@@ -1,4 +1,4 @@
-import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, DeviceCodeRequest } from "@azure/msal-node";
+import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, DeviceCodeRequest, Configuration } from "@azure/msal-node";
 import { DeviceCodeResponse } from "@azure/msal-common";
 import sleep from "../functions/sleep";
 
@@ -11,7 +11,7 @@ class AuthProvider {
   clientApplication: PublicClientApplication;
   account: AccountInfo;
 
-  constructor(msalConfig) {
+  constructor(msalConfig: Configuration) {
     /**
      * Initialize a public client application. For more information, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md

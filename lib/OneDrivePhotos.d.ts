@@ -1,5 +1,5 @@
 import { EventEmitter } from 'events';
-import { PublicClientApplication, AccountInfo, AuthenticationResult } from '@azure/msal-node';
+import { PublicClientApplication, AccountInfo, Configuration, AuthenticationResult } from '@azure/msal-node';
 import { DeviceCodeResponse } from '@azure/msal-common';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
@@ -10,7 +10,7 @@ interface TokenRequestCommon {
 declare class AuthProvider {
     clientApplication: PublicClientApplication;
     account: AccountInfo;
-    constructor(msalConfig: any);
+    constructor(msalConfig: Configuration);
     logDebug(...args: any[]): void;
     logInfo(...args: any[]): void;
     logError(...args: any[]): void;

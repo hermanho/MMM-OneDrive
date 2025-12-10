@@ -1,7 +1,28 @@
 import fs from "fs";
 import type { ICachePlugin, TokenCacheContext } from "@azure/msal-node";
 
+
+const testCacheFile = (CACHE_LOCATION: string) => {
+  console.info("[MMM-OneDrive] [AuthProvider cachePlugin] Cache file:", CACHE_LOCATION);
+  try {
+    if (!fs.existsSync(CACHE_LOCATION)) {
+      console.warn("[MMM-OneDrive] [AuthProvider cachePlugin] Cache file does not exist.");
+      return false;
+    }
+    console.info("[MMM-OneDrive] [AuthProvider cachePlugin] Cache file exists.");
+    fs.accessSync(CACHE_LOCATION, fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK);
+    console.info("[MMM-OneDrive] [AuthProvider cachePlugin] Cache file is accessible.");
+    return true;
+  } catch (err) {
+    console.error("[MMM-OneDrive] [AuthProvider cachePlugin] Cache file is not accessible.", err);
+    return false;
+  }
+};
+
 export const cachePlugin = (CACHE_LOCATION: string): ICachePlugin => {
+  testCacheFile(CACHE_LOCATION);
+
+
   const beforeCacheAccess = async (cacheContext: TokenCacheContext) => {
     try {
       if (fs.existsSync(CACHE_LOCATION)) {
