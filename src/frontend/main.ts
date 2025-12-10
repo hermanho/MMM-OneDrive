@@ -145,6 +145,32 @@ Module.register<Config>("MMM-OneDrive", {
     }
   },
 
+  // Helper: create image in the `ONEDRIVE_PHOTO_CURRENT` container,
+  // hide it until loaded, then reveal and start animation reliably.
+  createCurrentImage: function (currentDiv: HTMLElement, url: string) {
+    const img = document.createElement("img");
+    img.id = "ONEDRIVE_PHOTO_IMG";
+    img.style.visibility = "hidden";
+
+    img.addEventListener("load", () => {
+      img.style.visibility = "";
+      // Intentionally trigger a browser reflow/layout recalculation by reading offsetWidth.
+      // This ensures that CSS animations restart properly after the style change.
+      void img.offsetWidth;
+      requestAnimationFrame(() => {
+        currentDiv.classList.add("animated");
+      });
+    });
+
+    img.addEventListener("error", () => {
+      img.style.visibility = "";
+      currentDiv.classList.add("animated");
+    });
+
+    currentDiv.appendChild(img);
+    img.src = url; // set src after handlers to ensure cached images fire events
+  },
+
   render: function (url: string, target: OneDriveMediaItem, album: DriveItem) {
     if (this.suspended) {
       console.info("[MMM-OneDrive] Module is suspended, skipping render");
@@ -160,11 +186,7 @@ Module.register<Config>("MMM-OneDrive", {
     backDiv.appendChild(backimg);
 
     const currentDiv = document.getElementById("ONEDRIVE_PHOTO_CURRENT");
-    const img = document.createElement("img");
-    img.id = "ONEDRIVE_PHOTO_IMG";
-    currentDiv.appendChild(img);
-    img.src = url;
-    currentDiv.classList.add("animated");
+    this.createCurrentImage(currentDiv, url);
 
     const info = document.getElementById("ONEDRIVE_PHOTO_INFO");
     if (this.config.autoInfoPosition) {

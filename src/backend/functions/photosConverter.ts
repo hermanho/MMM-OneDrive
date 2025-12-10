@@ -61,7 +61,7 @@ export const convertHEIC = async ({ filename, data, size }: ConvertHEICParams) =
     }
 
     const jpegData = await sharpBuffer
-      .jpeg({ quality: 95, chromaSubsampling: "4:4:4", progressive: true })
+      .jpeg({ quality: 95, chromaSubsampling: "4:4:4" })
       .keepMetadata()
       .toBuffer();
 

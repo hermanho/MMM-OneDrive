@@ -91,35 +91,5 @@ describe("OneDrivePhotos", () => {
       const result = await photos.getImageFromAlbum(albumId);
       expect(result).toEqual([]);
     });
-
-    it.skip("skips getEXIF for non-image mime types", async () => {
-      mockRequest.mockResolvedValueOnce({
-        value: [
-          {
-            id: "img1",
-            file: { mimeType: "image/jpeg" },
-            "@microsoft.graph.downloadUrl": "url1",
-            name: "photo1.jpg",
-            fileSystemInfo: {},
-            parentReference: { driveId: "drive1" },
-          },
-          {
-            id: "doc1",
-            file: { mimeType: "application/pdf" },
-            "@microsoft.graph.downloadUrl": "url2",
-            name: "doc1.pdf",
-            fileSystemInfo: {},
-            parentReference: { driveId: "drive1" },
-          },
-        ],
-      });
-      const getEXIFSpy = jest.spyOn(photos, "getEXIF").mockResolvedValue({});
-      await photos.getImageFromAlbum(albumId);
-      // getEXIF should be called only for the image/jpeg item
-      expect(getEXIFSpy).toHaveBeenCalledTimes(1);
-      expect(getEXIFSpy).toHaveBeenCalledWith("url1");
-      // Should not be called for non-image mime
-      expect(getEXIFSpy).not.toHaveBeenCalledWith("url2");
-    });
   });
 });
