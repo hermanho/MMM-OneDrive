@@ -1,5 +1,6 @@
 {
   "search.exclude": {
     "MMM-OneDrive.js*": true
-  }
+  },
+  "js/ts.tsdk.path": "node_modules/typescript/lib"
 }

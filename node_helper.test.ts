@@ -31,7 +31,7 @@ describe("nodeHelperObj", () => {
 
     helper = new nodeHelperObj();
     // Provide a minimal config for initializeAfterLoading
-    const config = { albums: [], updateInterval: 60000, sort: "new", condition: {}, showWidth: 1080, showHeight: 1920, timeFormat: "YYYY/MM/DD HH:mm", forceAuthInteractive: false };
+    const config = { albums: [], updateInterval: 60000, sort: "new", condition: {}, showWidth: 1080, showHeight: 1920, timeFormat: "YYYY/MM/DD HH:mm" };
     helper.readFileSafe = jest.fn(() => Promise.resolve(""));
     helper.writeFileSafe = jest.fn(() => Promise.resolve());
     helper.saveCacheConfig = jest.fn(() => Promise.resolve());

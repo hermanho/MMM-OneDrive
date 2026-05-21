@@ -6,6 +6,10 @@
     "noImplicitThis": true,
     "target": "es6",
     "esModuleInterop": true,
-    "moduleResolution": "bundler"
+    "moduleResolution": "bundler",
+    "types": [
+      "node",
+      "magicmirror-module"
+    ]
   }
 }

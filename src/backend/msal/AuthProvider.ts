@@ -1,17 +1,12 @@
-import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, DeviceCodeRequest } from "@azure/msal-node";
+import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, DeviceCodeRequest, Configuration } from "@azure/msal-node";
 import { DeviceCodeResponse } from "@azure/msal-common";
 import sleep from "../functions/sleep";
 
-interface TokenRequestCommon {
-  account: AccountInfo;
-  scopes: string[];
-}
-
 class AuthProvider {
   clientApplication: PublicClientApplication;
-  account: AccountInfo;
+  account: AccountInfo | null;
 
-  constructor(msalConfig) {
+  constructor(msalConfig: Configuration) {
     /**
      * Initialize a public client application. For more information, visit:
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-node/docs/initialize-public-client-application.md
@@ -50,26 +45,26 @@ class AuthProvider {
     }
   }
 
-  async getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback: (response: DeviceCodeResponse) => void = null) {
-    let authResponse: AuthenticationResult | undefined;
+  async getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void) | null = null) {
+    let authResponse: AuthenticationResult | null = null;
     const account = this.account || (await this.getAccount());
 
-    const tokenRequest: TokenRequestCommon = {
-      ...request,
-      account: null,
-    };
-
     if (account) {
-      tokenRequest.account = account;
+      const tokenRequest = {
+        ...request,
+        account: account,
+      };
       authResponse = await this.getTokenSilent(tokenRequest);
     }
+
     if (!authResponse) {
       this.logWarn("Failed to call getTokenSilent");
 
       try {
-        authResponse = await this.getTokenDeviceCode(tokenRequest, deviceCodeCallback);
+        authResponse = await this.getTokenDeviceCode(request, deviceCodeCallback);
       } catch (error) {
         this.logError("Failed to getTokenDeviceCode. ", error);
+        throw error;
       }
     }
 
@@ -83,11 +78,13 @@ class AuthProvider {
     return authResponse;
   }
 
-  private async getTokenSilent(tokenRequest: SilentFlowRequest & TokenRequestCommon, maxRetries = 3) {
+  private async getTokenSilent(tokenRequest: SilentFlowRequest, maxRetries = 3) {
     let attempt = 0;
     while (attempt < maxRetries) {
       try {
-        return await this.clientApplication.acquireTokenSilent(tokenRequest);
+        return await this.clientApplication.acquireTokenSilent({
+          ...tokenRequest,
+        });
       } catch (error) {
         this.logError(error);
         if (error instanceof InteractionRequiredAuthError) {
@@ -105,10 +102,10 @@ class AuthProvider {
         await sleep(2000);
       }
     }
-    return undefined;
+    return null;
   }
 
-  private async getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback"> & TokenRequestCommon, callback: (response: DeviceCodeResponse) => void = null) {
+  private async getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback">, callback: ((response: DeviceCodeResponse) => void) | null = null) {
     const deviceCodeRequest: DeviceCodeRequest = {
       ...tokenRequest,
       deviceCodeCallback: (response) => {
@@ -121,7 +118,7 @@ class AuthProvider {
     this.logInfo("Requesting a token using OAuth2.0 device code flow");
     const authResponse = await this.clientApplication
       .acquireTokenByDeviceCode(deviceCodeRequest);
-    if (authResponse) {
+    if (authResponse?.account) {
       this.account = authResponse.account;
     }
     this.logInfo("getTokenDeviceCode done");

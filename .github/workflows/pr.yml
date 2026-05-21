@@ -22,32 +22,31 @@ jobs:
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
-          node-version: 20
+          node-version: 24
 
-      # ESLint and Prettier must be in `package.json`
       - name: Install Node.js dependencies
         run: npm ci
 
-      - uses: sibiraj-s/action-eslint@v3
-        with:
-          annotations: true
+      - name: Lint with ESLint
+        run: npm run lint:ci
+
   check-build:
     name: Check build
     runs-on: ubuntu-latest
 
     steps:
       - name: Check out Git repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
         with:
-          node-version: 22
+          node-version: 24
 
       - name: Install Node.js dependencies
         run: npm ci
@@ -63,4 +62,3 @@ jobs:
             echo "  🔴 Git repo dirty. Quit."
             exit 1
           fi
-

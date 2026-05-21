@@ -1,7 +1,7 @@
 
 export function createIntervalRunner(render: (() => Promise<unknown>), interval: number) {
   const state = { stopped: false, running: false };
-  let skipWait = null;
+  let skipWait: ((value: unknown) => void) | null = null;
 
   /**
    *
@@ -34,13 +34,13 @@ export function createIntervalRunner(render: (() => Promise<unknown>), interval:
     skipToNext: () => {
       if (skipWait) {
         console.info("[IntervalRunner]: Skip to next cycle");
-        skipWait();
+        skipWait(null);
       }
     },
     stop: () => {
       console.info("[IntervalRunner]: Stopping");
       state.stopped = true;
-      if (skipWait) skipWait();
+      if (skipWait) skipWait(null);
     },
     resume: () => {
       console.info("[IntervalRunner]: To resume");

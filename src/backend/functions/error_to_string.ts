@@ -1,5 +1,5 @@
 export const error_to_string = (error) => {
-  const logMessage = [];
+  const logMessage: string[] = [];
   if (error?.response) {
     // The request was made and the server responded with a status code
     // that falls out of the range of 2xx
@@ -11,8 +11,8 @@ export const error_to_string = (error) => {
     logMessage.push("request:", JSON.stringify(error?.request));
   } else {
     // Something happened in setting up the request that triggered an Error
-    logMessage.push(error?.message);
-    logMessage.push("stack:", error?.stack);
+    logMessage.push(error?.message ?? "Unknown error");
+    logMessage.push("stack:", error?.stack ?? "");
   }
   if (error?.config) {
     logMessage.push("config:", JSON.stringify(error?.config));

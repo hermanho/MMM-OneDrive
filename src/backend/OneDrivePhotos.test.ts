@@ -1,4 +1,11 @@
+jest.mock("./functions/sleep", () => ({
+  __esModule: true,
+  default: jest.fn(() => Promise.resolve()),
+}));
+
 import { OneDrivePhotos } from "./OneDrivePhotos";
+import { Client } from "@microsoft/microsoft-graph-client";
+import sleep from "./functions/sleep";
 import * as logger from "../../tests/logger.mock.js";
 import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 
@@ -90,6 +97,46 @@ describe("OneDrivePhotos", () => {
       mockRequest.mockResolvedValueOnce({ value: [] });
       const result = await photos.getImageFromAlbum(albumId);
       expect(result).toEqual([]);
+    });
+  });
+
+  describe("onAuthReady", () => {
+    let photos: any;
+    let mockAuthProvider: { getToken: jest.Mock<any> };
+    let initSpy: any;
+
+    beforeEach(() => {
+      photos = new (OneDrivePhotos as any)({ config: {}, debug: false });
+      mockAuthProvider = {
+        getToken: jest.fn(),
+      };
+      photos.getAuthProvider = () => mockAuthProvider as any;
+      initSpy = jest.spyOn(Client, "init").mockReturnValue({
+        api: jest.fn().mockReturnValue({
+          get: jest.fn(() => Promise.resolve({ id: "user-id" } as any)),
+        }),
+      } as any);
+      jest.clearAllMocks();
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("restarts device code auth after device code expiration", async () => {
+      mockAuthProvider.getToken
+        .mockRejectedValueOnce({ errorCode: "device_code_expired" })
+        .mockResolvedValueOnce({ accessToken: "token" });
+
+      await (photos as any).onAuthReady(2);
+
+      expect(mockAuthProvider.getToken).toHaveBeenCalledTimes(2);
+      expect(sleep).toHaveBeenCalledWith(2000);
+      expect(initSpy).toHaveBeenCalledTimes(1);
+      expect(logger.warn).toHaveBeenCalledWith(
+        "[MMM-OneDrive] [OneDrivePhotos]",
+        "Retrying onAuthReady, retry count: 0"
+      );
     });
   });
 });
