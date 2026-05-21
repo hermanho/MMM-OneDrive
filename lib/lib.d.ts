@@ -1,8 +1,8 @@
-import { EventEmitter } from 'node:stream';
+import { EventEmitter } from 'node:events';
 
 interface OneDriveMediaItem {
   id: string;
-  baseUrl?: string;
+  baseUrl: string;
   baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
@@ -42,7 +42,9 @@ declare function createIntervalRunner(render: (() => Promise<unknown>), interval
     };
 };
 
-declare const internetStatusListener: EventEmitter<[never]>;
+declare const internetStatusListener: EventEmitter<{
+    online: [];
+}>;
 
 declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size?: {
     width: number;

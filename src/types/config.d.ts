@@ -18,7 +18,6 @@ export type Config = {
   showWidth: number;
   showHeight: number;
   timeFormat: string;
-  forceAuthInteractive: boolean;
   autoInfoPosition: AutoInfoPositionFunction;
 };
 

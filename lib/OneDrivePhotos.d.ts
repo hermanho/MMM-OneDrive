@@ -1,29 +1,25 @@
-import { EventEmitter } from 'events';
-import { PublicClientApplication, AccountInfo, AuthenticationResult } from '@azure/msal-node';
+import { EventEmitter } from 'node:events';
 import { DeviceCodeResponse } from '@azure/msal-common';
+import { PublicClientApplication, AccountInfo, Configuration, SilentFlowRequest, AuthenticationResult } from '@azure/msal-node';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
-interface TokenRequestCommon {
-    account: AccountInfo;
-    scopes: string[];
-}
 declare class AuthProvider {
     clientApplication: PublicClientApplication;
-    account: AccountInfo;
-    constructor(msalConfig: any);
+    account: AccountInfo | null;
+    constructor(msalConfig: Configuration);
     logDebug(...args: any[]): void;
     logInfo(...args: any[]): void;
     logError(...args: any[]): void;
     logWarn(...args: any[]): void;
     logout(): Promise<void>;
-    getToken(request: Omit<TokenRequestCommon, "account">, forceAuthInteractive: boolean, deviceCodeCallback?: (response: DeviceCodeResponse) => void): Promise<AuthenticationResult>;
+    getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback?: ((response: DeviceCodeResponse) => void) | null): Promise<AuthenticationResult | null>;
     private getTokenSilent;
     private getTokenDeviceCode;
     /**
      * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.
      * https://github.com/AzureAD/microsoft-authentication-library-for-js/blob/dev/lib/msal-common/docs/Accounts.md
      */
-    getAccount(): Promise<AccountInfo>;
+    getAccount(): Promise<AccountInfo | null>;
 }
 
 type AutoInfoPositionFunction = boolean | ((album: DriveItem, target: DriveItem) => (number | string)[]) | null;
@@ -44,7 +40,6 @@ type Config = {
   showWidth: number;
   showHeight: number;
   timeFormat: string;
-  forceAuthInteractive: boolean;
   autoInfoPosition: AutoInfoPositionFunction;
 };
 
@@ -61,29 +56,30 @@ interface OneDriveMediaItem {
   baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
-    dateTimeOriginal: string;
+    dateTimeOriginal: string | null;
     width?: number;
     height?: number;
     photo?: {
-      cameraMake?: string;
-      cameraModel?: string;
-      focalLength?: number;
-      apertureFNumber?: number;
-      isoEquivalent?: number;
-      exposureTime?: string;
+      cameraMake?: string | null;
+      cameraModel?: string | null;
+      focalLength?: number | null;
+      apertureFNumber?: number | null;
+      isoEquivalent?: number | null;
+      exposureTime?: string | null;
     };
   };
   parentReference: Partial<{
-    driveId: string;
-    driveType: string;
-    id: string;
-    name: string;
-    path: string;
-  }>;
+    driveId: string | null;
+    driveType: string | null;
+    id: string | null;
+    name: string | null;
+    path: string | null;
+  }> | null;
   filename: string;
   _albumId: string;
 }
 
+type MediaItemValidator = (item: OneDriveMediaItem) => boolean;
 interface OneDrivePhotosParams {
     debug: boolean;
     config: ConfigTransformed;
@@ -98,14 +94,11 @@ declare class OneDrivePhotos extends EventEmitter {
     logError(...args: any[]): void;
     logDebug(...args: any[]): void;
     logWarn(...args: any[]): void;
-    /**
-     *
-     * @param {import("@azure/msal-common").DeviceCodeResponse} response
-     */
-    deviceCodeCallback(response: any): void;
-    private onAuthReady;
+    deviceCodeCallback(response: DeviceCodeResponse): void;
+    private createGraphClient;
+    private ensureGraphClient;
     private request;
-    getAlbums(): Promise<any[]>;
+    getAlbums(): Promise<DriveItem[]>;
     private getAlbumLoop;
     /**
      *
@@ -113,11 +106,11 @@ declare class OneDrivePhotos extends EventEmitter {
      * @returns {Promise<string | null>}
      */
     getAlbumThumbnail(album: any): Promise<any>;
-    getImageFromAlbum(albumId: any, isValid?: any, maxNum?: number): Promise<OneDriveMediaItem[]>;
+    getImageFromAlbum(albumId: string, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[]>;
     refreshItem(item: OneDriveMediaItem): Promise<{
-        baseUrl: any;
+        baseUrl: string;
         baseUrlExpireDateTime: string;
-    }>;
+    } | null | undefined>;
 }
 
 export { OneDrivePhotos };

@@ -31,7 +31,7 @@
 
 ## Authorise OAuth Token
 
-### On-device (SSH or VNC with Desktop UI)
+### Device code (SSH or VNC with Desktop UI)
 
    1. Start MagicMirror as usual
 
@@ -54,23 +54,3 @@
       <img src="images/authorize.png" width="300">
       <br />
       <img src="images/signed-in.png" width="300">
-
-### Sperated machine (legacy way)
-
-   1. Install a copy in your local machine (Win / Mac)
-   1. Update MagicMirror config file `config/config.js` and turn on the flag `forceAuthInteractive: true`
-   1. Start MagicMirror as usual
-
-      ```sh
-      cd ~/MagicMirror
-      npm start
-      ```
-
-   1. At the first time execution, it will be opened a browser and will ask you to login Microsoft account.
-   1. Authorize it and close the browser when done
-      <br />
-      <img src="images/authorize.png" width="300">
-      <br />
-      <img src="images/signed-in.png" width="300">
-      
-   1. Copy the file `msal/token.json` to the folder `MMM-OneDrive` in the remote device

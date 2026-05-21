@@ -1,6 +1,6 @@
-import { EventEmitter } from "node:stream";
+import { EventEmitter } from "node:events";
 
-export const internetStatusListener = new EventEmitter();
+export const internetStatusListener = new EventEmitter<{ "online": [] }>();
 
 export const isOnline = async (timeout = 25000): Promise<boolean> => {
   const testUrls = [

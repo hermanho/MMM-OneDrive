@@ -4,25 +4,25 @@ export interface OneDriveMediaItem {
   baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
-    dateTimeOriginal: string;
+    dateTimeOriginal: string | null;
     width?: number;
     height?: number;
     photo?: {
-      cameraMake?: string;
-      cameraModel?: string;
-      focalLength?: number;
-      apertureFNumber?: number;
-      isoEquivalent?: number;
-      exposureTime?: string;
+      cameraMake?: string | null;
+      cameraModel?: string | null;
+      focalLength?: number | null;
+      apertureFNumber?: number | null;
+      isoEquivalent?: number | null;
+      exposureTime?: string | null;
     };
   };
   parentReference: Partial<{
-    driveId: string;
-    driveType: string;
-    id: string;
-    name: string;
-    path: string;
-  }>;
+    driveId: string | null;
+    driveType: string | null;
+    id: string | null;
+    name: string | null;
+    path: string | null;
+  }> | null;
   filename: string;
   _albumId: string;
 }

@@ -7,7 +7,7 @@ import { convertHEIC } from "./functions/photosConverter";
 
 export { createIntervalRunner } from "./intervalRunner";
 export { internetStatusListener } from "./functions/isOnline";
-
+ 
 class FileError extends Error {
   constructor(message: string) {
     super(message);
