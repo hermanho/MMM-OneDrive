@@ -1,120 +1,182 @@
-import { describe, expect, it, beforeEach, jest, afterEach } from "@jest/globals";
+import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import nodeHelperObj from "./node_helper.js";
 import type { OneDriveMediaItem } from "./types/type";
 
-const createMockOneDrivePhotos = (num: number) => Array(num).fill({})
-  .map((_, i) => ({
-    id: "photo" + i,
-    mediaMetadata: {
-      dateTimeOriginal: new Date().toISOString(),
-    },
-    mimeType: "image/jpeg",
-  } as OneDriveMediaItem));
+const mockGetImageFromAlbum: any = jest.fn();
+const mockRefreshItem: any = jest.fn();
 
-const mockGetImageFromAlbum = jest.fn();
-
-jest.mock("./OneDrivePhotos.js", () =>
-  jest.fn(() => ({
+jest.mock("./lib/OneDrivePhotos.js", () => ({
+  OneDrivePhotos: jest.fn(() => ({
     on: jest.fn(),
-    getAlbums: async () => Promise.resolve([]),
-    getAlbumThumbnail: async () => Promise.resolve("mock-thumbnail-url"),
+    getAlbums: jest.fn(() => Promise.resolve([])),
+    getAlbumThumbnail: jest.fn(() => Promise.resolve("mock-thumbnail-url")),
     getImageFromAlbum: mockGetImageFromAlbum,
-  }))
-);
+    refreshItem: mockRefreshItem,
+  })),
+}));
 
-describe("nodeHelperObj", () => {
+jest.mock("./lib/lib", () => ({
+  createDirIfNotExists: jest.fn(),
+  createIntervalRunner: jest.fn(() => ({
+    skipToNext: jest.fn(),
+    stop: jest.fn(),
+    resume: jest.fn(),
+  })),
+  internetStatusListener: { on: jest.fn() },
+  urlToDisk: jest.fn(() => Promise.resolve(2048)),
+}));
+
+const { createIntervalRunner: mockCreateIntervalRunner, urlToDisk: mockUrlToDisk } = jest.requireMock("./lib/lib") as {
+  createIntervalRunner: any;
+  urlToDisk: any;
+};
+
+const createMockPhoto = (overrides: Partial<OneDriveMediaItem> = {}): OneDriveMediaItem => ({
+  id: "photo-1",
+  baseUrl: "https://example.com/photo.jpg",
+  baseUrlExpireDateTime: new Date(Date.now() + 60_000).toISOString(),
+  mimeType: "image/jpeg",
+  mediaMetadata: {
+    dateTimeOriginal: "2024-01-01T00:00:00.000Z",
+    manualExtractEXIF: null,
+    width: "1920",
+    height: "1080",
+    photo: {},
+  },
+  parentReference: {
+    driveId: "drive-1",
+    driveType: "personal",
+    id: "parent-1",
+    name: "Pictures",
+    path: "/drive/root:/Pictures",
+  },
+  filename: "photo.jpg",
+  _albumId: "album-1",
+  _albumTitle: "Album 1",
+  _indexOfPhotos: 0,
+  ...overrides,
+});
+
+describe("node_helper.js", () => {
   let helper: InstanceType<typeof nodeHelperObj>;
+
   beforeEach(async () => {
-    mockGetImageFromAlbum.mockImplementation((id: string) =>
-      Promise.resolve(createMockOneDrivePhotos(10).map((photo) => ({ ...photo, albumId: "album" + id })))
-    );
+    mockGetImageFromAlbum.mockReset();
+    mockRefreshItem.mockReset();
+    mockCreateIntervalRunner.mockClear();
+    mockUrlToDisk.mockClear();
 
     helper = new nodeHelperObj();
-    // Provide a minimal config for initializeAfterLoading
-    const config = { albums: [], updateInterval: 60000, sort: "new", condition: {}, showWidth: 1080, showHeight: 1920, timeFormat: "YYYY/MM/DD HH:mm" };
+    helper.name = "MMM-OneDrive";
+    helper.path = process.cwd();
+    helper.sendSocketNotification = jest.fn();
     helper.readFileSafe = jest.fn(() => Promise.resolve(""));
     helper.writeFileSafe = jest.fn(() => Promise.resolve());
     helper.saveCacheConfig = jest.fn(() => Promise.resolve());
-    helper.sendSocketNotification = jest.fn(() => Promise.resolve());
-    const mockTryToIntitialize = jest.fn(() => Promise.resolve()) as any;
-    mockTryToIntitialize.initializeTimer = null;
-    helper.tryToIntitialize = mockTryToIntitialize;
-    await helper.initializeAfterLoading(config);
-    helper.localPhotoList = createMockOneDrivePhotos(10);
-    helper.photoRefreshPointer = 0;
+    helper.tryToIntitialize = jest.fn(() => Promise.resolve());
+
+    const config = {
+      albums: [],
+      updateInterval: 60_000,
+      sort: "new",
+      condition: {},
+      showWidth: 1080,
+      showHeight: 1920,
+      timeFormat: "YYYY/MM/DD HH:mm",
+      autoInfoPosition: false,
+    };
+
+    await helper.initializeAfterLoading(config as any);
+    helper.selectedAlbums = [{ id: "album-1", name: "Album 1" } as any];
     jest.clearAllMocks();
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
     helper?.stop();
-    helper = null;
+    jest.clearAllMocks();
   });
 
-
-  describe("getImageList", () => {
-    it("should increase photoRefreshPointer after getImageList call", async () => {
-      helper.localPhotoList = createMockOneDrivePhotos(20);
-      helper.selectedAlbums = Array(10).fill({})
-        .map((_, i) => ({ id: "album" + i, title: "album" + i }));
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.photoRefreshPointer).toBe(7);
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBe(14);
-      await helper.getImageList();
-      expect(helper.localPhotoList.length).toBe(100);
-      expect(helper.photoRefreshPointer).toBe(34);
-    });
-
-    it("should filter out non image mimetype items", async () => {
-      const mimeMap = [
-        "image/jpeg",
-        "image/heic",
-        "image/png",
-        "image/gif",
-        "video/quicktime",
-        "text/plain",
-        "unknown",
+  it("getImageList sorts newest first and resets photoRefreshPointer when out of range", async () => {
+    mockGetImageFromAlbum.mockImplementation((albumId: string, validator?: (item: OneDriveMediaItem) => boolean) => {
+      const items = [
+        createMockPhoto({ id: `${albumId}-old`, mediaMetadata: { dateTimeOriginal: "2024-01-01T00:00:00.000Z", width: "1920", height: "1080", photo: {}, manualExtractEXIF: null } as any }),
+        createMockPhoto({ id: `${albumId}-new`, mediaMetadata: { dateTimeOriginal: "2024-02-01T00:00:00.000Z", width: "1920", height: "1080", photo: {}, manualExtractEXIF: null } as any }),
       ];
-      mockGetImageFromAlbum.mockImplementation((id: string, validator: (photo: OneDriveMediaItem) => boolean) =>
-        Promise.resolve(createMockOneDrivePhotos(mimeMap.length * 3)
-          .map((photo, i) => ({
-            ...photo,
-            albumId: "album" + id,
-            mimeType: mimeMap[i % mimeMap.length],
-          }))
-          .filter(validator))
-      );
-      helper.selectedAlbums = Array(3).fill({})
-        .map((_, i) => ({ id: "album" + i, title: "album" + i }));
-      await helper.getImageList();
-      expect(helper.localPhotoList.length).toBe(36); // 3 albums * 3 items * 4 valid mime types
+      return Promise.resolve(typeof validator === "function" ? items.filter(validator) : items);
     });
+
+    helper.selectedAlbums = [
+      { id: "album-1", name: "Album 1" },
+      { id: "album-2", name: "Album 2" },
+    ] as any;
+    helper.photoRefreshPointer = 99;
+
+    await helper.getImageList();
+
+    expect(helper.localPhotoList).toHaveLength(4);
+    expect(helper.localPhotoList.map((photo) => photo._indexOfPhotos)).toEqual([0, 1, 2, 3]);
+    expect(helper.localPhotoList[0].id).toContain("new");
+    expect(helper.photoRefreshPointer).toBe(0);
   });
 
-  describe("prepAndSendChunk", () => {
-    it("should reset photoRefreshPointer from 0 with remaining", async () => {
-      helper.localPhotoList = createMockOneDrivePhotos(19);
-      helper.photoRefreshPointer = 100; // Out of bounds
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.photoRefreshPointer).toBe(7);
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.photoRefreshPointer).toBe(14);
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.photoRefreshPointer).toBe(19);
-      await helper.prepAndSendChunk(7);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
-      expect(helper.photoRefreshPointer).toBe(7);
+  it("getImageList applies configured filters and excludes videos", async () => {
+    helper.config.condition = {
+      minWidth: 1000,
+      minHeight: 700,
+    };
+
+    mockGetImageFromAlbum.mockImplementation((_albumId: string, validator?: (item: OneDriveMediaItem) => boolean) => {
+      const items = [
+        createMockPhoto({ id: "valid-1" }),
+        createMockPhoto({ id: "too-small", mediaMetadata: { dateTimeOriginal: "2024-01-01T00:00:00.000Z", width: "800", height: "600", photo: {}, manualExtractEXIF: null } as any }),
+        createMockPhoto({ id: "video-1", mimeType: "video/mp4" }),
+      ];
+      return Promise.resolve(typeof validator === "function" ? items.filter(validator) : items);
     });
 
-    it("should handle photoRefreshPointer < 0", async () => {
-      helper.photoRefreshPointer = -10;
-      await helper.prepAndSendChunk(5);
-      expect(helper.photoRefreshPointer).toBeLessThanOrEqual(helper.localPhotoList.length);
+    await helper.getImageList();
+
+    expect(helper.localPhotoList).toHaveLength(1);
+    expect(helper.localPhotoList[0].id).toBe("valid-1");
+  });
+
+  it("prepareShowPhoto sends RENDER_PHOTO with the cached module URL", async () => {
+    helper.localPhotoList = [
+      createMockPhoto({ id: "photo-1", filename: "My Photo.JPG", _albumId: "album-1" }),
+    ];
+    helper.selectedAlbums = [{ id: "album-1", name: "Album 1" } as any];
+
+    const result = await helper.prepareShowPhoto({ photoId: "photo-1" });
+
+    expect(result).toBe(true);
+    expect(mockUrlToDisk.mock.calls[0][0]).toEqual(expect.objectContaining({ id: "photo-1" }));
+    expect(mockUrlToDisk.mock.calls[0][1]).toEqual(expect.stringContaining("cache/photos/my photo.jpg-cache.jpg"));
+    expect(helper.sendSocketNotification).toHaveBeenCalledWith("RENDER_PHOTO", expect.objectContaining({
+      url: "modules/MMM-OneDrive/cache/photos/my%20photo.jpg-cache.jpg",
+      album: expect.objectContaining({ id: "album-1" }),
+    }));
+  });
+
+  it("prepareShowPhoto refreshes expired URLs before rendering", async () => {
+    mockRefreshItem.mockResolvedValue({
+      baseUrl: "https://example.com/refreshed.jpg",
+      baseUrlExpireDateTime: new Date(Date.now() + 120_000).toISOString(),
     });
+
+    const photo = createMockPhoto({
+      id: "photo-expired",
+      filename: "expired.jpg",
+      baseUrl: "https://example.com/expired.jpg",
+      baseUrlExpireDateTime: new Date(Date.now() - 60_000).toISOString(),
+    });
+
+    helper.localPhotoList = [photo];
+    helper.selectedAlbums = [{ id: "album-1", name: "Album 1" } as any];
+
+    const result = await helper.prepareShowPhoto({ photoId: "photo-expired" });
+
+    expect(result).toBe(true);
+    expect(mockRefreshItem).toHaveBeenCalledWith(photo);
+    expect(photo.baseUrl).toBe("https://example.com/refreshed.jpg");
   });
 });

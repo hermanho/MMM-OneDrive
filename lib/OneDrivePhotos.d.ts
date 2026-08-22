@@ -1,18 +1,18 @@
 import { EventEmitter } from 'node:events';
-import { DeviceCodeResponse } from '@azure/msal-common';
 import { PublicClientApplication, AccountInfo, Configuration, SilentFlowRequest, AuthenticationResult } from '@azure/msal-node';
+import { DeviceCodeResponse } from '@azure/msal-common';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
 declare class AuthProvider {
     clientApplication: PublicClientApplication;
-    account: AccountInfo | null;
+    account: AccountInfo | undefined;
     constructor(msalConfig: Configuration);
     logDebug(...args: any[]): void;
     logInfo(...args: any[]): void;
     logError(...args: any[]): void;
     logWarn(...args: any[]): void;
     logout(): Promise<void>;
-    getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback?: ((response: DeviceCodeResponse) => void) | null): Promise<AuthenticationResult | null>;
+    getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void)): Promise<AuthenticationResult | null>;
     private getTokenSilent;
     private getTokenDeviceCode;
     /**
@@ -56,9 +56,9 @@ interface OneDriveMediaItem {
   baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
-    dateTimeOriginal: string | null;
-    width?: number;
-    height?: number;
+    dateTimeOriginal: string | null | undefined;
+    width?: number | null | undefined;
+    height?: number | null | undefined;
     photo?: {
       cameraMake?: string | null;
       cameraModel?: string | null;
@@ -74,7 +74,7 @@ interface OneDriveMediaItem {
     id: string | null;
     name: string | null;
     path: string | null;
-  }> | null;
+  }> | null | undefined;
   filename: string;
   _albumId: string;
 }
@@ -94,9 +94,12 @@ declare class OneDrivePhotos extends EventEmitter {
     logError(...args: any[]): void;
     logDebug(...args: any[]): void;
     logWarn(...args: any[]): void;
-    deviceCodeCallback(response: DeviceCodeResponse): void;
-    private createGraphClient;
-    private ensureGraphClient;
+    /**
+     *
+     * @param {import("@azure/msal-common").DeviceCodeResponse} response
+     */
+    deviceCodeCallback(response: any): void;
+    private onAuthReady;
     private request;
     getAlbums(): Promise<DriveItem[]>;
     private getAlbumLoop;
@@ -106,9 +109,9 @@ declare class OneDrivePhotos extends EventEmitter {
      * @returns {Promise<string | null>}
      */
     getAlbumThumbnail(album: any): Promise<any>;
-    getImageFromAlbum(albumId: string, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[]>;
+    getImageFromAlbum(albumId: any, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[] | undefined>;
     refreshItem(item: OneDriveMediaItem): Promise<{
-        baseUrl: string;
+        baseUrl: any;
         baseUrlExpireDateTime: string;
     } | null | undefined>;
 }

@@ -4,7 +4,7 @@
     "noImplicitAny": false,
     "noUnusedLocals": true,
     "noImplicitThis": true,
-    "target": "es6",
+    "target": "es2021",
     "esModuleInterop": true,
     "moduleResolution": "bundler",
     "types": [

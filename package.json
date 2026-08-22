@@ -67,5 +67,9 @@
   },
   "engines": {
     "node": ">=22.21.1 <23 || >=24"
+  },
+  "allowScripts": {
+    "fsevents@2.3.3": true,
+    "unrs-resolver@1.12.2": true
   }
 }
