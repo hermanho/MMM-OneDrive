@@ -1,6 +1,6 @@
 import { EventEmitter } from 'node:events';
-import { PublicClientApplication, AccountInfo, Configuration, SilentFlowRequest, AuthenticationResult } from '@azure/msal-node';
 import { DeviceCodeResponse } from '@azure/msal-common';
+import { PublicClientApplication, AccountInfo, Configuration, SilentFlowRequest, AuthenticationResult } from '@azure/msal-node';
 import { DriveItem } from '@microsoft/microsoft-graph-types';
 
 declare class AuthProvider {
@@ -94,11 +94,7 @@ declare class OneDrivePhotos extends EventEmitter {
     logError(...args: any[]): void;
     logDebug(...args: any[]): void;
     logWarn(...args: any[]): void;
-    /**
-     *
-     * @param {import("@azure/msal-common").DeviceCodeResponse} response
-     */
-    deviceCodeCallback(response: any): void;
+    deviceCodeCallback(response: DeviceCodeResponse): void;
     private onAuthReady;
     private request;
     getAlbums(): Promise<DriveItem[]>;
@@ -109,7 +105,7 @@ declare class OneDrivePhotos extends EventEmitter {
      * @returns {Promise<string | null>}
      */
     getAlbumThumbnail(album: any): Promise<any>;
-    getImageFromAlbum(albumId: any, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[] | undefined>;
+    getImageFromAlbum(albumId: string, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[]>;
     refreshItem(item: OneDriveMediaItem): Promise<{
         baseUrl: any;
         baseUrlExpireDateTime: string;

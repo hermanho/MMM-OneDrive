@@ -169,6 +169,47 @@ describe("OneDrivePhotos", () => {
     });
   });
 
+  describe("auth state handling", () => {
+    it("throws a clear error when request is called before auth client initialization", async () => {
+      const unauthenticatedPhotos = createPhotos();
+
+      await expect((unauthenticatedPhotos as any).request("testRequest", "/me", "get", null)).rejects.toThrow(
+        "Graph client is not initialized before request() [testRequest]. Ensure onAuthReady() succeeds before making requests.",
+      );
+
+      expect(logger.error).toHaveBeenCalledWith(
+        "[MMM-OneDrive] [OneDrivePhotos]",
+        "Graph client is not initialized before request() [testRequest]. Ensure onAuthReady() succeeds before making requests.",
+      );
+    });
+
+    it("throws when the Graph /me response is missing a user id", async () => {
+      initSpy.mockReturnValue({
+        api: jest.fn().mockReturnValue({
+          get: jest.fn(() => Promise.resolve({})),
+        }),
+      } as any);
+
+      await expect((photos as any).onAuthReady()).rejects.toThrow(
+        "Microsoft Graph /me response is missing required user id",
+      );
+
+      expect(logger.error).toHaveBeenCalledWith(
+        "[MMM-OneDrive] [OneDrivePhotos]",
+        "Microsoft Graph /me response is missing required user id",
+      );
+    });
+
+    it("emits authSuccess on each successful onAuthReady call", async () => {
+      const emitSpy = jest.spyOn(photos, "emit");
+
+      await (photos as any).onAuthReady();
+      await (photos as any).onAuthReady();
+
+      expect(emitSpy.mock.calls.filter(([eventName]) => eventName === "authSuccess")).toHaveLength(2);
+    });
+  });
+
   describe("auth retry behavior", () => {
     it("retries onAuthReady when Graph returns InvalidAuthenticationToken", async () => {
       mockAuthProvider.getToken

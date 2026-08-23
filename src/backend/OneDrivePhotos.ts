@@ -4,6 +4,7 @@ import { EventEmitter } from "node:events";
 import crypto from "node:crypto";
 import { Client, PageCollection } from "@microsoft/microsoft-graph-client";
 import { LogLevel } from "@azure/msal-node";
+import { DeviceCodeResponse } from "@azure/msal-common";
 import Log from "logger";
 import { error_to_string } from "./functions/error_to_string";
 import { msalConfig, protectedResources } from "./msal/authConfig";
@@ -85,11 +86,7 @@ export class OneDrivePhotos extends EventEmitter {
     Log.warn("[MMM-OneDrive] [OneDrivePhotos]", ...args);
   }
 
-  /**
-   *
-   * @param {import("@azure/msal-common").DeviceCodeResponse} response
-   */
-  deviceCodeCallback(response) {
+  deviceCodeCallback(response: DeviceCodeResponse) {
     const expireDt = new Date(Date.now() + response.expiresIn * 1000);
     const message = response.message + `\nToken will be expired at ${expireDt.toLocaleTimeString(undefined, { hour12: true })}.`;
     this.emit("errorMessage", message);
@@ -104,9 +101,9 @@ export class OneDrivePhotos extends EventEmitter {
       };
       try {
         const tokenResponse = await this.getAuthProvider().getToken(tokenRequest, (r) => this.deviceCodeCallback(r));
-        if (!tokenResponse) {
-          this.logError("Failed to acquire token");
-          throw new Error("Failed to acquire token");
+        if (!tokenResponse?.accessToken) {
+          this.logError("No access token returned from AuthProvider.getToken");
+          throw new Error("No access token returned from AuthProvider.getToken");
         }
         this.log("onAuthReady token responded");
         this.#graphClient = Client.init({
@@ -115,7 +112,14 @@ export class OneDrivePhotos extends EventEmitter {
           },
         });
         const graphResponse = await this.#graphClient.api(protectedResources.graphMe.endpoint).get();
-        this.#userId = graphResponse.id;
+        const userId = graphResponse?.id;
+        if (!userId) {
+          this.#graphClient = undefined;
+          const err = new Error("Microsoft Graph /me response is missing required user id");
+          this.logError(err.message);
+          throw err;
+        }
+        this.#userId = userId;
         this.log(`onAuthReady done, retry count: ${attempt}`);
         this.emit("authSuccess");
         return;
@@ -123,6 +127,7 @@ export class OneDrivePhotos extends EventEmitter {
         this.logError("onAuthReady error", err);
         this.logWarn(`Retrying onAuthReady, retry count: ${attempt}`);
 
+        this.#graphClient = undefined;
         // UnknownError is GraphError
         // TypeError is usually caused by network issues
         const errorCode = (err as GraphLikeError).code ?? (err as GraphLikeError).errorCode ?? "";
@@ -143,8 +148,13 @@ export class OneDrivePhotos extends EventEmitter {
 
   private async request<T>(logContext, url, method = "get", data = null) {
     this.logDebug((logContext ? `[${logContext}]` : "") + ` request ${method} URL: ${url}`);
+    if (!this.#graphClient) {
+      const message = `Graph client is not initialized before request()${logContext ? ` [${logContext}]` : ""}. Ensure onAuthReady() succeeds before making requests.`;
+      this.logError(message);
+      throw new Error(message);
+    }
     try {
-      const ret = await this.#graphClient?.api(url)[method](data);
+      const ret = await this.#graphClient.api(url)[method](data);
       return ret as T;
     } catch (error) {
       this.logError((logContext ? `[${logContext}]` : "") + ` request fail ${method} URL: ${url}`);
@@ -227,7 +237,7 @@ export class OneDrivePhotos extends EventEmitter {
     }
   }
 
-  async getImageFromAlbum(albumId, isValid: MediaItemValidator | null = null, maxNum = 99999) {
+  async getImageFromAlbum(albumId: string, isValid: MediaItemValidator | null = null, maxNum = 99999) {
     await this.onAuthReady();
     const url = protectedResources.getChildrenInAlbum.endpoint.replace("$$userId$$", this.#userId!).replace("$$albumId$$", albumId);
 
@@ -251,6 +261,10 @@ export class OneDrivePhotos extends EventEmitter {
             this.log(`Parsing ${childrenItems.length} items in ${albumId}`);
             let validCount = 0;
             for (const item of childrenItems) {
+              if (!item["@microsoft.graph.downloadUrl"]) {
+                this.logWarn(`Item ${item.id} in album ${albumId} does not have downloadUrl, skipped`);
+                continue;
+              }
               const itemVal: OneDriveMediaItem = {
                 id: item.id!,
                 _albumId: albumId,
@@ -317,7 +331,7 @@ export class OneDrivePhotos extends EventEmitter {
               return list;
             }
           } else {
-            this.logWarn(`${albumId}`, albumId);
+            this.logWarn(albumId, albumId);
             done = true;
             return list;
           }
@@ -327,6 +341,7 @@ export class OneDrivePhotos extends EventEmitter {
           throw err;
         }
       }
+      return list;
     };
     return await getImages(url);
   }
