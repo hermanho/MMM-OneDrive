@@ -4,9 +4,9 @@ export interface OneDriveMediaItem {
   baseUrlExpireDateTime?: string;
   mimeType: string;
   mediaMetadata: {
-    dateTimeOriginal: string | null;
-    width?: number;
-    height?: number;
+    dateTimeOriginal: string | null | undefined;
+    width?: number | null | undefined;
+    height?: number | null | undefined;
     photo?: {
       cameraMake?: string | null;
       cameraModel?: string | null;
@@ -22,7 +22,7 @@ export interface OneDriveMediaItem {
     id: string | null;
     name: string | null;
     path: string | null;
-  }> | null;
+  }> | null | undefined;
   filename: string;
   _albumId: string;
 }

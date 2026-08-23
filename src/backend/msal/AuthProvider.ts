@@ -4,7 +4,7 @@ import sleep from "../functions/sleep";
 
 class AuthProvider {
   clientApplication: PublicClientApplication;
-  account: AccountInfo | null;
+  account: AccountInfo | undefined;
 
   constructor(msalConfig: Configuration) {
     /**
@@ -13,7 +13,7 @@ class AuthProvider {
      */
     this.clientApplication = new PublicClientApplication(msalConfig);
 
-    this.account = null;
+    this.account = undefined;
   }
 
   logDebug(...args) {
@@ -39,13 +39,14 @@ class AuthProvider {
     const cache = this.clientApplication.getTokenCache();
     try {
       await cache.removeAccount(this.account);
-      this.account = null;
+      this.account = undefined;
     } catch (error) {
-      this.logError(error);
+      this.account = undefined;
+      this.logError("Failed to clear token cache.", error);
     }
   }
 
-  async getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void) | null = null) {
+  async getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void)) {
     let authResponse: AuthenticationResult | null = null;
     const account = this.account || (await this.getAccount());
 
