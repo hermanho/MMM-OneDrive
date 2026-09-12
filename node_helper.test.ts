@@ -1,35 +1,57 @@
-import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
-import nodeHelperObj from "./node_helper.js";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import type { OneDriveMediaItem } from "./types/type";
 
-const mockGetImageFromAlbum: any = jest.fn();
-const mockRefreshItem: any = jest.fn();
+const commonJsMocks = await vi.hoisted(async () => {
+  const { mockCommonJsModule } = await import("./tests/mockCommonJsModule");
+  const mockGetImageFromAlbum: any = vi.fn();
+  const mockRefreshItem: any = vi.fn();
+  const mockCreateIntervalRunner: any = vi.fn(() => ({
+    skipToNext: vi.fn(),
+    stop: vi.fn(),
+    resume: vi.fn(),
+  }));
+  const mockUrlToDisk: any = vi.fn(() => Promise.resolve(2048));
 
-jest.mock("./lib/OneDrivePhotos.js", () => ({
-  OneDrivePhotos: jest.fn(() => ({
-    on: jest.fn(),
-    getAlbums: jest.fn(() => Promise.resolve([])),
-    getAlbumThumbnail: jest.fn(() => Promise.resolve("mock-thumbnail-url")),
-    getImageFromAlbum: mockGetImageFromAlbum,
-    refreshItem: mockRefreshItem,
-  })),
-}));
+  const nodeHelper = {
+    create(classDefinition: object) {
+      return function NodeHelperMock() {
+        return classDefinition;
+      };
+    },
+  };
+  await mockCommonJsModule("node_helper", nodeHelper);
+  await mockCommonJsModule("logger", {
+    info: vi.fn(),
+  });
+  await mockCommonJsModule("./lib/OneDrivePhotos.js", {
+    OneDrivePhotos: vi.fn(function () {
+      return {
+        on: vi.fn(),
+        getAlbums: vi.fn(() => Promise.resolve([])),
+        getAlbumThumbnail: vi.fn(() => Promise.resolve("mock-thumbnail-url")),
+        getImageFromAlbum: mockGetImageFromAlbum,
+        refreshItem: mockRefreshItem,
+      };
+    }),
+  });
+  await mockCommonJsModule("./lib/lib", {
+    createDirIfNotExists: vi.fn(),
+    createIntervalRunner: mockCreateIntervalRunner,
+    internetStatusListener: { on: vi.fn() },
+    urlToDisk: mockUrlToDisk,
+  });
 
-jest.mock("./lib/lib", () => ({
-  createDirIfNotExists: jest.fn(),
-  createIntervalRunner: jest.fn(() => ({
-    skipToNext: jest.fn(),
-    stop: jest.fn(),
-    resume: jest.fn(),
-  })),
-  internetStatusListener: { on: jest.fn() },
-  urlToDisk: jest.fn(() => Promise.resolve(2048)),
-}));
+  return {
+    mockGetImageFromAlbum,
+    mockRefreshItem,
+    mockCreateIntervalRunner,
+    mockUrlToDisk,
+  };
+});
 
-const { createIntervalRunner: mockCreateIntervalRunner, urlToDisk: mockUrlToDisk } = jest.requireMock("./lib/lib") as {
-  createIntervalRunner: any;
-  urlToDisk: any;
-};
+import nodeHelperObj from "./node_helper.js";
+
+const { mockGetImageFromAlbum, mockRefreshItem, mockCreateIntervalRunner, mockUrlToDisk } = commonJsMocks;
 
 const createMockPhoto = (overrides: Partial<OneDriveMediaItem> = {}): OneDriveMediaItem => ({
   id: "photo-1",
@@ -69,11 +91,11 @@ describe("node_helper.js", () => {
     helper = new nodeHelperObj();
     helper.name = "MMM-OneDrive";
     helper.path = process.cwd();
-    helper.sendSocketNotification = jest.fn();
-    helper.readFileSafe = jest.fn(() => Promise.resolve(""));
-    helper.writeFileSafe = jest.fn(() => Promise.resolve());
-    helper.saveCacheConfig = jest.fn(() => Promise.resolve());
-    helper.tryToIntitialize = jest.fn(() => Promise.resolve());
+    helper.sendSocketNotification = vi.fn();
+    helper.readFileSafe = vi.fn(() => Promise.resolve(""));
+    helper.writeFileSafe = vi.fn(() => Promise.resolve());
+    helper.saveCacheConfig = vi.fn(() => Promise.resolve());
+    helper.tryToIntitialize = vi.fn(() => Promise.resolve());
 
     const config = {
       albums: [],
@@ -88,12 +110,12 @@ describe("node_helper.js", () => {
 
     await helper.initializeAfterLoading(config as any);
     helper.selectedAlbums = [{ id: "album-1", name: "Album 1" } as any];
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
     helper?.stop();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   it("getImageList sorts newest first and resets photoRefreshPointer when out of range", async () => {
