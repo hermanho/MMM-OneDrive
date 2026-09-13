@@ -1,10 +1,10 @@
-import banner2 from "rollup-plugin-banner2";
 import commonjs from "@rollup/plugin-commonjs";
 import nodeResolve from "@rollup/plugin-node-resolve";
 import terser from "@rollup/plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import { dts } from "rollup-plugin-dts";
 import pkg from "./package.json" with { type: "json" };
+import path from "node:path";
 
 const bannerText = `/*! *****************************************************************************
   ${pkg.name}
@@ -28,8 +28,9 @@ export default [
   {
     input: "src/frontend/main.ts",
     external: ["logger", "moment"],
-    plugins: [typescript({ tsconfig: "./src/frontend/tsconfig.json" }), nodeResolve(), commonjs(), terser(), banner2(() => bannerText)],
+    plugins: [typescript({ tsconfig: "./src/frontend/tsconfig.json" }), nodeResolve({ jail: path.resolve(".") }), commonjs(), terser()],
     output: {
+      banner: bannerText,
       file: `./${pkg.main}`,
       format: "iife",
       sourcemap: true,
@@ -45,9 +46,11 @@ export default [
       external: ["node_helper", "logger", "sharp", /node:.*/, /node_modules\/jpeg-js/, /node_modules\/libheif-js/],
       plugins: [typescript({
         tsconfig: "./src/backend/tsconfig.json",
-      }), nodeResolve({
+      }),
+      nodeResolve({
         preferBuiltins: true,
         browser: false,
+        jail: path.resolve("."),
       }), commonjs(), terser({
         mangle: false,
         format: {
@@ -56,8 +59,9 @@ export default [
           beautify: true,
         },
         toplevel: true,
-      }), banner2(() => bannerText)],
+      })],
       output: {
+        banner: bannerText,
         file: `./lib/${file}.js`,
         format: "cjs",
         globals: {

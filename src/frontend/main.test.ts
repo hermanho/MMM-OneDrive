@@ -1,13 +1,17 @@
-(global as any).Module = {
-  definitions: {},
-  register(name: string, definition: any) {
-    this.definitions[name] = definition;
-  },
-};
-(global as any).document = {};
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
+vi.hoisted(() => {
+  (global as any).Module = {
+    definitions: {},
+    register(name: string, definition: any) {
+      this.definitions[name] = definition;
+    },
+  };
+  (global as any).document = {};
+});
+
 import "./main";
+
 import type { OneDriveMediaItem } from "../../types/type";
 import type { DriveItem } from "@microsoft/microsoft-graph-types";
 
@@ -154,9 +158,9 @@ const createModuleInstance = (configOverrides: Record<string, unknown> = {}) => 
     ...configOverrides,
   },
   data: { position: "top_left" },
-  sendSocketNotification: jest.fn(),
-  cleanUpPresentPhotoMemory: jest.fn(),
-  cleanUpAlbumCoverMemory: jest.fn(),
+  sendSocketNotification: vi.fn(),
+  cleanUpPresentPhotoMemory: vi.fn(),
+  cleanUpAlbumCoverMemory: vi.fn(),
 });
 
 describe("main.ts", () => {
@@ -165,8 +169,8 @@ describe("main.ts", () => {
   });
 
   afterEach(() => {
-    jest.clearAllMocks();
-    jest.useRealTimers();
+    vi.clearAllMocks();
+    vi.useRealTimers();
   });
 
   it("starts with normalized config and transforms RegExp albums for INIT", () => {
@@ -192,7 +196,7 @@ describe("main.ts", () => {
 
   it("delegates RENDER_PHOTO socket notifications to render and stores state", () => {
     const instance = createModuleInstance();
-    instance.render = jest.fn();
+    instance.render = vi.fn();
     const payload = {
       photo: createPhoto(),
       album: createAlbum(),
