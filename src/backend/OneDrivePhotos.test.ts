@@ -1,18 +1,18 @@
-jest.mock("./functions/sleep", () => ({
-  __esModule: true,
-  default: jest.fn(() => Promise.resolve()),
+import { afterEach, beforeEach, describe, expect, it, vi, type MockInstance } from "vitest";
+
+vi.mock("./functions/sleep", () => ({
+  default: vi.fn(() => Promise.resolve()),
 }));
 
-import { afterEach, beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { Client, GraphError } from "@microsoft/microsoft-graph-client";
 import sleep from "./functions/sleep";
-import * as logger from "../../tests/logger.mock.js";
+import logger from "../../tests/logger.mock";
 import { OneDrivePhotos } from "./OneDrivePhotos";
 
 describe("OneDrivePhotos", () => {
   let photos: any;
   let mockAuthProvider: { getToken: any };
-  let initSpy: jest.SpiedFunction<typeof Client.init>;
+  let initSpy: MockInstance<typeof Client.init>;
 
   const createPhotos = () => new (OneDrivePhotos as any)({
     config: {},
@@ -22,8 +22,8 @@ describe("OneDrivePhotos", () => {
 
   const mockSuccessfulGraphMe = () => {
     initSpy.mockReturnValue({
-      api: jest.fn().mockReturnValue({
-        get: jest.fn(() => Promise.resolve({ id: "user-id" })),
+      api: vi.fn().mockReturnValue({
+        get: vi.fn(() => Promise.resolve({ id: "user-id" })),
       }),
     } as any);
   };
@@ -31,27 +31,27 @@ describe("OneDrivePhotos", () => {
   beforeEach(() => {
     photos = createPhotos();
     mockAuthProvider = {
-      getToken: (jest.fn() as any).mockResolvedValue({
+      getToken: (vi.fn() as any).mockResolvedValue({
         accessToken: "token",
         expiresOn: new Date(Date.now() + 60 * 60 * 1000),
       }),
     };
     photos.getAuthProvider = () => mockAuthProvider as any;
-    initSpy = jest.spyOn(Client, "init");
+    initSpy = vi.spyOn(Client, "init");
     mockSuccessfulGraphMe();
-    jest.clearAllMocks();
+    vi.clearAllMocks();
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    vi.restoreAllMocks();
   });
 
   describe("getImageFromAlbum", () => {
-    let mockRequest: jest.SpiedFunction<any>;
+    let mockRequest: MockInstance<any>;
     const albumId = "test-album-id";
 
     beforeEach(() => {
-      mockRequest = jest.spyOn(photos, "request");
+      mockRequest = vi.spyOn(photos, "request");
     });
 
     it("returns all valid images from a single page", async () => {
@@ -185,8 +185,8 @@ describe("OneDrivePhotos", () => {
 
     it("throws when the Graph /me response is missing a user id", async () => {
       initSpy.mockReturnValue({
-        api: jest.fn().mockReturnValue({
-          get: jest.fn(() => Promise.resolve({})),
+        api: vi.fn().mockReturnValue({
+          get: vi.fn(() => Promise.resolve({})),
         }),
       } as any);
 
@@ -201,7 +201,7 @@ describe("OneDrivePhotos", () => {
     });
 
     it("emits authSuccess on each successful onAuthReady call", async () => {
-      const emitSpy = jest.spyOn(photos, "emit");
+      const emitSpy = vi.spyOn(photos, "emit");
 
       await (photos as any).onAuthReady();
       await (photos as any).onAuthReady();
@@ -218,8 +218,8 @@ describe("OneDrivePhotos", () => {
 
       initSpy
         .mockReturnValueOnce({
-          api: jest.fn().mockReturnValue({
-            get: jest.fn(() => {
+          api: vi.fn().mockReturnValue({
+            get: vi.fn(() => {
               const error = new GraphError(401, "InvalidAuthenticationToken");
               error.code = "InvalidAuthenticationToken";
               return Promise.reject(error);
@@ -227,12 +227,12 @@ describe("OneDrivePhotos", () => {
           }),
         } as any)
         .mockReturnValueOnce({
-          api: jest.fn().mockReturnValue({
-            get: jest.fn(() => Promise.resolve({ id: "user-id" })),
+          api: vi.fn().mockReturnValue({
+            get: vi.fn(() => Promise.resolve({ id: "user-id" })),
           }),
         } as any);
 
-      jest.spyOn(photos, "request").mockResolvedValueOnce({ value: [] });
+      vi.spyOn(photos, "request").mockResolvedValueOnce({ value: [] });
 
       const result = await photos.getImageFromAlbum("album-1");
 
