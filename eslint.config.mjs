@@ -53,7 +53,6 @@ export default defineConfig([
         Log: true,
         MM: true,
         Module: true,
-        moment: true,
         define: true,
         PhotosConverter: true,
       },

@@ -7,7 +7,7 @@
 const fs = require("node:fs");
 const { writeFile, readFile, mkdir } = require("node:fs/promises");
 const path = require("node:path");
-const moment = require("moment");
+const dayjs = require("dayjs");
 const { Readable } = require("node:stream");
 const { finished } = require("node:stream/promises");
 const { RE2 } = require("re2-wasm");
@@ -427,9 +427,9 @@ const nodeHelperObject = {
       if (!photo.hasOwnProperty("mediaMetadata")) return false;
       const data = photo.mediaMetadata;
       if (photo.mimeType.startsWith("video/")) return false;
-      const ct = moment(data.dateTimeOriginal);
-      if (condition.fromDate && moment(condition.fromDate).isAfter(ct)) return false;
-      if (condition.toDate && moment(condition.toDate).isBefore(ct)) return false;
+      const ct = dayjs(data.dateTimeOriginal);
+      if (condition.fromDate && dayjs(condition.fromDate).isAfter(ct)) return false;
+      if (condition.toDate && dayjs(condition.toDate).isBefore(ct)) return false;
       if (condition.minWidth && Number(condition.minWidth) > Number(data.width)) return false;
       if (condition.minHeight && Number(condition.minHeight) > Number(data.height)) return false;
       if (condition.maxWidth && Number(condition.maxWidth) < Number(data.width)) return false;
@@ -454,8 +454,8 @@ const nodeHelperObject = {
       if (photos.length > 0) {
         if (this.config.sort === "new" || this.config.sort === "old") {
           photos.sort((a, b) => {
-            const at = moment(a.mediaMetadata.dateTimeOriginal);
-            const bt = moment(b.mediaMetadata.dateTimeOriginal);
+            const at = dayjs(a.mediaMetadata.dateTimeOriginal);
+            const bt = dayjs(b.mediaMetadata.dateTimeOriginal);
             if (at.isBefore(bt) && this.config.sort === "new") return 1;
             if (at.isAfter(bt) && this.config.sort === "old") return 1;
             return -1;

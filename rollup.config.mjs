@@ -27,7 +27,7 @@ const bannerText = `/*! ********************************************************
 export default [
   {
     input: "src/frontend/main.ts",
-    external: ["logger", "moment"],
+    external: ["logger"],
     plugins: [typescript({ tsconfig: "./src/frontend/tsconfig.json" }), nodeResolve({ jail: path.resolve(".") }), commonjs(), terser()],
     output: {
       banner: bannerText,
@@ -36,7 +36,6 @@ export default [
       sourcemap: true,
       globals: {
         logger: "Log",
-        moment: "moment",
       },
     },
   },
