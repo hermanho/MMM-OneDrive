@@ -27,12 +27,12 @@
     "OneDrive"
   ],
   "dependencies": {
-    "@azure/msal-node": "5.4.0",
+    "@azure/msal-node": "6.0.1",
     "@microsoft/microsoft-graph-client": "3.0.7",
     "dayjs": "1.11.23",
     "heic-convert": "2.1.0",
     "image-type": "6.1.0",
-    "libheif-js": "1.19.8",
+    "libheif-js": "1.23.2",
     "re2-wasm": "1.0.2",
     "sharp": "0.35.4"
   },
@@ -51,12 +51,12 @@
     "@types/magicmirror-module": "2.16.6",
     "eslint-plugin-jsdoc": "64.3.8",
     "eslint-plugin-tsdoc": "0.5.2",
-    "globals": "17.7.0",
-    "rollup": "4.62.2",
-    "rollup-plugin-dts": "6.4.1",
+    "globals": "17.12.0",
+    "rollup": "4.63.3",
+    "rollup-plugin-dts": "6.5.1",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.64.0",
-    "vitest": "5.0.0"
+    "typescript-eslint": "8.70.0",
+    "vitest": "5.0.1"
   },
   "engines": {
     "node": ">=22.21.1 <23 || >=24"
