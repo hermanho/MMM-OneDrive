@@ -1,13 +1,10 @@
 import { AutoInfoPositionFunction, Config, ConfigTransformed } from "../types/config";
-import type MomentLib from "moment";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
 import type { OneDriveMediaItem } from "../../types/type";
 import type { DriveItem } from "@microsoft/microsoft-graph-types";
 
-/**
- * Global or injected variable declarations
- * moment.js is lazy loaded so not available when script is loaded.
- */
-declare const moment: typeof MomentLib;
+dayjs.extend(relativeTime);
 
 Module.register<Config>("MMM-OneDrive", {
   defaults: {
@@ -35,7 +32,7 @@ Module.register<Config>("MMM-OneDrive", {
   suspended: false,
 
   getScripts() {
-    return ["moment.js"];
+    return [];
   },
   getStyles: function () {
     return ["MMM-OneDrive.css"];
@@ -235,11 +232,9 @@ Module.register<Config>("MMM-OneDrive", {
       photoTime.classList.add("photoTime");
       const dateTimeOriginal = target.mediaMetadata?.dateTimeOriginal;
       if (dateTimeOriginal) {
-        const photoMoment = moment(dateTimeOriginal);
-        if (photoMoment.isValid()) {
-          {
-            photoTime.textContent = this.config.timeFormat === "relative" ? photoMoment.fromNow() : photoMoment.format(this.config.timeFormat);
-          }
+        const photoDate = dayjs(dateTimeOriginal);
+        if (photoDate.isValid()) {
+          photoTime.textContent = this.config.timeFormat === "relative" ? photoDate.fromNow() : photoDate.format(this.config.timeFormat);
         }
       }
 
