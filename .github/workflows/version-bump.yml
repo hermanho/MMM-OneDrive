@@ -2,7 +2,7 @@ name: Version Bump on Dependabot PR
 
 on:
   pull_request:
-    types: [opened, reopened, synchronized]
+    types: [opened, reopened, synchronize]
     branches:
       - main  # or your default branch
 
@@ -30,6 +30,9 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email 'github-actions[bot]@users.noreply.github.com'
 
+      - name: Install Node.js dependencies
+        run: npm ci
+
       - name: Check whether version bump is needed
         id: version-check
         run: |
@@ -38,11 +41,13 @@ jobs:
 
           CURRENT_VERSION=$(node -p "require('./package.json').version")
           BASE_VERSION=$(git show "origin/$BASE_REF:package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+          BUMP_COMMIT_COUNT=$(git log --format=%s "origin/$BASE_REF..HEAD" --grep='^chore: bump version for dependency updates$' | wc -l | tr -d ' ')
 
           echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
           echo "base_version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
+          echo "bump_commit_count=$BUMP_COMMIT_COUNT" >> "$GITHUB_OUTPUT"
 
-          if [ "$CURRENT_VERSION" = "$BASE_VERSION" ]; then
+          if [ "$CURRENT_VERSION" = "$BASE_VERSION" ] && [ "$BUMP_COMMIT_COUNT" = "0" ]; then
             echo "should_bump=true" >> "$GITHUB_OUTPUT"
           else
             echo "should_bump=false" >> "$GITHUB_OUTPUT"
@@ -53,9 +58,14 @@ jobs:
         run: |
           npm version patch --no-git-tag-version
 
+      - name: Build generated artifacts
+        if: steps.version-check.outputs.should_bump == 'true'
+        run: |
+          npm run build
+
       - name: Commit and Push Changes
         if: steps.version-check.outputs.should_bump == 'true'
         run: |
-          git add package.json package-lock.json
+          git add package.json package-lock.json MMM-OneDrive.js MMM-OneDrive.js.map lib/
           git commit -m "chore: bump version for dependency updates"
           git push
