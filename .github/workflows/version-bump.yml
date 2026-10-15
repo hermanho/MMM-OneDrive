@@ -1,0 +1,61 @@
+name: Version Bump on Dependabot PR
+
+on:
+  pull_request:
+    types: [opened, reopened, synchronized]
+    branches:
+      - main  # or your default branch
+
+jobs:
+  version-bump:
+    if: github.actor == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e
+        with:
+          node-version: 24
+
+      - name: Configure Git
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Check whether version bump is needed
+        id: version-check
+        run: |
+          BASE_REF="${{ github.event.pull_request.base.ref }}"
+          git fetch origin "$BASE_REF" --depth=1
+
+          CURRENT_VERSION=$(node -p "require('./package.json').version")
+          BASE_VERSION=$(git show "origin/$BASE_REF:package.json" | node -p "JSON.parse(require('fs').readFileSync(0, 'utf8')).version")
+
+          echo "current_version=$CURRENT_VERSION" >> "$GITHUB_OUTPUT"
+          echo "base_version=$BASE_VERSION" >> "$GITHUB_OUTPUT"
+
+          if [ "$CURRENT_VERSION" = "$BASE_VERSION" ]; then
+            echo "should_bump=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_bump=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Increment Version
+        if: steps.version-check.outputs.should_bump == 'true'
+        run: |
+          npm version patch --no-git-tag-version
+
+      - name: Commit and Push Changes
+        if: steps.version-check.outputs.should_bump == 'true'
+        run: |
+          git add package.json package-lock.json
+          git commit -m "chore: bump version for dependency updates"
+          git push
