@@ -1,6 +1,6 @@
 {
   "name": "mmm-onedrive",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "MagicMirror² module to display your photos from OneDrive.",
   "license": "MIT",
   "author": "hermanho",
@@ -27,7 +27,7 @@
     "OneDrive"
   ],
   "dependencies": {
-    "@azure/msal-node": "6.0.1",
+    "@azure/msal-node": "7.1.0",
     "@microsoft/microsoft-graph-client": "3.0.7",
     "dayjs": "1.11.23",
     "heic-convert": "2.1.0",
