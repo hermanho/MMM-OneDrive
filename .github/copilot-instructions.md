@@ -23,17 +23,17 @@ MMM-OneDrive is a MagicMirror² module that authorizes against Microsoft OneDriv
 ## Source of Truth and Generated Files
 
 - Make application changes in `src/`, not in generated JavaScript.
-- `MMM-OneDrive.js`, `MMM-OneDrive.js.map`, `lib/*.js`, and `lib/*.d.ts` are Rollup outputs. Their generated-file banner is authoritative: do not edit them directly.
+- `MMM-OneDrive.js`, `MMM-OneDrive.js.map`, `lib/*.js`, and `lib/*.d.ts` are Rolldown outputs. Their generated-file banner is authoritative: do not edit them directly.
 - After changing frontend or backend TypeScript, run `npm run build` and include the regenerated outputs when appropriate. CI runs a build and fails if it leaves the checkout dirty.
 - Frontend and backend use separate TypeScript configs and runtime targets. Keep browser/DOM code in `src/frontend/` and Node-only APIs in `src/backend/`.
 
 ## Development Commands
 
-Requires Node `>=22.21.1 <23` or `>=24` (CI uses Node 24).
+Requires Node `>=22.21.1 <23`, `>=24.11.0 <25`, or `>=26` (CI uses Node 24).
 
 ```sh
 npm ci                 # install locked dependencies
-npm run build          # run Rollup and regenerate distributable artifacts
+npm run build          # run Rolldown and regenerate distributable artifacts
 npm test               # run the Vitest suite once
 npm run lint:ci        # check Oxlint without modifying files
 npm run lint           # run Oxlint with --fix

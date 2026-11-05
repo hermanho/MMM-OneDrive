@@ -1,5 +1,7 @@
 # Installation
 
+Requires Node.js `>=22.21.1 <23`, `>=24.11.0 <25`, or `>=26`.
+
 1. Install Module
 
    Run the following command. For example, the Magic Mirror directory is `~/MagicMirror`.
