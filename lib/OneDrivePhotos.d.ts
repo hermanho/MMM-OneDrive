@@ -100,9 +100,8 @@ declare class OneDrivePhotos extends EventEmitter {
     getAlbums(): Promise<DriveItem[]>;
     private getAlbumLoop;
     /**
-     *
-     * @param {microsoftgraph.DriveItem} album
-     * @returns {Promise<string | null>}
+     * @param album - Album whose cover thumbnail is requested.
+     * @returns The thumbnail URL, if available.
      */
     getAlbumThumbnail(album: any): Promise<any>;
     getImageFromAlbum(albumId: string, isValid?: MediaItemValidator | null, maxNum?: number): Promise<OneDriveMediaItem[]>;

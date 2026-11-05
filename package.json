@@ -11,8 +11,8 @@
   "scripts": {
     "build": "rollup -c",
     "install-prod": "npm install --no-audit --no-fund --no-update-notifier --only=prod --omit=dev",
-    "lint": "eslint . --fix",
-    "lint:ci": "eslint .",
+    "lint": "oxlint . --fix",
+    "lint:ci": "oxlint . --deny-warnings",
     "test": "vitest run"
   },
   "repository": {
@@ -40,22 +40,18 @@
     "@babel/core": "8.0.7",
     "@babel/preset-env": "8.0.7",
     "@babel/preset-typescript": "8.0.7",
-    "@eslint/js": "10.0.1",
     "@microsoft/microsoft-graph-types": "2.43.1",
     "@rollup/plugin-commonjs": "29.0.3",
     "@rollup/plugin-node-resolve": "16.0.3",
     "@rollup/plugin-strip": "3.0.4",
     "@rollup/plugin-terser": "1.0.0",
     "@rollup/plugin-typescript": "12.3.0",
-    "@stylistic/eslint-plugin": "5.10.0",
     "@types/magicmirror-module": "2.16.6",
-    "eslint-plugin-jsdoc": "65.3.2",
     "eslint-plugin-tsdoc": "0.5.4",
-    "globals": "17.13.0",
+    "oxlint": "1.90.0",
     "rollup": "4.64.6",
     "rollup-plugin-dts": "6.5.1",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.71.2",
     "vitest": "5.0.4"
   },
   "engines": {

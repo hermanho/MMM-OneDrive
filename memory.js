@@ -9,7 +9,7 @@ const fs = require("fs");
 
 /**
  * Get swap memory information from /proc/meminfo
- * @returns {{total: number, free: number, used: number, cached: number}}
+ * @returns {{total: number, free: number, used: number, cached: number}} Swap memory in MB.
  */
 function getSwapMemory() {
   try {
@@ -39,7 +39,7 @@ function getSwapMemory() {
 
 /**
  * Get GPU memory information from Raspberry Pi
- * @returns {{allocated: number, free: number, used: number, reloc: number}}
+ * @returns {{allocated: number, free: number, used: number, reloc: number}} GPU memory in MB.
  */
 function getGPUMemory() {
   try {
@@ -82,7 +82,7 @@ function getGPUMemory() {
 
 /**
  * Get complete memory information including RAM, Swap, and GPU
- * @returns {{ram: {total: number, free: number, used: number}, swap: {total: number, free: number, used: number, cached: number}, gpu: {allocated: number, free: number, used: number, reloc: number}}}
+ * @returns {{ram: {total: number, free: number, used: number}, swap: {total: number, free: number, used: number, cached: number}, gpu: {allocated: number, free: number, used: number, reloc: number}}} Memory information in MB.
  */
 function getCompleteMemoryInfo() {
   const totalRam = (os.totalmem() / 1024 / 1024).toFixed(2);
@@ -105,7 +105,7 @@ function getCompleteMemoryInfo() {
 
 /**
  * Format complete memory info as a log string
- * @returns {string}
+ * @returns {string} Formatted RAM, swap, and GPU memory information.
  */
 function getCompleteMemoryString() {
   const memInfo = getCompleteMemoryInfo();
@@ -136,7 +136,7 @@ function getCompleteMemoryString() {
 
 /**
  * Format GPU memory info as a log string
- * @returns {string}
+ * @returns {string} Formatted GPU memory information.
  */
 function getGPUMemoryString() {
   const gpuMem = getGPUMemory();

@@ -32,7 +32,7 @@ jobs:
       - name: Install Node.js dependencies
         run: npm ci
 
-      - name: Lint with ESLint
+      - name: Lint with Oxlint
         run: npm run lint:ci
 
       - name: Run tests

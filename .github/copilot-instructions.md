@@ -35,8 +35,8 @@ Requires Node `>=22.21.1 <23` or `>=24` (CI uses Node 24).
 npm ci                 # install locked dependencies
 npm run build          # run Rollup and regenerate distributable artifacts
 npm test               # run the Vitest suite once
-npm run lint:ci        # check ESLint without modifying files
-npm run lint           # run ESLint with --fix
+npm run lint:ci        # check Oxlint without modifying files
+npm run lint           # run Oxlint with --fix
 npm run install-prod   # production-only install for MagicMirror deployment
 ```
 
@@ -53,7 +53,7 @@ Use the smallest relevant validation first. Run the full CI-equivalent checks (`
 ## Style
 
 - Follow `.editorconfig`: UTF-8, two-space indentation, trailing-whitespace removal, and a final newline.
-- ESLint is the formatting and correctness authority. TypeScript tests may use `any` where practical; production code should remain type-safe.
+- Oxlint is the linting authority; it does not enforce all formatting conventions. TypeScript tests may use `any` where practical; production code should remain type-safe.
 - Existing JavaScript is CommonJS, while source TypeScript uses ES modules. Preserve the conventions of the file you edit.
 
 ## Runtime State and Credentials
