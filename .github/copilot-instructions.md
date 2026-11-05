@@ -29,13 +29,14 @@ MMM-OneDrive is a MagicMirror² module that authorizes against Microsoft OneDriv
 
 ## Development Commands
 
-Requires Node `>=22.21.1 <23`, `>=24.11.0 <25`, or `>=26` (CI uses Node 24).
+The module matches MagicMirror's Node requirement: `>=22.22.2 <23 || >=24`. Development dependencies require Node `>=22.22.2 <23`, `>=24.11.0 <25`, or `>=26` (CI uses Node 24).
 
 ```sh
 npm ci                 # install locked dependencies
 npm run build          # run Rolldown and regenerate distributable artifacts
 npm test               # run the Vitest suite once
 npm run lint:ci        # check Oxlint without modifying files
+npm run typecheck:frontend # type-check browser TypeScript
 npm run lint           # run Oxlint with --fix
 npm run install-prod   # production-only install for MagicMirror deployment
 ```

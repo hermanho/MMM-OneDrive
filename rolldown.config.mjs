@@ -16,7 +16,7 @@ const bannerText = `/*! ********************************************************
 
 `;
 
-const backendExternal = ["node_helper", "logger", "sharp", /node:.*/, /node_modules\/jpeg-js/, /node_modules\/libheif-js/];
+const backendExternal = ["node_helper", "logger", "sharp", /^node:/, /^jpeg-js(?:\/|$)/, /^libheif-js(?:\/|$)/];
 
 /** @type {import('rolldown').RolldownOptions[]} */
 export default [

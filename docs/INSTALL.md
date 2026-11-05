@@ -1,6 +1,6 @@
 # Installation
 
-Requires Node.js `>=22.21.1 <23`, `>=24.11.0 <25`, or `>=26`.
+Requires Node.js `>=22.22.2 <23` or `>=24`, matching MagicMirror². Development tools have narrower Node.js requirements; see the project agent guide for development versions.
 
 1. Install Module
 

@@ -35,6 +35,9 @@ jobs:
       - name: Lint with Oxlint
         run: npm run lint:ci
 
+      - name: Type-check frontend
+        run: npm run typecheck:frontend
+
       - name: Run tests
         run: npm test
 

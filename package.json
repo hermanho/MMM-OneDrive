@@ -13,6 +13,7 @@
     "install-prod": "npm install --no-audit --no-fund --no-update-notifier --only=prod --omit=dev",
     "lint": "oxlint . --fix",
     "lint:ci": "oxlint . --deny-warnings",
+    "typecheck:frontend": "tsc -p src/frontend/tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "repository": {
@@ -44,13 +45,14 @@
     "@types/magicmirror-module": "2.16.6",
     "eslint-plugin-tsdoc": "0.5.4",
     "oxlint": "1.90.0",
+    "oxlint-tsgolint": "7.0.2005",
     "rolldown": "1.2.16",
     "rolldown-plugin-dts": "0.29.0",
     "typescript": "6.0.3",
     "vitest": "5.0.4"
   },
   "engines": {
-    "node": ">=22.21.1 <23 || >=24.11.0 <25 || >=26"
+    "node": ">=22.22.2 <23 || >=24"
   },
   "allowScripts": {
     "fsevents@2.3.3": true,

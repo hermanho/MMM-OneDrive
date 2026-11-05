@@ -2,6 +2,7 @@
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "ignorePatterns": ["MMM-OneDrive.js", "**/*.d.ts", "lib/**/*.js"],
   "plugins": ["typescript", "jsdoc"],
+  "options": { "typeAware": true },
   "jsPlugins": ["eslint-plugin-tsdoc"],
   "env": { "browser": true, "node": true },
   "globals": {
@@ -20,13 +21,21 @@
     "prefer-promise-reject-errors": "error",
     "require-await": "error",
     "typescript/no-explicit-any": "error",
+    "typescript/no-floating-promises": "off",
+    "typescript/restrict-template-expressions": "off",
     "typescript/no-unused-vars": ["error", { "argsIgnorePattern": "^_", "varsIgnorePattern": "^_" }],
     "typescript/no-unnecessary-template-expression": "error"
   },
   "overrides": [
     {
       "files": ["**/*.ts", "**/*.mts", "**/*.cts"],
-      "rules": { "tsdoc/syntax": "error" }
+      "rules": {
+        "tsdoc/syntax": "error",
+        "prefer-promise-reject-errors": "off",
+        "require-await": "off",
+        "typescript/prefer-promise-reject-errors": "error",
+        "typescript/require-await": "error"
+      }
     },
     {
       "files": ["**/*.test.ts", "tests/**", "src/backend/functions/photosConverter.ts", "src/backend/functions/externals/libheifJS.ts"],
