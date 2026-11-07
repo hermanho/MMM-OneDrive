@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import fs from "node:fs";
 import libheifWASMModule from "libheif-js/libheif-wasm/libheif.js";
 import Log from "logger";

@@ -1,6 +1,6 @@
 {
   "name": "mmm-onedrive",
-  "version": "1.9.3",
+  "version": "1.9.4",
   "description": "MagicMirror² module to display your photos from OneDrive.",
   "license": "MIT",
   "author": "hermanho",
@@ -9,10 +9,11 @@
     "https://github.com/hermanho/MMM-OneDrive/graphs/contributors"
   ],
   "scripts": {
-    "build": "rollup -c",
+    "build": "rolldown -c",
     "install-prod": "npm install --no-audit --no-fund --no-update-notifier --only=prod --omit=dev",
-    "lint": "eslint . --fix",
-    "lint:ci": "eslint .",
+    "lint": "oxlint . --fix",
+    "lint:ci": "oxlint . --deny-warnings",
+    "typecheck:frontend": "tsc -p src/frontend/tsconfig.json --noEmit",
     "test": "vitest run"
   },
   "repository": {
@@ -27,7 +28,7 @@
     "OneDrive"
   ],
   "dependencies": {
-    "@azure/msal-node": "6.0.1",
+    "@azure/msal-node": "7.2.0",
     "@microsoft/microsoft-graph-client": "3.0.7",
     "dayjs": "1.11.23",
     "heic-convert": "2.1.0",
@@ -37,29 +38,22 @@
     "sharp": "0.35.5"
   },
   "devDependencies": {
-    "@babel/core": "8.0.7",
+    "@babel/core": "8.1.0",
     "@babel/preset-env": "8.0.7",
     "@babel/preset-typescript": "8.0.7",
-    "@eslint/js": "10.0.1",
     "@microsoft/microsoft-graph-types": "2.43.1",
-    "@rollup/plugin-commonjs": "29.0.3",
-    "@rollup/plugin-node-resolve": "16.0.3",
-    "@rollup/plugin-strip": "3.0.4",
-    "@rollup/plugin-terser": "1.0.0",
-    "@rollup/plugin-typescript": "12.3.0",
-    "@stylistic/eslint-plugin": "5.10.0",
     "@types/magicmirror-module": "2.16.6",
-    "eslint-plugin-jsdoc": "65.3.2",
+    "@types/node": "24.19.2",
     "eslint-plugin-tsdoc": "0.5.4",
-    "globals": "17.13.0",
-    "rollup": "4.64.6",
-    "rollup-plugin-dts": "6.5.1",
+    "oxlint": "1.91.0",
+    "oxlint-tsgolint": "7.0.2005",
+    "rolldown": "1.2.16",
+    "rolldown-plugin-dts": "0.29.0",
     "typescript": "6.0.3",
-    "typescript-eslint": "8.71.2",
-    "vitest": "5.0.4"
+    "vitest": "5.1.0"
   },
   "engines": {
-    "node": ">=22.21.1 <23 || >=24"
+    "node": ">=22.22.2 <23 || >=24"
   },
   "allowScripts": {
     "fsevents@2.3.3": true,

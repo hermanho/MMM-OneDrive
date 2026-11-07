@@ -197,7 +197,7 @@ this.sendNotification('ONEDRIVE_PHOTO_NEXT', undefined);
 
 ## Last Tested
 
-- node.js: required over v18.
+- Node.js: `>=22.22.2 <23` or `>=24` (matching MagicMirror²).
 - MagicMirror: v2.31.0
 - Modules:
   - MMM-ModuleScheduler [https://github.com/ianperrin/MMM-ModuleScheduler]
