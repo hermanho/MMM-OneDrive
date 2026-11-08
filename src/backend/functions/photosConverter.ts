@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import Log from "logger";
 import sharp from "sharp";
 import { getLibheifFactory } from "./externals/libheifJS";

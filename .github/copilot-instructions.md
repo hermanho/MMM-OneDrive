@@ -23,20 +23,21 @@ MMM-OneDrive is a MagicMirror² module that authorizes against Microsoft OneDriv
 ## Source of Truth and Generated Files
 
 - Make application changes in `src/`, not in generated JavaScript.
-- `MMM-OneDrive.js`, `MMM-OneDrive.js.map`, `lib/*.js`, and `lib/*.d.ts` are Rollup outputs. Their generated-file banner is authoritative: do not edit them directly.
+- `MMM-OneDrive.js`, `MMM-OneDrive.js.map`, `lib/*.js`, and `lib/*.d.ts` are Rolldown outputs. Their generated-file banner is authoritative: do not edit them directly.
 - After changing frontend or backend TypeScript, run `npm run build` and include the regenerated outputs when appropriate. CI runs a build and fails if it leaves the checkout dirty.
 - Frontend and backend use separate TypeScript configs and runtime targets. Keep browser/DOM code in `src/frontend/` and Node-only APIs in `src/backend/`.
 
 ## Development Commands
 
-Requires Node `>=22.21.1 <23` or `>=24` (CI uses Node 24).
+The module matches MagicMirror's Node requirement: `>=22.22.2 <23 || >=24`. Development dependencies require Node `>=22.22.2 <23`, `>=24.11.0 <25`, or `>=26` (CI uses Node 24).
 
 ```sh
 npm ci                 # install locked dependencies
-npm run build          # run Rollup and regenerate distributable artifacts
+npm run build          # run Rolldown and regenerate distributable artifacts
 npm test               # run the Vitest suite once
-npm run lint:ci        # check ESLint without modifying files
-npm run lint           # run ESLint with --fix
+npm run lint:ci        # check Oxlint without modifying files
+npm run typecheck:frontend # type-check browser TypeScript
+npm run lint           # run Oxlint with --fix
 npm run install-prod   # production-only install for MagicMirror deployment
 ```
 
@@ -53,7 +54,7 @@ Use the smallest relevant validation first. Run the full CI-equivalent checks (`
 ## Style
 
 - Follow `.editorconfig`: UTF-8, two-space indentation, trailing-whitespace removal, and a final newline.
-- ESLint is the formatting and correctness authority. TypeScript tests may use `any` where practical; production code should remain type-safe.
+- Oxlint is the linting authority; it does not enforce all formatting conventions. TypeScript tests may use `any` where practical; production code should remain type-safe.
 - Existing JavaScript is CommonJS, while source TypeScript uses ES modules. Preserve the conventions of the file you edit.
 
 ## Runtime State and Credentials

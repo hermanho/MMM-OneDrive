@@ -1,5 +1,4 @@
-import { EventEmitter } from 'node:events';
-
+import { EventEmitter } from "node:events";
 interface OneDriveMediaItem {
   id: string;
   baseUrl: string;
@@ -31,25 +30,21 @@ interface OneDriveMediaItem {
   _albumTitle: string;
   _indexOfPhotos: number;
 }
-
-declare function createIntervalRunner(render: (() => Promise<unknown>), interval: number): {
-    skipToNext: () => void;
-    stop: () => void;
-    resume: () => void;
-    state: () => {
-        stopped: boolean;
-        running: boolean;
-    };
+export declare function createIntervalRunner(render: (() => Promise<unknown>), interval: number): {
+  skipToNext: () => void;
+  stop: () => void;
+  resume: () => void;
+  state: () => {
+    stopped: boolean;
+    running: boolean;
+  };
 };
-
-declare const internetStatusListener: EventEmitter<{
-    online: [];
+export declare const internetStatusListener: EventEmitter<{
+  online: [];
 }>;
-
-declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size?: {
-    width: number;
-    height: number;
+export declare const urlToDisk: (photo: OneDriveMediaItem, dest: string, size?: {
+  width: number;
+  height: number;
 }) => Promise<number>;
-declare const createDirIfNotExists: (dir: string) => Promise<void>;
-
-export { createDirIfNotExists, createIntervalRunner, internetStatusListener, urlToDisk };
+export declare const createDirIfNotExists: (dir: string) => Promise<void>;
+export {};

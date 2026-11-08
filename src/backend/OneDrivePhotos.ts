@@ -177,13 +177,11 @@ export class OneDrivePhotos extends EventEmitter {
   private async getAlbumLoop() {
     await this.onAuthReady();
     const url = protectedResources.listAllAlbums.endpoint.replace("$$userId$$", this.#userId!);
-    /** @type {microsoftgraph.DriveItem[]} */
     let list: DriveItem[] = [];
     let found = 0;
     /**
-     * 
-     * @param {string} pageUrl 
-     * @returns {Promise<microsoftgraph.DriveItem[]>} DriveItem
+     * @param pageUrl - URL of the album page to retrieve.
+     * @returns The accumulated drive items.
      */
     const getAlbum = async (pageUrl) => {
       this.log("Getting Album info chunks.");
@@ -214,9 +212,8 @@ export class OneDrivePhotos extends EventEmitter {
   }
 
   /**
-   * 
-   * @param {microsoftgraph.DriveItem} album 
-   * @returns {Promise<string | null>}
+   * @param album - Album whose cover thumbnail is requested.
+   * @returns The thumbnail URL, if available.
    */
   async getAlbumThumbnail(album) {
     if (!album?.bundle?.album?.coverImageItemId) {
