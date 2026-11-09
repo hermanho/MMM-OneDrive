@@ -1,0 +1,784 @@
+
+> magicmirror@2.38.0 start
+> node --run start:wayland
+
+[2026-11-09 09:35:18.217] [LOG]   [app] Starting MagicMirror: v2.38.0
+[2026-11-09 09:35:18.224] [LOG]   [utils] Loading config ...
+[2026-11-09 09:35:18.226] [INFO]  [utils] Checking config file /home/cgrymala/MagicMirror/config/config.js ...
+[2026-11-09 09:35:18.283] [INFO]  [utils] Your configuration file doesn't contain syntax errors :)
+[2026-11-09 09:35:18.283] [INFO]  [utils] Checking modules structure configuration ...
+[2026-11-09 09:35:18.284] [INFO]  [utils] Your modules structure configuration doesn't contain errors :)
+[2026-11-09 09:35:18.284] [LOG]   [app] Loading module helpers ...
+[2026-11-09 09:35:18.285] [LOG]   [app] No helper found for module: alert.
+[2026-11-09 09:35:18.287] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 09:35:18.287] [LOG]   [node_helper] Module helper loaded: updatenotification
+[2026-11-09 09:35:18.288] [LOG]   [app] No helper found for module: clock.
+[2026-11-09 09:35:18.355] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 09:35:18.355] [LOG]   [node_helper] Module helper loaded: calendar
+[2026-11-09 09:35:18.356] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 09:35:18.357] [LOG]   [node_helper] Module helper loaded: weather
+[2026-11-09 09:35:18.598] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 09:35:18.599] [LOG]   [node_helper] Module helper loaded: MMM-OneDrive
+[2026-11-09 09:35:18.600] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 09:35:18.600] [LOG]   [node_helper] Module helper loaded: MMM-EnphaseSolar
+[2026-11-09 09:35:18.600] [LOG]   [app] All module helpers loaded.
+[2026-11-09 09:35:18.605] [LOG]   [server] Starting server on port 8080 ... 
+[2026-11-09 09:35:18.806] [LOG]   [app] Server started ...
+[2026-11-09 09:35:18.806] [LOG]   [node_helper] Connecting socket for: updatenotification
+[2026-11-09 09:35:18.807] [LOG]   [node_helper] Starting module helper: updatenotification
+[2026-11-09 09:35:18.807] [LOG]   [node_helper] Connecting socket for: calendar
+[2026-11-09 09:35:18.807] [LOG]   [calendar] Starting node helper for: calendar
+[2026-11-09 09:35:18.807] [LOG]   [node_helper] Connecting socket for: weather
+[2026-11-09 09:35:18.807] [LOG]   [weather] Starting node helper for: weather
+[2026-11-09 09:35:18.808] [LOG]   [node_helper] Connecting socket for: MMM-OneDrive
+[2026-11-09 09:35:18.808] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting module helper
+[2026-11-09 09:35:18.809] [INFO]  [lib] [DiskCaching] Initialized in directory: /home/cgrymala/MagicMirror/modules/MMM-OneDrive/cache/photos
+[2026-11-09 09:35:18.810] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Started
+[2026-11-09 09:35:18.810] [LOG]   [node_helper] Connecting socket for: MMM-EnphaseSolar
+[2026-11-09 09:35:18.810] [LOG]   [MMM-EnphaseSolar] Starting node helper: MMM-EnphaseSolar
+[2026-11-09 09:35:18.811] [LOG]   [app] Sockets connected & modules started ...
+[2026-11-09 09:35:18.825] [LOG]   [electron] Launching application.
+[2026-11-09 09:35:19.070] [INFO]  [systeminformation] 
+####  System Information  ####
+- MM:       version: v2.38.0; git: f138f5b6; branch: master
+- SYSTEM:   manufacturer: Raspberry Pi Foundation; model: Raspberry Pi 5 Model B Rev 1.1; virtual: false
+- OS:       platform: linux; distro: Debian GNU/Linux; release: 13; arch: arm64; kernel: 6.18.50+rpt-rpi-2712
+- VERSIONS: electron: 42.5.2; used node: 24.17.0; installed node: 24.12.0; npm: 11.19.0; pm2: 6.0.14
+- ENV:      XDG_SESSION_TYPE: tty; MM_CONFIG_FILE: undefined
+            WAYLAND_DISPLAY:  undefined; DISPLAY: undefined; ELECTRON_ENABLE_GPU: undefined
+- RAM:      total: 16214.30 MB; free: 14851.23 MB; used: 1363.06 MB
+- OTHERS:   uptime: 8606 minutes; timeZone: America/New_York
+[2026-11-09 09:35:19.525] [LOG]   [weather] Received INIT_WEATHER for instance module_5_weather
+[2026-11-09 09:35:19.525] [LOG]   [weather] Attempting to initialize provider openmeteo for instance module_5_weather
+[2026-11-09 09:35:19.525] [LOG]   [weather] Loading provider from: /home/cgrymala/MagicMirror/defaultmodules/weather/providers/openmeteo.js
+[2026-11-09 09:35:19.545] [LOG]   [calendar] Create new calendarfetcher for url: https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics - Interval: 604800000
+[2026-11-09 09:35:19.549] [LOG]   [calendar] Create new calendarfetcher for url: https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics - Interval: 604800000
+[2026-11-09 09:35:19.550] [LOG]   [weather] Received INIT_WEATHER for instance module_4_weather
+[2026-11-09 09:35:19.551] [LOG]   [weather] Attempting to initialize provider openmeteo for instance module_4_weather
+[2026-11-09 09:35:19.551] [LOG]   [weather] Loading provider from: /home/cgrymala/MagicMirror/defaultmodules/weather/providers/openmeteo.js
+[2026-11-09 09:35:19.552] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] notification received INIT
+[2026-11-09 09:35:19.552] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Debug mode true
+[2026-11-09 09:35:19.552] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting UI render clock
+[2026-11-09 09:35:19.553] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting Initialization
+[2026-11-09 09:35:19.554] [INFO]  [MMM-EnphaseSolar] MMM-EnphaseSolar: Getting a session token
+[2026-11-09 09:35:19.556] [INFO]  [updatenotification] Updater Class Loaded!
+[2026-11-09 09:35:19.556] [INFO]  [updatenotification] Checking git for module: MMM-OneDrive
+[2026-11-09 09:35:19.565] [INFO]  [updatenotification] Checking git for module: MMM-EnphaseSolar
+[2026-11-09 09:35:19.571] [INFO]  [updatenotification] Checking git for module: MagicMirror
+[2026-11-09 09:35:19.576] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cache data
+[2026-11-09 09:35:19.577] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cached albumns list
+[2026-11-09 09:35:19.587] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] successfully loaded selectedAlbums
+[2026-11-09 09:35:19.587] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cached list
+[2026-11-09 09:35:19.603] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] successfully loaded photo list cache of  171  photos
+[2026-11-09 09:35:19.605] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Show photos from cache for fast startup
+[2026-11-09 09:35:19.605] [INFO]  [lib] [IntervalRunner]: Skip to next cycle
+[2026-11-09 09:35:19.605] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Initialization complete!
+[2026-11-09 09:35:19.605] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Start first scanning.
+[2026-11-09 09:35:19.606] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Run scanJob
+[2026-11-09 09:35:19.606] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Getting album list
+[2026-11-09 09:35:19.610] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading to UI: {
+  id: 'F17A01643E1C5BF8!sa507527234fa4025b57dfcd402b489c4',
+  filename: 'PXL_20250517_002226180.jpg',
+  album: 'MagicMirror'
+}
+[2026-11-09 09:35:19.612] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Image PXL_20250517_002226180.jpg url expired 2026-11-09T14:06:07.011Z, refreshing...
+[2026-11-09 09:35:19.703] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Initializing AuthProvider
+[2026-11-09 09:35:19.704] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] AuthProvider created
+[2026-11-09 09:35:19.704] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Info - getTokenCache called
+[2026-11-09 09:35:19.705] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-node@7.2.0 : Trace - getAllAccounts called
+[2026-11-09 09:35:19.705] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 09:35:19.712] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 09:35:19.713] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 09:35:19.713] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 09:35:19.714] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 09:35:19.714] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.714] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.714] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.714] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.715] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.715] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.715] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.715] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-common@16.16.0 : Trace - CacheManager - getIdToken called
+[2026-11-09 09:35:19.716] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.716] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:19.716] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:19.716] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:19.717] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [8ed3361a-baf5-4605-9f55-559e3c167821] : @azure/msal-common@16.16.0 : Info - CacheManager:getIdToken - Returning ID token
+[2026-11-09 09:35:19.717] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:19.717] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:19.718] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent called for the first time, storing active request
+[2026-11-09 09:35:19.718] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 09:35:19.719] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:19.719] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:19.719] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.719] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:19.720] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:19.721] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 09:35:19.722] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 09:35:19.722] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Silent flow client created
+[2026-11-09 09:35:19.722] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Info - Overwriting in-memory cache with persistent cache
+[2026-11-09 09:35:19.722] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Clearing cache entries created by MSAL
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.723] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.723] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 09:35:19.742] [DEBUG] [calendar] Parsed iCal data from https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics with 4 entries.
+[2026-11-09 09:35:19.743] [DEBUG] [calendar] There are 4 calendar entries.
+[2026-11-09 09:35:19.743] [DEBUG] [calendar] title: Veterans Day
+[2026-11-09 09:35:19.744] [DEBUG] [calendar] Event: Veterans Day | start: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:19.748] [DEBUG] [calendar] saving event: Veterans Day, start: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Wed Nov 11 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:19.750] [DEBUG] [calendar] title: Thanksgiving Day
+[2026-11-09 09:35:19.750] [DEBUG] [calendar] Event: Thanksgiving Day | start: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:19.751] [DEBUG] [calendar] saving event: Thanksgiving Day, start: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Thu Nov 26 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:19.751] [DEBUG] [calendar] title: Christmas
+[2026-11-09 09:35:19.751] [DEBUG] [calendar] Event: Christmas | start: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:19.752] [DEBUG] [calendar] saving event: Christmas, start: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 25 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:19.752] [INFO]  [calendar] Broadcasting 3 events from https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics.
+[2026-11-09 09:35:19.771] [LOG]   [weather] Weather provider openmeteo initialized for instance module_5_weather
+[2026-11-09 09:35:19.772] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 09:35:19.772] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 09:35:19.772] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 09:35:19.773] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 09:35:19.773] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.773] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.773] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.773] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.774] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.774] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.775] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getAccessToken called
+[2026-11-09 09:35:19.776] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.776] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:19.776] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:19.776] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:19.776] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getAccessToken - Returning access token
+[2026-11-09 09:35:19.777] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - Token refresh is required due to cache outcome: '3'
+[2026-11-09 09:35:19.777] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:19.778] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.778] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:19.778] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:19.779] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getRefreshToken called
+[2026-11-09 09:35:19.779] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.779] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.779] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.779] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getRefreshToken - returning refresh token
+[2026-11-09 09:35:19.780] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:19.781] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:19.781] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:19.781] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:19.782] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.783] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.783] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:19.784] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:19.785] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.785] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:19.791] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Get AuthProvider from cache
+[2026-11-09 09:35:19.792] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Info - getTokenCache called
+[2026-11-09 09:35:19.792] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-node@7.2.0 : Trace - getAllAccounts called
+[2026-11-09 09:35:19.792] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 09:35:19.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 09:35:19.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 09:35:19.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-common@16.16.0 : Trace - CacheManager - getIdToken called
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:19.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [65b0a644-f5bb-47a5-9a51-0482e40adee6] : @azure/msal-common@16.16.0 : Info - CacheManager:getIdToken - Returning ID token
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:19.796] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:19 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent has been called previously, returning the result from the first call
+[2026-11-09 09:35:19.820] [LOG]   [weather] Weather provider openmeteo initialized for instance module_4_weather
+[2026-11-09 09:35:20.211] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:20.211] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:20.211] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:20.211] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:20.211] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d956ec04e00 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:20Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:20Z","traceId":"6b524931-a9a8-4035-90ae-3d956ec04e00","claims":"","errorNo":70000}
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Verbose - acquireTokenWithRefreshToken: bad refresh token, removing from cache
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:20.212] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:20 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d956ec04e00 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:20Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:20Z","traceId":"6b524931-a9a8-4035-90ae-3d956ec04e00","claims":"","errorNo":70000}
+[2026-11-09 09:35:20.265] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {
+    "connection": {
+        "mqtt_state": "connected",
+        "prov_state": "configured",
+        "auth_state": "ok",
+        "sc_stream": "enabled",
+        "sc_debug": "disabled"
+    },
+    "meters": {
+        "last_update": 1794234873,
+        "soc": 0,
+        "main_relay_state": 1,
+        "gen_relay_state": 5,
+        "backup_bat_mode": 1,
+        "backup_soc": 0,
+        "is_split_phase": 1,
+        "phase_count": 2,
+        "enc_agg_soc": 0,
+        "enc_agg_energy": 0,
+        "acb_agg_soc": 0,
+        "acb_agg_energy": 0,
+        "pv": {
+            "agg_p_mw": 11174547,
+            "agg_s_mva": 11277064,
+            "agg_p_ph_a_mw": 5588641,
+            "agg_p_ph_b_mw": 5585905,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 5639913,
+            "agg_s_ph_b_mva": 5637151,
+            "agg_s_ph_c_mva": 0
+        },
+        "storage": {
+            "agg_p_mw": 0,
+            "agg_s_mva": 11971,
+            "agg_p_ph_a_mw": 0,
+            "agg_p_ph_b_mw": 0,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 5466,
+            "agg_s_ph_b_mva": 6504,
+            "agg_s_ph_c_mva": 0
+        },
+        "grid": {
+            "agg_p_mw": -10537645,
+            "agg_s_mva": -10632785,
+            "agg_p_ph_a_mw": -5238055,
+            "agg_p_ph_b_mw": -5299590,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": -5289337,
+            "agg_s_ph_b_mva": -5343448,
+            "agg_s_ph_c_mva": 0
+        },
+        "load": {
+            "agg_p_mw": 636902,
+            "agg_s_mva": 656250,
+            "agg_p_ph_a_mw": 350586,
+            "agg_p_ph_b_mw": 286315,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 356042,
+            "agg_s_ph_b_mva": 300207,
+            "agg_s_ph_c_mva": 0
+        },
+        "generator": {
+            "agg_p_mw": 0,
+            "agg_s_mva": 0,
+            "agg_p_ph_a_mw": 0,
+            "agg_p_ph_b_mw": 0,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 0,
+            "agg_s_ph_b_mva": 0,
+            "agg_s_ph_c_mva": 0
+        }
+    },
+    "tasks": {
+        "task_id": -1617737505,
+        "timestamp": 1794234319
+    },
+    "counters": {
+        "main_CfgLoad": 2,
+        "main_CfgChanged": 1,
+        "main_taskUpdate": 86,
+        "MqttClient_respond": 172,
+        "MqttClient_msgarrvd": 86,
+        "MqttClient_reconnect": 1,
+        "MqttClient_create": 6,
+        "MqttClient_setCallbacks": 6,
+        "MqttClient_connect": 6,
+        "MqttClient_subscribe": 6,
+        "SSL_Keys_Create": 6,
+        "sc_SendStreamCtrl": 1,
+        "rest_Status": 11654
+    },
+    "dry_contacts": {
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        }
+    }
+}
+[2026-11-09 09:35:20.444] [DEBUG] [calendar] Parsed iCal data from https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics with 16 entries.
+[2026-11-09 09:35:20.444] [DEBUG] [calendar] There are 16 calendar entries.
+[2026-11-09 09:35:20.444] [DEBUG] [calendar] title: Humira injection
+[2026-11-09 09:35:20.444] [DEBUG] [calendar] Event: Humira injection | start: Fri Aug 21 2026 12:15:00 GMT-0400 (Eastern Daylight Time) | end: Fri Aug 21 2026 13:15:00 GMT-0400 (Eastern Daylight Time) | recurring: true
+[2026-11-09 09:35:20.456] [DEBUG] [calendar] saving event: Humira injection, start: Fri Nov 13 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 13 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.456] [DEBUG] [calendar] saving event: Humira injection, start: Fri Nov 27 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 27 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] saving event: Humira injection, start: Fri Dec 11 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 11 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] saving event: Humira injection, start: Fri Dec 25 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 25 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] saving event: Humira injection, start: Fri Jan 08 2027 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Jan 08 2027 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] saving event: Humira injection, start: Fri Jan 22 2027 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Jan 22 2027 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] title: Zepbound
+[2026-11-09 09:35:20.457] [DEBUG] [calendar] Event: Zepbound | start: Sat Aug 29 2026 00:00:00 GMT-0400 (Eastern Daylight Time) | end: Sun Aug 30 2026 00:00:00 GMT-0400 (Eastern Daylight Time) | recurring: true
+[2026-11-09 09:35:20.463] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 14 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 15 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.463] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 21 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 22 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.463] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 28 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 29 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 05 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 06 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 12 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 13 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 19 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 20 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 26 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 27 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 02 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 03 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 09 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 10 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 16 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 17 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 23 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 24 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 30 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 31 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 06 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 07 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 13 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 14 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.464] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 20 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 21 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 27 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 28 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] title: Amanda Neurosurgeon 
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] Event: Amanda Neurosurgeon  | start: Tue Nov 10 2026 13:00:00 GMT-0500 (Eastern Standard Time) | end: Tue Nov 10 2026 14:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] saving event: Amanda Neurosurgeon , start: Tue Nov 10 2026 13:00:00 GMT-0500 (Eastern Standard Time), end: Tue Nov 10 2026 14:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] title: Amanda MRI
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] Event: Amanda MRI | start: Fri Nov 13 2026 06:30:00 GMT-0500 (Eastern Standard Time) | end: Fri Nov 13 2026 07:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] saving event: Amanda MRI, start: Fri Nov 13 2026 06:30:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 13 2026 07:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] title: Amanda Dr Redmond 
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] Event: Amanda Dr Redmond  | start: Tue Nov 17 2026 14:45:00 GMT-0500 (Eastern Standard Time) | end: Tue Nov 17 2026 15:45:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] saving event: Amanda Dr Redmond , start: Tue Nov 17 2026 14:45:00 GMT-0500 (Eastern Standard Time), end: Tue Nov 17 2026 15:45:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] title: Music Bingo at Tiki's 
+[2026-11-09 09:35:20.465] [DEBUG] [calendar] Event: Music Bingo at Tiki's  | start: Thu Nov 19 2026 19:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Nov 19 2026 21:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] saving event: Music Bingo at Tiki's , start: Thu Nov 19 2026 19:00:00 GMT-0500 (Eastern Standard Time), end: Thu Nov 19 2026 21:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] title: Amanda hair
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] Event: Amanda hair | start: Wed Nov 25 2026 11:30:00 GMT-0500 (Eastern Standard Time) | end: Wed Nov 25 2026 12:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] saving event: Amanda hair, start: Wed Nov 25 2026 11:30:00 GMT-0500 (Eastern Standard Time), end: Wed Nov 25 2026 12:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] title: Nails 
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] Event: Nails  | start: Tue Dec 01 2026 10:30:00 GMT-0500 (Eastern Standard Time) | end: Tue Dec 01 2026 11:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] saving event: Nails , start: Tue Dec 01 2026 10:30:00 GMT-0500 (Eastern Standard Time), end: Tue Dec 01 2026 11:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] title: Amanda Dr Prince
+[2026-11-09 09:35:20.466] [DEBUG] [calendar] Event: Amanda Dr Prince | start: Fri Dec 04 2026 14:00:00 GMT-0500 (Eastern Standard Time) | end: Fri Dec 04 2026 15:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] saving event: Amanda Dr Prince, start: Fri Dec 04 2026 14:00:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 04 2026 15:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] title: Music Bingo at Tiki's 
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] Event: Music Bingo at Tiki's  | start: Thu Dec 17 2026 19:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Dec 17 2026 21:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] saving event: Music Bingo at Tiki's , start: Thu Dec 17 2026 19:00:00 GMT-0500 (Eastern Standard Time), end: Thu Dec 17 2026 21:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] title: Amanda Dr Ramirez
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] Event: Amanda Dr Ramirez | start: Wed Jan 27 2027 11:00:00 GMT-0500 (Eastern Standard Time) | end: Wed Jan 27 2027 12:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] saving event: Amanda Dr Ramirez, start: Wed Jan 27 2027 11:00:00 GMT-0500 (Eastern Standard Time), end: Wed Jan 27 2027 12:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] title: CAG  and ALG Dentist
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] Event: CAG  and ALG Dentist | start: Mon Feb 22 2027 10:00:00 GMT-0500 (Eastern Standard Time) | end: Mon Feb 22 2027 12:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] saving event: CAG  and ALG Dentist, start: Mon Feb 22 2027 10:00:00 GMT-0500 (Eastern Standard Time), end: Mon Feb 22 2027 12:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 09:35:20.467] [DEBUG] [calendar] title: Amanda eye appointment
+[2026-11-09 09:35:20.468] [DEBUG] [calendar] Event: Amanda eye appointment | start: Wed Mar 24 2027 11:30:00 GMT-0400 (Eastern Daylight Time) | end: Wed Mar 24 2027 12:30:00 GMT-0400 (Eastern Daylight Time) | recurring: false
+[2026-11-09 09:35:20.468] [DEBUG] [calendar] saving event: Amanda eye appointment, start: Wed Mar 24 2027 11:30:00 GMT-0400 (Eastern Daylight Time), end: Wed Mar 24 2027 12:30:00 GMT-0400 (Eastern Daylight Time)
+[2026-11-09 09:35:20.468] [DEBUG] [calendar] title: CAG doctor
+[2026-11-09 09:35:20.468] [DEBUG] [calendar] Event: CAG doctor | start: Thu Apr 29 2027 08:30:00 GMT-0400 (Eastern Daylight Time) | end: Thu Apr 29 2027 09:30:00 GMT-0400 (Eastern Daylight Time) | recurring: false
+[2026-11-09 09:35:20.468] [DEBUG] [calendar] saving event: CAG doctor, start: Thu Apr 29 2027 08:30:00 GMT-0400 (Eastern Daylight Time), end: Thu Apr 29 2027 09:30:00 GMT-0400 (Eastern Daylight Time)
+[2026-11-09 09:35:20.468] [INFO]  [calendar] Broadcasting 34 events from https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics.
+[2026-11-09 09:35:20.539] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {
+    "production": {
+        "pcu": {
+            "wattHoursToday": 6429,
+            "wattHoursSevenDays": 418934,
+            "wattHoursLifetime": 43630690,
+            "wattsNow": 3355
+        },
+        "rgm": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 0,
+            "wattsNow": 0
+        },
+        "eim": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 42439209,
+            "wattsNow": 0
+        }
+    },
+    "consumption": {
+        "eim": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 43644275,
+            "wattsNow": 0
+        }
+    }
+}
+[2026-11-09 09:35:22.215] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:22.216] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:22.216] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent called for the first time, storing active request
+[2026-11-09 09:35:22.216] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 09:35:22.216] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:22.216] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 09:35:22.217] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 09:35:22.218] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Silent flow client created
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Info - Overwriting in-memory cache with persistent cache
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Clearing cache entries created by MSAL
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.219] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.220] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 09:35:22.220] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:22.220] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent has been called previously, returning the result from the first call
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.221] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getAccessToken called
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:22.222] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getAccessToken - Returning access token
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - Token refresh is required due to cache outcome: '3'
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getRefreshToken called
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:22.223] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getRefreshToken - returning refresh token
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:22.224] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:22.225] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.225] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:22.301] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {"production":[{"type":"inverters","activeCount":49,"readingTime":1794234873,"wNow":3358,"whLifetime":43630690},{"type":"eim","activeCount":1,"measurementType":"production","readingTime":1794234875,"wNow":11286.537,"whLifetime":49572394.324,"varhLeadLifetime":9494094.988,"varhLagLifetime":9557945.468,"vahLifetime":0.316,"rmsCurrent":91.532,"rmsVoltage":249.605,"reactPwr":-1621.754,"apprntPwr":11423.505,"pwrFactor":1.976,"whToday":49572394.324,"whLastSevenDays":49572394.324,"vahToday":0.316,"varhLeadToday":9494094.988,"varhLagToday":9557945.468}],"consumption":[{"type":"eim","activeCount":1,"measurementType":"total-consumption","readingTime":1794234875,"wNow":611.033,"whLifetime":48005397.6,"varhLeadLifetime":890184.735,"varhLagLifetime":-487652.258,"vahLifetime":0.3,"rmsCurrent":4.918,"rmsVoltage":249.411,"reactPwr":-30.873,"apprntPwr":613.375,"pwrFactor":-1.976,"whToday":48005397.6,"whLastSevenDays":48005397.6,"vahToday":0.3,"varhLeadToday":890184.735,"varhLagToday":0.0},{"type":"eim","activeCount":1,"measurementType":"net-consumption","readingTime":1794234875,"wNow":-10675.503,"whLifetime":-1566996.723,"varhLeadLifetime":10384279.723,"varhLagLifetime":9006442.729,"vahLifetime":0.3,"rmsCurrent":86.613,"rmsVoltage":249.411,"reactPwr":1590.88,"apprntPwr":10801.236,"pwrFactor":-1.976,"whToday":0,"whLastSevenDays":0,"vahToday":0,"varhLeadToday":0,"varhLagToday":0}],"storage":[{"type":"acb","activeCount":0,"readingTime":0,"wNow":0,"whNow":0,"state":"idle"}]}
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:22.976] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 78aef4b4-39fb-48f6-bd92-4599c51bb402 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:22Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:22Z","traceId":"78aef4b4-39fb-48f6-bd92-4599c51bb402","claims":"","errorNo":70000}
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Verbose - acquireTokenWithRefreshToken: bad refresh token, removing from cache
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:22.977] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:22 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 78aef4b4-39fb-48f6-bd92-4599c51bb402 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:22Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:22Z","traceId":"78aef4b4-39fb-48f6-bd92-4599c51bb402","claims":"","errorNo":70000}
+[2026-11-09 09:35:24.978] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:24.979] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:24.979] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent called for the first time, storing active request
+[2026-11-09 09:35:24.979] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 09:35:24.979] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:24.979] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:24.980] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 09:35:24.981] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Silent flow client created
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Info - Overwriting in-memory cache with persistent cache
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Clearing cache entries created by MSAL
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.983] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.983] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.983] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 09:35:24.983] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 09:35:24.983] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:24.983] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent has been called previously, returning the result from the first call
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.984] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getAccessToken called
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:24.985] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getAccessToken - Returning access token
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - Token refresh is required due to cache outcome: '3'
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - CacheManager - getRefreshToken called
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 09:35:24.986] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Info - CacheManager:getRefreshToken - returning refresh token
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'cacheManagerGetRefreshToken'
+[2026-11-09 09:35:24.987] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientCreateTokenRequestBody'
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:24.988] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:24 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:25.888] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:25.888] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecutePostToTokenEndpoint'
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Returning result from 'refreshTokenClientExecuteTokenRequest'
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireToken'
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 691e31f3-b332-40e1-9878-40fac22cf202 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:25Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:25Z","traceId":"691e31f3-b332-40e1-9878-40fac22cf202","claims":"","errorNo":70000}
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Verbose - acquireTokenWithRefreshToken: bad refresh token, removing from cache
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:25.889] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:25.890] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - Error occurred in 'refreshTokenClientAcquireTokenWithCachedRefreshToken'
+[2026-11-09 09:35:25.890] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:25 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-common@16.16.0 : Trace - {"errorCode":"invalid_grant","errorMessage":"AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 691e31f3-b332-40e1-9878-40fac22cf202 Correlation ID: 43f36e43-fc72-461a-b34c-71a4365f1fd3 Timestamp: 2026-11-09 14:35:25Z","subError":"bad_token","correlationId":"43f36e43-fc72-461a-b34c-71a4365f1fd3","name":"InteractionRequiredAuthError","timestamp":"2026-11-09 14:35:25Z","traceId":"691e31f3-b332-40e1-9878-40fac22cf202","claims":"","errorNo":70000}
+[2026-11-09 09:35:27.891] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] Requesting a token using OAuth2.0 device code flow
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - acquireTokenByDeviceCode called
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:27.892] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 09:35:27.893] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 09:35:27.894] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 09:35:27.895] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Verbose - Device code client created
+[2026-11-09 09:35:27.895] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.895] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:27.897] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] Requesting a token using OAuth2.0 device code flow
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - acquireTokenByDeviceCode called
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.897] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 09:35:27.898] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Verbose - Device code client created
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:27.899] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:27 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.343] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.343] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] To sign in, use a web browser to open the page https://www.microsoft.com/link and enter the code TPNMRKTV to authenticate.
+[2026-11-09 09:35:28.344] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Stop UI runner
+[2026-11-09 09:35:28.344] [INFO]  [lib] [IntervalRunner]: Stopping
+[2026-11-09 09:35:28.345] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.345] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.345] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.345] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.452] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.452] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] To sign in, use a web browser to open the page https://www.microsoft.com/link and enter the code 3U6QYF53 to authenticate.
+[2026-11-09 09:35:28.452] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Stop UI runner
+[2026-11-09 09:35:28.452] [INFO]  [lib] [IntervalRunner]: Stopping
+[2026-11-09 09:35:28.453] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.453] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.453] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.453] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.968] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:28.968] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.968] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:28.969] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:28 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:29.317] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:29 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:29.317] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:29 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:29.317] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:29 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:29.317] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:29 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:33.970] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:33 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:33.971] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:33 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:34.318] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:34.318] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:34.771] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:34.771] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:34.771] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:34.771] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:34 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:35.145] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:35 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:35.146] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:35 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:35.146] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:35 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:35.146] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:35 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:39.772] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:39 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:39.772] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:39 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:40.147] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:40.147] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:40.267] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:40.268] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:40.268] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:40.268] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:40.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:40.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:40.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:40.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:40 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:45.268] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:45.268] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:45.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:45.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:45.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:45.794] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:45.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:45.982] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:45 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:46.332] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:46 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:46.332] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:46 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:46.332] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:46 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:46.332] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:46 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:50.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:50 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:50.795] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:50 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:51.307] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:51.308] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:51.308] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:51.308] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:51.333] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:51.333] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:51.658] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:51.658] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:51.659] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:51.659] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:51 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:56.309] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:56 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:56.309] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:56 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:56.659] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:56 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:56.659] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:56 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:57.259] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:57.259] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:57.259] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:57.259] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:35:57.555] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:35:57.555] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:57.556] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:35:57.556] [LOG]   [lib] [Mon, 09 Nov 2026 14:35:57 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:36:02.260] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:02.261] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:36:02.557] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:02.557] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Executing function 'networkClientSendPostRequestAsync'
+[2026-11-09 09:36:02.862] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:36:02.862] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:02.862] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:02.862] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:02 GMT] : [43f36e43-fc72-461a-b34c-71a4365f1fd3] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.
+[2026-11-09 09:36:03.649] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:03 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Trace - Returning result from 'networkClientSendPostRequestAsync'
+[2026-11-09 09:36:03.649] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:03 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:03.649] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:03 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 09:36:03.649] [LOG]   [lib] [Mon, 09 Nov 2026 14:36:03 GMT] : [dc396366-ae14-4ca5-934c-5df2f3e47634] : @azure/msal-node@7.2.0 : Info - Authorization pending. Continue polling.

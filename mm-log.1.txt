@@ -1,0 +1,538 @@
+
+> magicmirror@2.38.0 start
+> node --run start:wayland
+
+[2026-11-09 08:10:59.949] [LOG]   [app] Starting MagicMirror: v2.38.0
+[2026-11-09 08:10:59.957] [LOG]   [utils] Loading config ...
+[2026-11-09 08:10:59.959] [INFO]  [utils] Checking config file /home/cgrymala/MagicMirror/config/config.js ...
+[2026-11-09 08:11:00.017] [INFO]  [utils] Your configuration file doesn't contain syntax errors :)
+[2026-11-09 08:11:00.018] [INFO]  [utils] Checking modules structure configuration ...
+[2026-11-09 08:11:00.019] [INFO]  [utils] Your modules structure configuration doesn't contain errors :)
+[2026-11-09 08:11:00.020] [LOG]   [app] Loading module helpers ...
+[2026-11-09 08:11:00.021] [LOG]   [app] No helper found for module: alert.
+[2026-11-09 08:11:00.023] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 08:11:00.023] [LOG]   [node_helper] Module helper loaded: updatenotification
+[2026-11-09 08:11:00.023] [LOG]   [app] No helper found for module: clock.
+[2026-11-09 08:11:00.091] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 08:11:00.091] [LOG]   [node_helper] Module helper loaded: calendar
+[2026-11-09 08:11:00.099] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 08:11:00.099] [LOG]   [node_helper] Module helper loaded: weather
+[2026-11-09 08:11:00.353] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 08:11:00.354] [LOG]   [node_helper] Module helper loaded: MMM-OneDrive
+[2026-11-09 08:11:00.355] [LOG]   [node_helper] Initializing new module helper ...
+[2026-11-09 08:11:00.355] [LOG]   [node_helper] Module helper loaded: MMM-EnphaseSolar
+[2026-11-09 08:11:00.355] [LOG]   [app] All module helpers loaded.
+[2026-11-09 08:11:00.360] [LOG]   [server] Starting server on port 8080 ... 
+[2026-11-09 08:11:00.563] [LOG]   [app] Server started ...
+[2026-11-09 08:11:00.564] [LOG]   [node_helper] Connecting socket for: updatenotification
+[2026-11-09 08:11:00.564] [LOG]   [node_helper] Starting module helper: updatenotification
+[2026-11-09 08:11:00.564] [LOG]   [node_helper] Connecting socket for: calendar
+[2026-11-09 08:11:00.565] [LOG]   [calendar] Starting node helper for: calendar
+[2026-11-09 08:11:00.565] [LOG]   [node_helper] Connecting socket for: weather
+[2026-11-09 08:11:00.565] [LOG]   [weather] Starting node helper for: weather
+[2026-11-09 08:11:00.566] [LOG]   [node_helper] Connecting socket for: MMM-OneDrive
+[2026-11-09 08:11:00.566] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting module helper
+[2026-11-09 08:11:00.567] [INFO]  [lib] [DiskCaching] Initialized in directory: /home/cgrymala/MagicMirror/modules/MMM-OneDrive/cache/photos
+[2026-11-09 08:11:00.568] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Started
+[2026-11-09 08:11:00.568] [LOG]   [node_helper] Connecting socket for: MMM-EnphaseSolar
+[2026-11-09 08:11:00.569] [LOG]   [MMM-EnphaseSolar] Starting node helper: MMM-EnphaseSolar
+[2026-11-09 08:11:00.569] [LOG]   [app] Sockets connected & modules started ...
+[2026-11-09 08:11:00.591] [LOG]   [electron] Launching application.
+[2026-11-09 08:11:00.778] [INFO]  [systeminformation] 
+####  System Information  ####
+- MM:       version: v2.38.0; git: f138f5b6; branch: master
+- SYSTEM:   manufacturer: Raspberry Pi Foundation; model: Raspberry Pi 5 Model B Rev 1.1; virtual: false
+- OS:       platform: linux; distro: Debian GNU/Linux; release: 13; arch: arm64; kernel: 6.18.50+rpt-rpi-2712
+- VERSIONS: electron: 42.5.2; used node: 24.17.0; installed node: 24.12.0; npm: 11.19.0; pm2: 6.0.14
+- ENV:      XDG_SESSION_TYPE: tty; MM_CONFIG_FILE: undefined
+            WAYLAND_DISPLAY:  undefined; DISPLAY: undefined; ELECTRON_ENABLE_GPU: undefined
+- RAM:      total: 16214.30 MB; free: 14851.97 MB; used: 1362.33 MB
+- OTHERS:   uptime: 8522 minutes; timeZone: America/New_York
+[2026-11-09 08:11:01.250] [LOG]   [weather] Received INIT_WEATHER for instance module_5_weather
+[2026-11-09 08:11:01.251] [LOG]   [weather] Attempting to initialize provider openmeteo for instance module_5_weather
+[2026-11-09 08:11:01.251] [LOG]   [weather] Loading provider from: /home/cgrymala/MagicMirror/defaultmodules/weather/providers/openmeteo.js
+[2026-11-09 08:11:01.267] [LOG]   [calendar] Create new calendarfetcher for url: https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics - Interval: 604800000
+[2026-11-09 08:11:01.270] [LOG]   [calendar] Create new calendarfetcher for url: https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics - Interval: 604800000
+[2026-11-09 08:11:01.272] [LOG]   [weather] Received INIT_WEATHER for instance module_4_weather
+[2026-11-09 08:11:01.272] [LOG]   [weather] Attempting to initialize provider openmeteo for instance module_4_weather
+[2026-11-09 08:11:01.272] [LOG]   [weather] Loading provider from: /home/cgrymala/MagicMirror/defaultmodules/weather/providers/openmeteo.js
+[2026-11-09 08:11:01.274] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] notification received INIT
+[2026-11-09 08:11:01.274] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Debug mode true
+[2026-11-09 08:11:01.274] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting UI render clock
+[2026-11-09 08:11:01.275] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Starting Initialization
+[2026-11-09 08:11:01.276] [INFO]  [MMM-EnphaseSolar] MMM-EnphaseSolar: Getting a session token
+[2026-11-09 08:11:01.278] [INFO]  [updatenotification] Updater Class Loaded!
+[2026-11-09 08:11:01.278] [INFO]  [updatenotification] Checking git for module: MMM-OneDrive
+[2026-11-09 08:11:01.288] [INFO]  [updatenotification] Checking git for module: MMM-EnphaseSolar
+[2026-11-09 08:11:01.303] [INFO]  [updatenotification] Checking git for module: MagicMirror
+[2026-11-09 08:11:01.314] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cache data
+[2026-11-09 08:11:01.315] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cached albumns list
+[2026-11-09 08:11:01.323] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] successfully loaded selectedAlbums
+[2026-11-09 08:11:01.323] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading cached list
+[2026-11-09 08:11:01.326] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] successfully loaded photo list cache of  171  photos
+[2026-11-09 08:11:01.328] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Show photos from cache for fast startup
+[2026-11-09 08:11:01.328] [INFO]  [lib] [IntervalRunner]: Skip to next cycle
+[2026-11-09 08:11:01.328] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Initialization complete!
+[2026-11-09 08:11:01.329] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Start first scanning.
+[2026-11-09 08:11:01.329] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Run scanJob
+[2026-11-09 08:11:01.330] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Getting album list
+[2026-11-09 08:11:01.334] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading to UI: {
+  id: 'F17A01643E1C5BF8!sc406ef4e33324c13bfdb9b6e8ae228ab',
+  filename: '0B6A4559 (Large).jpg',
+  album: 'MagicMirror'
+}
+[2026-11-09 08:11:01.391] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Initializing AuthProvider
+[2026-11-09 08:11:01.392] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] AuthProvider created
+[2026-11-09 08:11:01.392] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Info - getTokenCache called
+[2026-11-09 08:11:01.393] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-node@7.2.0 : Trace - getAllAccounts called
+[2026-11-09 08:11:01.393] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 08:11:01.396] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 08:11:01.397] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 08:11:01.397] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 08:11:01.398] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 08:11:01.398] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.398] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.398] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 08:11:01.398] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.399] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.399] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 08:11:01.399] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.399] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-common@16.16.0 : Trace - CacheManager - getIdToken called
+[2026-11-09 08:11:01.400] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.400] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 08:11:01.400] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 08:11:01.400] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 08:11:01.400] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [8828f673-baaa-43a3-bc3a-244ece75e5c6] : @azure/msal-common@16.16.0 : Info - CacheManager:getIdToken - Returning ID token
+[2026-11-09 08:11:01.401] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 08:11:01.401] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 08:11:01.402] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent called for the first time, storing active request
+[2026-11-09 08:11:01.402] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 08:11:01.403] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 08:11:01.403] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:01.403] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.403] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 08:11:01.404] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 08:11:01.405] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-node@7.2.0 : Verbose - Silent flow client created
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Info - Overwriting in-memory cache with persistent cache
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Clearing cache entries created by MSAL
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:01.406] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.407] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.407] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 08:11:01.428] [DEBUG] [calendar] Parsed iCal data from https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics with 4 entries.
+[2026-11-09 08:11:01.429] [DEBUG] [calendar] There are 4 calendar entries.
+[2026-11-09 08:11:01.429] [DEBUG] [calendar] title: Veterans Day
+[2026-11-09 08:11:01.430] [DEBUG] [calendar] Event: Veterans Day | start: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.435] [DEBUG] [calendar] saving event: Veterans Day, start: Wed Nov 11 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Wed Nov 11 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.436] [DEBUG] [calendar] title: Thanksgiving Day
+[2026-11-09 08:11:01.436] [DEBUG] [calendar] Event: Thanksgiving Day | start: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.437] [DEBUG] [calendar] saving event: Thanksgiving Day, start: Thu Nov 26 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Thu Nov 26 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.437] [DEBUG] [calendar] title: Christmas
+[2026-11-09 08:11:01.437] [DEBUG] [calendar] Event: Christmas | start: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time) | end: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.438] [DEBUG] [calendar] saving event: Christmas, start: Fri Dec 25 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 25 2026 23:59:59 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.438] [INFO]  [calendar] Broadcasting 3 events from https://ics.calendarlabs.com/76/mm3137/US_Holidays.ics.
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.449] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.450] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.450] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.450] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 08:11:01.450] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.451] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - CacheManager - getAccessToken called
+[2026-11-09 08:11:01.451] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.451] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 08:11:01.451] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 08:11:01.451] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Info - CacheManager:getAccessToken - Returning access token
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - CacheManager - getIdToken called
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 08:11:01.452] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Info - CacheManager:getIdToken - Returning ID token
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:01.453] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - Executing function 'silentFlowClientGenerateResultFromCacheRecord'
+[2026-11-09 08:11:01.454] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:01 GMT] : [fcb8d0cd-bc77-4dcd-bb7a-56f18054be1b] : @azure/msal-common@16.16.0 : Trace - Returning result from 'silentFlowClientGenerateResultFromCacheRecord'
+[2026-11-09 08:11:01.454] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] getToken done
+[2026-11-09 08:11:01.454] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady token responded
+[2026-11-09 08:11:01.475] [LOG]   [weather] Weather provider openmeteo initialized for instance module_5_weather
+[2026-11-09 08:11:01.479] [LOG]   [weather] Weather provider openmeteo initialized for instance module_4_weather
+[2026-11-09 08:11:01.641] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady done, retry count: 0
+[2026-11-09 08:11:01.641] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Resume UI runner
+[2026-11-09 08:11:01.642] [INFO]  [lib] [IntervalRunner]: To resume
+[2026-11-09 08:11:01.642] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Getting Album info chunks.
+[2026-11-09 08:11:01.642] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] [getAlbum] request get URL: https://graph.microsoft.com/v1.0/me/drive/bundles?filter=bundle%2Falbum%20ne%20null
+[2026-11-09 08:11:01.776] [DEBUG] [calendar] Parsed iCal data from https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics with 16 entries.
+[2026-11-09 08:11:01.776] [DEBUG] [calendar] There are 16 calendar entries.
+[2026-11-09 08:11:01.776] [DEBUG] [calendar] title: Humira injection
+[2026-11-09 08:11:01.776] [DEBUG] [calendar] Event: Humira injection | start: Fri Aug 21 2026 12:15:00 GMT-0400 (Eastern Daylight Time) | end: Fri Aug 21 2026 13:15:00 GMT-0400 (Eastern Daylight Time) | recurring: true
+[2026-11-09 08:11:01.791] [DEBUG] [calendar] saving event: Humira injection, start: Fri Nov 13 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 13 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] saving event: Humira injection, start: Fri Nov 27 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 27 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] saving event: Humira injection, start: Fri Dec 11 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 11 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] saving event: Humira injection, start: Fri Dec 25 2026 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 25 2026 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] saving event: Humira injection, start: Fri Jan 08 2027 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Jan 08 2027 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] saving event: Humira injection, start: Fri Jan 22 2027 12:15:00 GMT-0500 (Eastern Standard Time), end: Fri Jan 22 2027 13:15:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] title: Zepbound
+[2026-11-09 08:11:01.792] [DEBUG] [calendar] Event: Zepbound | start: Sat Aug 29 2026 00:00:00 GMT-0400 (Eastern Daylight Time) | end: Sun Aug 30 2026 00:00:00 GMT-0400 (Eastern Daylight Time) | recurring: true
+[2026-11-09 08:11:01.799] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 14 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 15 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.799] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 21 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 22 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Nov 28 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Nov 29 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 05 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 06 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 12 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 13 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 19 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 20 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Dec 26 2026 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Dec 27 2026 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 02 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 03 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 09 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 10 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 16 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 17 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 23 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 24 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Jan 30 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Jan 31 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 06 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 07 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 13 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 14 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.800] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 20 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 21 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] saving event: Zepbound, start: Sat Feb 27 2027 00:00:00 GMT-0500 (Eastern Standard Time), end: Sun Feb 28 2027 00:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] title: Amanda Neurosurgeon 
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] Event: Amanda Neurosurgeon  | start: Tue Nov 10 2026 13:00:00 GMT-0500 (Eastern Standard Time) | end: Tue Nov 10 2026 14:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] saving event: Amanda Neurosurgeon , start: Tue Nov 10 2026 13:00:00 GMT-0500 (Eastern Standard Time), end: Tue Nov 10 2026 14:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] title: Amanda MRI
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] Event: Amanda MRI | start: Fri Nov 13 2026 06:30:00 GMT-0500 (Eastern Standard Time) | end: Fri Nov 13 2026 07:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] saving event: Amanda MRI, start: Fri Nov 13 2026 06:30:00 GMT-0500 (Eastern Standard Time), end: Fri Nov 13 2026 07:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] title: Amanda Dr Redmond 
+[2026-11-09 08:11:01.801] [DEBUG] [calendar] Event: Amanda Dr Redmond  | start: Tue Nov 17 2026 14:45:00 GMT-0500 (Eastern Standard Time) | end: Tue Nov 17 2026 15:45:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] saving event: Amanda Dr Redmond , start: Tue Nov 17 2026 14:45:00 GMT-0500 (Eastern Standard Time), end: Tue Nov 17 2026 15:45:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] title: Music Bingo at Tiki's 
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] Event: Music Bingo at Tiki's  | start: Thu Nov 19 2026 19:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Nov 19 2026 21:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] saving event: Music Bingo at Tiki's , start: Thu Nov 19 2026 19:00:00 GMT-0500 (Eastern Standard Time), end: Thu Nov 19 2026 21:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] title: Amanda hair
+[2026-11-09 08:11:01.802] [DEBUG] [calendar] Event: Amanda hair | start: Wed Nov 25 2026 11:30:00 GMT-0500 (Eastern Standard Time) | end: Wed Nov 25 2026 12:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] saving event: Amanda hair, start: Wed Nov 25 2026 11:30:00 GMT-0500 (Eastern Standard Time), end: Wed Nov 25 2026 12:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] title: Nails 
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] Event: Nails  | start: Tue Dec 01 2026 10:30:00 GMT-0500 (Eastern Standard Time) | end: Tue Dec 01 2026 11:30:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] saving event: Nails , start: Tue Dec 01 2026 10:30:00 GMT-0500 (Eastern Standard Time), end: Tue Dec 01 2026 11:30:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] title: Amanda Dr Prince
+[2026-11-09 08:11:01.803] [DEBUG] [calendar] Event: Amanda Dr Prince | start: Fri Dec 04 2026 14:00:00 GMT-0500 (Eastern Standard Time) | end: Fri Dec 04 2026 15:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] saving event: Amanda Dr Prince, start: Fri Dec 04 2026 14:00:00 GMT-0500 (Eastern Standard Time), end: Fri Dec 04 2026 15:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] title: Music Bingo at Tiki's 
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] Event: Music Bingo at Tiki's  | start: Thu Dec 17 2026 19:00:00 GMT-0500 (Eastern Standard Time) | end: Thu Dec 17 2026 21:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] saving event: Music Bingo at Tiki's , start: Thu Dec 17 2026 19:00:00 GMT-0500 (Eastern Standard Time), end: Thu Dec 17 2026 21:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] title: Amanda Dr Ramirez
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] Event: Amanda Dr Ramirez | start: Wed Jan 27 2027 11:00:00 GMT-0500 (Eastern Standard Time) | end: Wed Jan 27 2027 12:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.804] [DEBUG] [calendar] saving event: Amanda Dr Ramirez, start: Wed Jan 27 2027 11:00:00 GMT-0500 (Eastern Standard Time), end: Wed Jan 27 2027 12:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] title: CAG  and ALG Dentist
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] Event: CAG  and ALG Dentist | start: Mon Feb 22 2027 10:00:00 GMT-0500 (Eastern Standard Time) | end: Mon Feb 22 2027 12:00:00 GMT-0500 (Eastern Standard Time) | recurring: false
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] saving event: CAG  and ALG Dentist, start: Mon Feb 22 2027 10:00:00 GMT-0500 (Eastern Standard Time), end: Mon Feb 22 2027 12:00:00 GMT-0500 (Eastern Standard Time)
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] title: Amanda eye appointment
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] Event: Amanda eye appointment | start: Wed Mar 24 2027 11:30:00 GMT-0400 (Eastern Daylight Time) | end: Wed Mar 24 2027 12:30:00 GMT-0400 (Eastern Daylight Time) | recurring: false
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] saving event: Amanda eye appointment, start: Wed Mar 24 2027 11:30:00 GMT-0400 (Eastern Daylight Time), end: Wed Mar 24 2027 12:30:00 GMT-0400 (Eastern Daylight Time)
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] title: CAG doctor
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] Event: CAG doctor | start: Thu Apr 29 2027 08:30:00 GMT-0400 (Eastern Daylight Time) | end: Thu Apr 29 2027 09:30:00 GMT-0400 (Eastern Daylight Time) | recurring: false
+[2026-11-09 08:11:01.805] [DEBUG] [calendar] saving event: CAG doctor, start: Thu Apr 29 2027 08:30:00 GMT-0400 (Eastern Daylight Time), end: Thu Apr 29 2027 09:30:00 GMT-0400 (Eastern Daylight Time)
+[2026-11-09 08:11:01.806] [INFO]  [calendar] Broadcasting 34 events from https://outlook.live.com/owa/calendar/d67912a7-b2be-4f47-80ac-707c022d9b70/dcea1bd4-67a8-4ea7-a669-d0f48f3545db/cid-F17A01643E1C5BF8/calendar.ics.
+[2026-11-09 08:11:02.088] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {
+    "connection": {
+        "mqtt_state": "connected",
+        "prov_state": "configured",
+        "auth_state": "ok",
+        "sc_stream": "enabled",
+        "sc_debug": "disabled"
+    },
+    "meters": {
+        "last_update": 1794229815,
+        "soc": 0,
+        "main_relay_state": 1,
+        "gen_relay_state": 5,
+        "backup_bat_mode": 1,
+        "backup_soc": 0,
+        "is_split_phase": 1,
+        "phase_count": 2,
+        "enc_agg_soc": 0,
+        "enc_agg_energy": 0,
+        "acb_agg_soc": 0,
+        "acb_agg_energy": 0,
+        "pv": {
+            "agg_p_mw": 3301478,
+            "agg_s_mva": 4325317,
+            "agg_p_ph_a_mw": 1648944,
+            "agg_p_ph_b_mw": 1652533,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 2158419,
+            "agg_s_ph_b_mva": 2166898,
+            "agg_s_ph_c_mva": 0
+        },
+        "storage": {
+            "agg_p_mw": 0,
+            "agg_s_mva": -57397,
+            "agg_p_ph_a_mw": 0,
+            "agg_p_ph_b_mw": 0,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": -25358,
+            "agg_s_ph_b_mva": -32040,
+            "agg_s_ph_c_mva": 0
+        },
+        "grid": {
+            "agg_p_mw": -1470722,
+            "agg_s_mva": -3246354,
+            "agg_p_ph_a_mw": -158384,
+            "agg_p_ph_b_mw": -1312338,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": -1398145,
+            "agg_s_ph_b_mva": -1848210,
+            "agg_s_ph_c_mva": 0
+        },
+        "load": {
+            "agg_p_mw": 1830756,
+            "agg_s_mva": 1021566,
+            "agg_p_ph_a_mw": 1490560,
+            "agg_p_ph_b_mw": 340195,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 734916,
+            "agg_s_ph_b_mva": 286648,
+            "agg_s_ph_c_mva": 0
+        },
+        "generator": {
+            "agg_p_mw": 0,
+            "agg_s_mva": 0,
+            "agg_p_ph_a_mw": 0,
+            "agg_p_ph_b_mw": 0,
+            "agg_p_ph_c_mw": 0,
+            "agg_s_ph_a_mva": 0,
+            "agg_s_ph_b_mva": 0,
+            "agg_s_ph_c_mva": 0
+        }
+    },
+    "tasks": {
+        "task_id": -1622205408,
+        "timestamp": 1794203120
+    },
+    "counters": {
+        "main_CfgLoad": 2,
+        "main_CfgChanged": 1,
+        "main_taskUpdate": 85,
+        "MqttClient_respond": 170,
+        "MqttClient_msgarrvd": 85,
+        "MqttClient_reconnect": 1,
+        "MqttClient_create": 6,
+        "MqttClient_setCallbacks": 6,
+        "MqttClient_connect": 6,
+        "MqttClient_subscribe": 6,
+        "SSL_Keys_Create": 6,
+        "sc_SendStreamCtrl": 1,
+        "rest_Status": 11598
+    },
+    "dry_contacts": {
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        },
+        "": {
+            "dry_contact_id": "",
+            "dry_contact_type": "",
+            "dry_contact_load_name": "",
+            "dry_contact_status": 0
+        }
+    }
+}
+[2026-11-09 08:11:02.103] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {
+    "production": {
+        "pcu": {
+            "wattHoursToday": 2280,
+            "wattHoursSevenDays": 418934,
+            "wattHoursLifetime": 43626544,
+            "wattsNow": 2019
+        },
+        "rgm": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 0,
+            "wattsNow": 0
+        },
+        "eim": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 42439209,
+            "wattsNow": 0
+        }
+    },
+    "consumption": {
+        "eim": {
+            "wattHoursToday": 0,
+            "wattHoursSevenDays": 0,
+            "wattHoursLifetime": 43644275,
+            "wattsNow": 0
+        }
+    }
+}
+[2026-11-09 08:11:02.309] [DEBUG] [lib] [MMM-OneDrive] [urlToImageBase64] Image type: jpg, mimeType: image/jpeg
+[2026-11-09 08:11:02.311] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Image send to UI:
+[2026-11-09 08:11:02.311] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] {"id":"F17A01643E1C5BF8!sc406ef4e33324c13bfdb9b6e8ae228ab","filename":"0B6A4559 (Large).jpg","index":0,"fileSizeInKB":"318.68"}
+[2026-11-09 08:11:02.336] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] - RAM:      total: 16214.3 MB; free: 14761 MB; used: 1453.3 MB
+- SWAP:     total: 2047.98 MB; free: 1980.8 MB; used: 67.19 MB; cached: 0.11 MB
+- GPU:     allocated: 8 MB; reloc: 0 MB (used: ~0 MB; free: ~8 MB)
+- OTHERS:   uptime: 8522 minutes; timeZone: America/New_York
+[2026-11-09 08:11:02.338] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] notification received IMAGE_LOADED
+[2026-11-09 08:11:02.338] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Image loaded:
+[2026-11-09 08:11:02.338] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] {"id":"F17A01643E1C5BF8!sc406ef4e33324c13bfdb9b6e8ae228ab","filename":"0B6A4559 (Large).jpg","index":0}
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] found album:
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] name		id
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] Daughtry - Great Frederick Fair - Sept 18, 2026	F17A01643E1C5BF8!sf4ba71db15064ddd9f39b771f11dbbdc
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] Iron Maiden - Run For Your Lives - Sept 6, 2026	F17A01643E1C5BF8!sd102d9dff8454412a10751af85d077c0
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] MagicMirror	F17A01643E1C5BF8!s3c49250bcb5e4da5b4700381308a2efd
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] Keith Urban High & Alive - October 4, 2025	F17A01643E1C5BF8!s1676f40d485b4deb95bd022aae136203
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] Friday, December 30, 2016	F17A01643E1C5BF8!317254
+[2026-11-09 08:11:03.067] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] founded albums:  5
+[2026-11-09 08:11:03.068] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Finish Album scanning. Properly scanned : 1
+[2026-11-09 08:11:03.068] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Albums: MagicMirror
+[2026-11-09 08:11:03.068] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] [getAlbumThumbnail] request get URL: https://graph.microsoft.com/v1.0/drive/items/F17A01643E1C5BF8!sfe304eca85fd46eebf346ef3dff18d44/thumbnails
+[2026-11-09 08:11:03.069] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] Album list cache saved
+[2026-11-09 08:11:04.147] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] thumbnail found:  F17A01643E1C5BF8!sfe304eca85fd46eebf346ef3dff18d44 medium
+[2026-11-09 08:11:04.300] [DEBUG] [MMM-EnphaseSolar] MMM-EnphaseSolar: data in response was: {"production":[{"type":"inverters","activeCount":49,"readingTime":1794229607,"wNow":2019,"whLifetime":43626544},{"type":"eim","activeCount":1,"measurementType":"production","readingTime":1794229817,"wNow":3187.5,"whLifetime":49567988.52,"varhLeadLifetime":9494094.988,"varhLagLifetime":9554645.114,"vahLifetime":0.116,"rmsCurrent":33.736,"rmsVoltage":250.072,"reactPwr":-2675.743,"apprntPwr":4218.318,"pwrFactor":1.511,"whToday":49567988.52,"whLastSevenDays":49567988.52,"vahToday":0.116,"varhLeadToday":9494094.988,"varhLagToday":9554645.114}],"consumption":[{"type":"eim","activeCount":1,"measurementType":"total-consumption","readingTime":1794229817,"wNow":1827.878,"whLifetime":48004034.803,"varhLeadLifetime":886966.189,"varhLagLifetime":-487652.258,"vahLifetime":0.088,"rmsCurrent":8.284,"rmsVoltage":249.947,"reactPwr":-75.695,"apprntPwr":1034.553,"pwrFactor":-0.771,"whToday":48004034.803,"whLastSevenDays":48004034.803,"vahToday":0.088,"varhLeadToday":886966.189,"varhLagToday":0.0},{"type":"eim","activeCount":1,"measurementType":"net-consumption","readingTime":1794229817,"wNow":-1359.622,"whLifetime":-1563953.717,"varhLeadLifetime":10381061.178,"varhLagLifetime":9006442.729,"vahLifetime":0.088,"rmsCurrent":25.451,"rmsVoltage":249.947,"reactPwr":2600.048,"apprntPwr":3181.649,"pwrFactor":-0.771,"whToday":0,"whLastSevenDays":0,"vahToday":0,"varhLeadToday":0,"varhLagToday":0}],"storage":[{"type":"acb","activeCount":0,"readingTime":0,"wNow":0,"whNow":0,"state":"idle"}]}
+[2026-11-09 08:11:04.368] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] getAlbumList done
+[2026-11-09 08:11:04.368] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Getting image list
+[2026-11-09 08:11:04.368] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Prepare to get photo list from 'MagicMirror'
+[2026-11-09 08:11:04.368] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Get AuthProvider from cache
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - acquireTokenSilent called
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - initializeRequestScopes called
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - acquireTokenSilent called for the first time, storing active request
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - createAuthority called
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityResolveEndpointsAsync'
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.369] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Attempting to get cloud discovery metadata from authority configuration
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Did not find cloud discovery metadata in the config... Attempting to get cloud discovery metadata from the hardcoded values.
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Found cloud discovery metadata from hardcoded values.
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateCloudDiscoveryMetadata'
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Executing function 'authorityUpdateEndpointMetadata'
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Attempting to get endpoint metadata from authority configuration
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Did not find endpoint metadata in the config... Attempting to get endpoint metadata from the hardcoded values.
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityUpdateEndpointMetadata'
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.370] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Trace - Returning result from 'authorityResolveEndpointsAsync'
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - buildOauthClientConfiguration called
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Info - Building oauth client configuration with the following authority: https://login.microsoftonline.com/consumers/oauth2/v2.0/token.
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-node@7.2.0 : Verbose - Silent flow client created
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Info - Overwriting in-memory cache with persistent cache
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Clearing cache entries created by MSAL
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.371] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.372] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.372] [DEBUG] [lib] [MMM-OneDrive] [AuthProvider cachePlugin] Cache file found, loading cache.
+[2026-11-09 08:11:04.374] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Deserializing JSON to in-memory cache
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Reading cache snapshot from disk
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Overlaying input cache with the default cache
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting in-memory cache
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.375] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting in-memory cache
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - CacheManager - getAccessToken called
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Info - CacheManager:getAccessToken - Returning access token
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.376] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - CacheManager - getIdToken called
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'config'
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata called with source: 'hardcoded_values'
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - getAliasesFromMetadata: found cloud discovery metadata in 'hardcoded_values', returning aliases
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Info - CacheManager:getIdToken - Returning ID token
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Retrieving all cache keys
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Getting cache key-value store
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [] : @azure/msal-node@7.2.0 : Trace - Setting cache key value store
+[2026-11-09 08:11:04.377] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - Executing function 'silentFlowClientGenerateResultFromCacheRecord'
+[2026-11-09 08:11:04.378] [LOG]   [lib] [Mon, 09 Nov 2026 13:11:04 GMT] : [dd104e93-5b77-4229-a4d9-eff8d64cccab] : @azure/msal-common@16.16.0 : Trace - Returning result from 'silentFlowClientGenerateResultFromCacheRecord'
+[2026-11-09 08:11:04.378] [INFO]  [lib] [MMM-OneDrive] [AuthProvider] getToken done
+[2026-11-09 08:11:04.378] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady token responded
+[2026-11-09 08:11:04.489] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady done, retry count: 0
+[2026-11-09 08:11:04.489] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Resume UI runner
+[2026-11-09 08:11:04.490] [INFO]  [lib] [IntervalRunner]: To resume
+[2026-11-09 08:11:04.490] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Indexing photos. album: F17A01643E1C5BF8!s3c49250bcb5e4da5b4700381308a2efd
+[2026-11-09 08:11:04.491] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] getImages loop cycle: 0
+[2026-11-09 08:11:04.492] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] [getImages] request get URL: https://graph.microsoft.com/v1.0/me/drives/f17a01643e1c5bf8/items/F17A01643E1C5BF8!s3c49250bcb5e4da5b4700381308a2efd/children?$top=1000
+[2026-11-09 08:11:07.009] [INFO]  [lib] [MMM-OneDrive] [OneDrivePhotos] Parsing 171 items in F17A01643E1C5BF8!s3c49250bcb5e4da5b4700381308a2efd
+[2026-11-09 08:11:07.011] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] Valid 171 items in F17A01643E1C5BF8!s3c49250bcb5e4da5b4700381308a2efd
+[2026-11-09 08:11:07.012] [DEBUG] [lib] [MMM-OneDrive] [OneDrivePhotos] getImages loop cycle 0 took 2520 ms
+[2026-11-09 08:11:07.012] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Got 171 photo(s) from 'MagicMirror'
+[2026-11-09 08:11:07.012] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Total indexed photos: 171
+[2026-11-09 08:11:07.013] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Run scanJob done, duration: 5684
+[2026-11-09 08:11:07.014] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Next scan will be at 11/9/2026, 9:06:01 AM
+[2026-11-09 08:11:07.014] [INFO]  [lib] [IntervalRunner]: Skip to next cycle
+[2026-11-09 08:11:07.014] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Loading to UI: {
+  id: 'F17A01643E1C5BF8!sc8566838757040b6865c668d9e081a82',
+  filename: 'PXL_20260607_115154499~2.jpg',
+  album: 'MagicMirror'
+}
+[2026-11-09 08:11:07.017] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] Photo list cache saved
+[2026-11-09 08:11:07.024] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] Cache config JSON saved
+[2026-11-09 08:11:07.024] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] Cache config CACHE_HASH saved
+[2026-11-09 08:11:07.781] [DEBUG] [lib] [MMM-OneDrive] [urlToImageBase64] Image type: jpg, mimeType: image/jpeg
+[2026-11-09 08:11:07.783] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Image send to UI:
+[2026-11-09 08:11:07.783] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] {"id":"F17A01643E1C5BF8!sc8566838757040b6865c668d9e081a82","filename":"PXL_20260607_115154499~2.jpg","index":1,"fileSizeInKB":"996.11"}
+[2026-11-09 08:11:07.809] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] - RAM:      total: 16214.3 MB; free: 14716.78 MB; used: 1497.52 MB
+- SWAP:     total: 2047.98 MB; free: 1980.8 MB; used: 67.19 MB; cached: 0.11 MB
+- GPU:     allocated: 8 MB; reloc: 0 MB (used: ~0 MB; free: ~8 MB)
+- OTHERS:   uptime: 8522 minutes; timeZone: America/New_York
+[2026-11-09 08:11:07.811] [DEBUG] [MMM-OneDrive] [MMM-OneDrive] [node_helper] notification received IMAGE_LOADED
+[2026-11-09 08:11:07.811] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Image loaded:
+[2026-11-09 08:11:07.812] [INFO]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] {"id":"F17A01643E1C5BF8!sc8566838757040b6865c668d9e081a82","filename":"PXL_20260607_115154499~2.jpg","index":1}

@@ -1,10 +1,12 @@
 import { PublicClientApplication, InteractionRequiredAuthError, ServerError, ClientAuthError, AuthenticationResult, AccountInfo, SilentFlowRequest, DeviceCodeRequest, Configuration } from "@azure/msal-node";
 import { DeviceCodeResponse } from "@azure/msal-common";
 import sleep from "../functions/sleep";
+import { refreshTokenLogSuffix } from "./CachePlugin";
 
 class AuthProvider {
   clientApplication: PublicClientApplication;
   account: AccountInfo | undefined;
+  private pendingTokenRequest: Promise<AuthenticationResult | null> | undefined;
 
   constructor(msalConfig: Configuration) {
     /**
@@ -47,6 +49,23 @@ class AuthProvider {
   }
 
   async getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void)) {
+    // Album scans and image URL refreshes can request authentication together.
+    // Share the entire operation, including interactive sign-in, not just MSAL's
+    // silent request. Only the initiating caller presents the device code.
+    if (this.pendingTokenRequest) {
+      return this.pendingTokenRequest;
+    }
+
+    this.pendingTokenRequest = this.acquireToken(request, deviceCodeCallback);
+    try {
+      return await this.pendingTokenRequest;
+    } finally {
+      // Do not retain a completed token or a rejected sign-in promise.
+      this.pendingTokenRequest = undefined;
+    }
+  }
+
+  private async acquireToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void)) {
     let authResponse: AuthenticationResult | null = null;
     const account = this.account || (await this.getAccount());
 
@@ -88,11 +107,10 @@ class AuthProvider {
         });
       } catch (error) {
         this.logError(error);
-        if (error instanceof InteractionRequiredAuthError) {
-          this.logError("Silent token acquisition failed");
-        }
-        if (error instanceof ServerError && error.errorCode === "invalid_grant") {
-          this.logError("Silent token acquisition failed");
+        if (error instanceof InteractionRequiredAuthError ||
+          (error instanceof ServerError && error.errorCode === "invalid_grant")) {
+          this.logError("Silent token acquisition requires sign-in; skipping retries");
+          return null;
         }
         if (error instanceof ClientAuthError && error.errorCode === "network_error") {
           this.logWarn("Network error occurred, waiting 60 seconds before retrying...");
@@ -104,6 +122,15 @@ class AuthProvider {
       }
     }
     return null;
+  }
+
+  getRefreshTokenLogSuffix(): string {
+    try {
+      return refreshTokenLogSuffix(this.clientApplication.getTokenCache().serialize());
+    } catch {
+      // Fingerprint logging must never turn a successful sign-in into a failure.
+      return " refresh_token_hex: unavailable";
+    }
   }
 
   private async getTokenDeviceCode(tokenRequest: Omit<DeviceCodeRequest, "deviceCodeCallback">, callback: ((response: DeviceCodeResponse) => void) | null = null) {
@@ -122,7 +149,7 @@ class AuthProvider {
     if (authResponse?.account) {
       this.account = authResponse.account;
     }
-    this.logInfo("getTokenDeviceCode done");
+    this.logInfo("getTokenDeviceCode done," + this.getRefreshTokenLogSuffix());
     return authResponse;
   }
 

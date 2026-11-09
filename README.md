@@ -92,6 +92,9 @@ condition: {
 ### `debug`
 
 - If set, more detailed info will be logged.
+- Cache load/save messages always append `refresh_token_hex: sha256:…` with short SHA-256 fingerprints, never raw tokens. The `getTokenDeviceCode done` and `onAuthReady done` messages also include the current cached fingerprints. Multiple tokens are comma-separated; `none` means no refresh token is present. These describe cached tokens, not a guarantee of which token MSAL selects. Cache-load messages use the debug log level.
+- Compare fingerprints across cache saves, subsequent cache loads, and authentication completion messages. Save messages are logged after the write completes; no extra disk read-back is performed. These messages do not inspect outgoing refresh requests. MSAL's default network transport is unchanged.
+- Fingerprint messages never include raw tokens. Existing MSAL/device-code logs can still contain sign-in codes and personal information; redact logs before sharing.
 
 ### `autoInfoPosition`
 

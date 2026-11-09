@@ -1,0 +1,1894 @@
+[2026-11-09 00:07:41.050] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: 'a6843cc2-5362-4223-85e3-d426ff040ec8'
+}
+[2026-11-09 00:07:41.051] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: 'a6843cc2-5362-4223-85e3-d426ff040ec8'
+}
+[2026-11-09 00:07:41.051] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 00:07:41.051] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 00:07:41.051] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] post_request_failed: expired_token
+stack:
+AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 00:07:41.051] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] post_request_failed: expired_token
+stack:
+AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 00:54:09.163] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 00:54:09.168] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 00:54:09.174] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 01:02:41.658] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 47711072-81d5-43bf-9e7c-87e57fe5a202 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:41Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 47711072-81d5-43bf-9e7c-87e57fe5a202 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:41Z',
+  subError: 'bad_token',
+  correlationId: '92efa80c-be18-4f35-a026-1800cbf3705f',
+  timestamp: '2026-11-09 06:02:41Z',
+  traceId: '47711072-81d5-43bf-9e7c-87e57fe5a202',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:02:41.659] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:02:41.659] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 01:02:44.248] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0269c287-fbfe-4d9f-b561-f056161fc802 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:44Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0269c287-fbfe-4d9f-b561-f056161fc802 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:44Z',
+  subError: 'bad_token',
+  correlationId: '92efa80c-be18-4f35-a026-1800cbf3705f',
+  timestamp: '2026-11-09 06:02:44Z',
+  traceId: '0269c287-fbfe-4d9f-b561-f056161fc802',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:02:44.249] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:02:44.249] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 01:02:46.911] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0269c287-fbfe-4d9f-b561-f056c720c802 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:46Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0269c287-fbfe-4d9f-b561-f056c720c802 Correlation ID: 92efa80c-be18-4f35-a026-1800cbf3705f Timestamp: 2026-11-09 06:02:46Z',
+  subError: 'bad_token',
+  correlationId: '92efa80c-be18-4f35-a026-1800cbf3705f',
+  timestamp: '2026-11-09 06:02:46Z',
+  traceId: '0269c287-fbfe-4d9f-b561-f056c720c802',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:02:46.912] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:02:46.912] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 01:02:48.913] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 01:17:53.232] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '92efa80c-be18-4f35-a026-1800cbf3705f'
+}
+[2026-11-09 01:17:53.233] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '92efa80c-be18-4f35-a026-1800cbf3705f'
+}
+[2026-11-09 01:17:53.233] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 01:17:53.233] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 01:17:53.233] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+[2026-11-09 01:17:53.233] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 01:17:54.258] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: de791b20-2f6d-4820-8a00-a8d207b7b402 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:54Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: de791b20-2f6d-4820-8a00-a8d207b7b402 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:54Z',
+  subError: 'bad_token',
+  correlationId: '7ff06ef5-b10c-436d-891c-cd128de2e7c4',
+  timestamp: '2026-11-09 06:17:54Z',
+  traceId: 'de791b20-2f6d-4820-8a00-a8d207b7b402',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:17:54.258] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:17:54.258] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 01:17:57.004] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d8cc16d6-e067-49cb-a419-4de238f9c502 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:56Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d8cc16d6-e067-49cb-a419-4de238f9c502 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:56Z',
+  subError: 'bad_token',
+  correlationId: '7ff06ef5-b10c-436d-891c-cd128de2e7c4',
+  timestamp: '2026-11-09 06:17:56Z',
+  traceId: 'd8cc16d6-e067-49cb-a419-4de238f9c502',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:17:57.004] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:17:57.004] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 01:17:59.446] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: bc7b402a-60e7-447b-99e5-ad81bf720500 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:59Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: bc7b402a-60e7-447b-99e5-ad81bf720500 Correlation ID: 7ff06ef5-b10c-436d-891c-cd128de2e7c4 Timestamp: 2026-11-09 06:17:59Z',
+  subError: 'bad_token',
+  correlationId: '7ff06ef5-b10c-436d-891c-cd128de2e7c4',
+  timestamp: '2026-11-09 06:17:59Z',
+  traceId: 'bc7b402a-60e7-447b-99e5-ad81bf720500',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 01:17:59.447] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 01:17:59.447] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 01:18:01.448] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 01:33:07.309] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '7ff06ef5-b10c-436d-891c-cd128de2e7c4'
+}
+[2026-11-09 01:33:07.309] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '7ff06ef5-b10c-436d-891c-cd128de2e7c4'
+}
+[2026-11-09 01:33:07.310] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 01:33:07.310] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 01:33:07.310] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 01:33:07.310] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 02:28:08.290] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: c06238d9-aa2e-46ef-b558-4fd4225d0c00 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:08Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: c06238d9-aa2e-46ef-b558-4fd4225d0c00 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:08Z',
+  subError: 'bad_token',
+  correlationId: '7875d766-810e-45b9-af35-f93bd9f6a1f7',
+  timestamp: '2026-11-09 07:28:08Z',
+  traceId: 'c06238d9-aa2e-46ef-b558-4fd4225d0c00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:28:08.291] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:28:08.291] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 02:28:10.914] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: c9403d1c-bf00-4f4f-8251-b2da3eea3902 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:10Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: c9403d1c-bf00-4f4f-8251-b2da3eea3902 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:10Z',
+  subError: 'bad_token',
+  correlationId: '7875d766-810e-45b9-af35-f93bd9f6a1f7',
+  timestamp: '2026-11-09 07:28:10Z',
+  traceId: 'c9403d1c-bf00-4f4f-8251-b2da3eea3902',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:28:10.914] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:28:10.914] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 02:28:13.216] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 23f5ba79-98eb-4e62-a645-16198c038602 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:13Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 23f5ba79-98eb-4e62-a645-16198c038602 Correlation ID: 7875d766-810e-45b9-af35-f93bd9f6a1f7 Timestamp: 2026-11-09 07:28:13Z',
+  subError: 'bad_token',
+  correlationId: '7875d766-810e-45b9-af35-f93bd9f6a1f7',
+  timestamp: '2026-11-09 07:28:13Z',
+  traceId: '23f5ba79-98eb-4e62-a645-16198c038602',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:28:13.217] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:28:13.217] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 02:28:15.217] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 02:43:18.852] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '7875d766-810e-45b9-af35-f93bd9f6a1f7'
+}
+[2026-11-09 02:43:18.852] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '7875d766-810e-45b9-af35-f93bd9f6a1f7'
+}
+[2026-11-09 02:43:18.852] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 02:43:18.852] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 02:43:18.853] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+[2026-11-09 02:43:18.853] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 02:43:19.432] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d0045be9-849b-40be-bc2e-0dc5d9a50a00 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:19Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d0045be9-849b-40be-bc2e-0dc5d9a50a00 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:19Z',
+  subError: 'bad_token',
+  correlationId: '218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce',
+  timestamp: '2026-11-09 07:43:19Z',
+  traceId: 'd0045be9-849b-40be-bc2e-0dc5d9a50a00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:43:19.433] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:43:19.433] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 02:43:21.791] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 1352fcc6-0c11-4586-8912-cacbf8d5d800 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:21Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 1352fcc6-0c11-4586-8912-cacbf8d5d800 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:21Z',
+  subError: 'bad_token',
+  correlationId: '218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce',
+  timestamp: '2026-11-09 07:43:21Z',
+  traceId: '1352fcc6-0c11-4586-8912-cacbf8d5d800',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:43:21.791] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:43:21.792] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 02:43:24.335] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 70f7d5c9-4a63-4e39-b19a-911de6dc9c02 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:24Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 70f7d5c9-4a63-4e39-b19a-911de6dc9c02 Correlation ID: 218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce Timestamp: 2026-11-09 07:43:24Z',
+  subError: 'bad_token',
+  correlationId: '218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce',
+  timestamp: '2026-11-09 07:43:24Z',
+  traceId: '70f7d5c9-4a63-4e39-b19a-911de6dc9c02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 02:43:24.335] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 02:43:24.335] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 02:43:26.336] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 02:54:09.239] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 02:54:09.299] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 02:54:09.357] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 02:58:27.239] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: '218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce'
+}
+[2026-11-09 02:58:27.239] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: '218576ef-0bf6-4c8b-9ed8-f3e6ebda26ce'
+}
+[2026-11-09 02:58:27.240] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 02:58:27.240] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 02:58:27.240] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] post_request_failed: expired_token
+stack:
+AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 02:58:27.240] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] post_request_failed: expired_token
+stack:
+AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 03:53:27.732] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 8f11080b-24e7-4395-b9f0-8165d1471c00 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:27Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 8f11080b-24e7-4395-b9f0-8165d1471c00 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:27Z',
+  subError: 'bad_token',
+  correlationId: '955b566b-e7ba-4389-91b9-d420dfb2be4d',
+  timestamp: '2026-11-09 08:53:27Z',
+  traceId: '8f11080b-24e7-4395-b9f0-8165d1471c00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 03:53:27.732] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 03:53:27.732] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 03:53:30.288] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e9b6f538-bbd8-4ff2-b37c-1aa025a9ea02 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:30Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e9b6f538-bbd8-4ff2-b37c-1aa025a9ea02 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:30Z',
+  subError: 'bad_token',
+  correlationId: '955b566b-e7ba-4389-91b9-d420dfb2be4d',
+  timestamp: '2026-11-09 08:53:30Z',
+  traceId: 'e9b6f538-bbd8-4ff2-b37c-1aa025a9ea02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 03:53:30.288] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 03:53:30.288] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 03:53:32.583] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: eaacd45f-d233-4019-a489-086525b3dc02 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:32Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: eaacd45f-d233-4019-a489-086525b3dc02 Correlation ID: 955b566b-e7ba-4389-91b9-d420dfb2be4d Timestamp: 2026-11-09 08:53:32Z',
+  subError: 'bad_token',
+  correlationId: '955b566b-e7ba-4389-91b9-d420dfb2be4d',
+  timestamp: '2026-11-09 08:53:32Z',
+  traceId: 'eaacd45f-d233-4019-a489-086525b3dc02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 03:53:32.584] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 03:53:32.584] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 03:53:34.584] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 04:08:35.192] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: '955b566b-e7ba-4389-91b9-d420dfb2be4d'
+}
+[2026-11-09 04:08:35.192] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'post_request_failed',
+  errorMessage: 'expired_token',
+  subError: '',
+  correlationId: '955b566b-e7ba-4389-91b9-d420dfb2be4d'
+}
+[2026-11-09 04:08:35.192] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 04:08:35.193] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 04:08:35.193] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] post_request_failed: expired_token
+stack:
+AuthError: post_request_failed: expired_token
+    at createAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1140:10)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8747:9)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+[2026-11-09 04:08:35.193] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 04:08:35.566] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d8cc16d6-e067-49cb-a419-4de2e751dc02 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:35Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d8cc16d6-e067-49cb-a419-4de2e751dc02 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:35Z',
+  subError: 'bad_token',
+  correlationId: 'dd453505-812c-4f71-b93d-4431ce3afdb4',
+  timestamp: '2026-11-09 09:08:35Z',
+  traceId: 'd8cc16d6-e067-49cb-a419-4de2e751dc02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 04:08:35.566] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 04:08:35.566] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 04:08:37.844] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0e45ff05-19e4-4c21-a288-e993df44bd02 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:37Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 0e45ff05-19e4-4c21-a288-e993df44bd02 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:37Z',
+  subError: 'bad_token',
+  correlationId: 'dd453505-812c-4f71-b93d-4431ce3afdb4',
+  timestamp: '2026-11-09 09:08:37Z',
+  traceId: '0e45ff05-19e4-4c21-a288-e993df44bd02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 04:08:37.844] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 04:08:37.844] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 04:08:40.209] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: acbfbe02-a51e-451c-a91e-86e3e5e08102 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:40Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: acbfbe02-a51e-451c-a91e-86e3e5e08102 Correlation ID: dd453505-812c-4f71-b93d-4431ce3afdb4 Timestamp: 2026-11-09 09:08:40Z',
+  subError: 'bad_token',
+  correlationId: 'dd453505-812c-4f71-b93d-4431ce3afdb4',
+  timestamp: '2026-11-09 09:08:40Z',
+  traceId: 'acbfbe02-a51e-451c-a91e-86e3e5e08102',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 04:08:40.210] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 04:08:40.210] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 04:08:42.210] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 04:23:46.342] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'dd453505-812c-4f71-b93d-4431ce3afdb4'
+}
+[2026-11-09 04:23:46.343] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'dd453505-812c-4f71-b93d-4431ce3afdb4'
+}
+[2026-11-09 04:23:46.344] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 04:23:46.344] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 04:23:46.344] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 04:23:46.345] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 04:54:09.156] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 04:54:09.164] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 04:54:09.167] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 05:18:47.297] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: bc68a219-aff4-42d7-a22b-695f0d28ae02 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:47Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: bc68a219-aff4-42d7-a22b-695f0d28ae02 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:47Z',
+  subError: 'bad_token',
+  correlationId: 'db5f2a08-a227-456e-a47c-3d89411eceab',
+  timestamp: '2026-11-09 10:18:47Z',
+  traceId: 'bc68a219-aff4-42d7-a22b-695f0d28ae02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:18:47.298] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:18:47.298] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 05:18:49.707] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: f60ed766-189f-4d66-9ed8-f0a24ace2400 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:49Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: f60ed766-189f-4d66-9ed8-f0a24ace2400 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:49Z',
+  subError: 'bad_token',
+  correlationId: 'db5f2a08-a227-456e-a47c-3d89411eceab',
+  timestamp: '2026-11-09 10:18:49Z',
+  traceId: 'f60ed766-189f-4d66-9ed8-f0a24ace2400',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:18:49.708] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:18:49.708] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 05:18:52.162] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d2870931-0ff8-40a8-90a4-74955ff02200 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:52Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: d2870931-0ff8-40a8-90a4-74955ff02200 Correlation ID: db5f2a08-a227-456e-a47c-3d89411eceab Timestamp: 2026-11-09 10:18:52Z',
+  subError: 'bad_token',
+  correlationId: 'db5f2a08-a227-456e-a47c-3d89411eceab',
+  timestamp: '2026-11-09 10:18:52Z',
+  traceId: 'd2870931-0ff8-40a8-90a4-74955ff02200',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:18:52.162] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:18:52.162] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 05:18:54.163] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 05:33:59.002] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'db5f2a08-a227-456e-a47c-3d89411eceab'
+}
+[2026-11-09 05:33:59.003] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'db5f2a08-a227-456e-a47c-3d89411eceab'
+}
+[2026-11-09 05:33:59.003] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 05:33:59.003] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 05:33:59.003] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+[2026-11-09 05:33:59.003] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 05:33:59.937] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 53290d88-7091-4050-9af8-30d4d8b38b02 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:33:59Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 53290d88-7091-4050-9af8-30d4d8b38b02 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:33:59Z',
+  subError: 'bad_token',
+  correlationId: 'b3691f11-0416-4cd1-a15e-c2f01fa5d89e',
+  timestamp: '2026-11-09 10:33:59Z',
+  traceId: '53290d88-7091-4050-9af8-30d4d8b38b02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:33:59.938] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:33:59.938] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 05:34:02.393] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e3878523-c5e0-4051-9dcb-3ad301082600 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:34:02Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e3878523-c5e0-4051-9dcb-3ad301082600 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:34:02Z',
+  subError: 'bad_token',
+  correlationId: 'b3691f11-0416-4cd1-a15e-c2f01fa5d89e',
+  timestamp: '2026-11-09 10:34:02Z',
+  traceId: 'e3878523-c5e0-4051-9dcb-3ad301082600',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:34:02.393] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:34:02.393] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 05:34:04.706] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 36fd4df7-a34a-483d-977a-aed00dd22900 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:34:04Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 36fd4df7-a34a-483d-977a-aed00dd22900 Correlation ID: b3691f11-0416-4cd1-a15e-c2f01fa5d89e Timestamp: 2026-11-09 10:34:04Z',
+  subError: 'bad_token',
+  correlationId: 'b3691f11-0416-4cd1-a15e-c2f01fa5d89e',
+  timestamp: '2026-11-09 10:34:04Z',
+  traceId: '36fd4df7-a34a-483d-977a-aed00dd22900',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 05:34:04.706] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 05:34:04.706] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 05:34:06.706] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 05:49:09.352] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'b3691f11-0416-4cd1-a15e-c2f01fa5d89e'
+}
+[2026-11-09 05:49:09.353] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'b3691f11-0416-4cd1-a15e-c2f01fa5d89e'
+}
+[2026-11-09 05:49:09.353] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 05:49:09.353] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 05:49:09.353] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 05:49:09.353] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 06:44:09.876] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6dea9713-8bc4-4805-b966-89597f273300 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:09Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6dea9713-8bc4-4805-b966-89597f273300 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:09Z',
+  subError: 'bad_token',
+  correlationId: '347baccf-1c44-464d-a05e-ee4bd63d497f',
+  timestamp: '2026-11-09 11:44:09Z',
+  traceId: '6dea9713-8bc4-4805-b966-89597f273300',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:44:09.877] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:44:09.877] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 06:44:12.277] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 5ce061e1-2782-4484-ad42-8c299960c202 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:12Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 5ce061e1-2782-4484-ad42-8c299960c202 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:12Z',
+  subError: 'bad_token',
+  correlationId: '347baccf-1c44-464d-a05e-ee4bd63d497f',
+  timestamp: '2026-11-09 11:44:12Z',
+  traceId: '5ce061e1-2782-4484-ad42-8c299960c202',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:44:12.278] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:44:12.278] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 06:44:14.631] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 49315a34-85a4-45e0-b9c0-ee621bfcb402 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:14Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 49315a34-85a4-45e0-b9c0-ee621bfcb402 Correlation ID: 347baccf-1c44-464d-a05e-ee4bd63d497f Timestamp: 2026-11-09 11:44:14Z',
+  subError: 'bad_token',
+  correlationId: '347baccf-1c44-464d-a05e-ee4bd63d497f',
+  timestamp: '2026-11-09 11:44:14Z',
+  traceId: '49315a34-85a4-45e0-b9c0-ee621bfcb402',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:44:14.631] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:44:14.631] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 06:44:16.632] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 06:54:09.446] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 06:54:09.452] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 06:54:09.460] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 06:59:22.639] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '347baccf-1c44-464d-a05e-ee4bd63d497f'
+}
+[2026-11-09 06:59:22.640] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '347baccf-1c44-464d-a05e-ee4bd63d497f'
+}
+[2026-11-09 06:59:22.640] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 06:59:22.640] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 06:59:22.640] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9208:5)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9205:12)
+[2026-11-09 06:59:22.640] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 06:59:23.534] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 2982c29b-d4d5-430e-8e0f-c83922b5ab02 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:23Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 2982c29b-d4d5-430e-8e0f-c83922b5ab02 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:23Z',
+  subError: 'bad_token',
+  correlationId: '1bb7ac11-5e38-44f5-9566-96f2136d00ba',
+  timestamp: '2026-11-09 11:59:23Z',
+  traceId: '2982c29b-d4d5-430e-8e0f-c83922b5ab02',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:59:23.535] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:59:23.535] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 06:59:26.339] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: eebb18f2-a2c2-446b-9f67-f7f29b083200 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:26Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: eebb18f2-a2c2-446b-9f67-f7f29b083200 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:26Z',
+  subError: 'bad_token',
+  correlationId: '1bb7ac11-5e38-44f5-9566-96f2136d00ba',
+  timestamp: '2026-11-09 11:59:26Z',
+  traceId: 'eebb18f2-a2c2-446b-9f67-f7f29b083200',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:59:26.339] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:59:26.339] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 06:59:28.736] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 37a44c85-e177-4de9-8715-8080a9a53c00 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:28Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:3581:15)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4280:28)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:4356:14)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9037:16)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9019:22)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 37a44c85-e177-4de9-8715-8080a9a53c00 Correlation ID: 1bb7ac11-5e38-44f5-9566-96f2136d00ba Timestamp: 2026-11-09 11:59:28Z',
+  subError: 'bad_token',
+  correlationId: '1bb7ac11-5e38-44f5-9566-96f2136d00ba',
+  timestamp: '2026-11-09 11:59:28Z',
+  traceId: '37a44c85-e177-4de9-8715-8080a9a53c00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 06:59:28.737] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 06:59:28.737] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 06:59:30.738] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 07:14:33.299] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '1bb7ac11-5e38-44f5-9566-96f2136d00ba'
+}
+[2026-11-09 07:14:33.299] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '1bb7ac11-5e38-44f5-9566-96f2136d00ba'
+}
+[2026-11-09 07:14:33.299] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 07:14:33.299] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 07:14:33.300] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 07:14:33.300] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:1151:10)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8723:7)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8729:16)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8668:51)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:8786:7)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9058:26)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9024:24)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9157:31)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:9245:5)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+/home/cgrymala/MagicMirror/node_modules/electron/dist/electron exited with signal SIGINT
+[2026-11-09 08:06:20.567] [ERROR] [app] Error when loading newsfeed: Cannot find module 'feedparser'
+Require stack:
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/newsfeedfetcher.js
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/node_helper.js
+- /home/cgrymala/MagicMirror/js/app.js
+- /home/cgrymala/MagicMirror/js/electron.js
+[2026-11-09 08:06:20.830] [ERROR] [unknown] (node:99896) [SharpElectronLinux] Warning: Binaries provided by Electron for use on Linux may be incompatible with sharp - see https://sharp.pixelplumbing.com/install#electron-and-linux
+(Use `electron --trace-warnings ...` to show where the warning was created)
+[100063:1109/080621.214271:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1658] vaInitialize failed: unknown libva error
+[2026-11-09 08:06:22.038] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Not ready to render UI. No photos in list.
+/home/cgrymala/MagicMirror/node_modules/electron/dist/electron exited with signal SIGINT
+[2026-11-09 09:40:16.387] [ERROR] [app] Error when loading newsfeed: Cannot find module 'feedparser'
+Require stack:
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/newsfeedfetcher.js
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/node_helper.js
+- /home/cgrymala/MagicMirror/js/app.js
+- /home/cgrymala/MagicMirror/js/electron.js
+[2026-11-09 09:40:16.657] [ERROR] [unknown] (node:101746) [SharpElectronLinux] Warning: Binaries provided by Electron for use on Linux may be incompatible with sharp - see https://sharp.pixelplumbing.com/install#electron-and-linux
+(Use `electron --trace-warnings ...` to show where the warning was created)
+[101913:1109/094017.007157:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1658] vaInitialize failed: unknown libva error
+[2026-11-09 09:40:17.850] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Not ready to render UI. No photos in list.
+[2026-11-09 09:40:18.553] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 837706d9-f0e0-4ab2-8195-e69bb47cd302 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:18Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 837706d9-f0e0-4ab2-8195-e69bb47cd302 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:18Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:18Z',
+  traceId: '837706d9-f0e0-4ab2-8195-e69bb47cd302',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:18.554] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:18.555] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 09:40:18.555] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 837706d9-f0e0-4ab2-8195-e69bb47cd302 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:18Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 837706d9-f0e0-4ab2-8195-e69bb47cd302 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:18Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:18Z',
+  traceId: '837706d9-f0e0-4ab2-8195-e69bb47cd302',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:18.555] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:18.556] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 09:40:20.874] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ed7ec4b5-3949-4ece-9457-4b94d8d0e502 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:20Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ed7ec4b5-3949-4ece-9457-4b94d8d0e502 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:20Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:20Z',
+  traceId: 'ed7ec4b5-3949-4ece-9457-4b94d8d0e502',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:20.874] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:20.874] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 09:40:20.874] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ed7ec4b5-3949-4ece-9457-4b94d8d0e502 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:20Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ed7ec4b5-3949-4ece-9457-4b94d8d0e502 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:20Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:20Z',
+  traceId: 'ed7ec4b5-3949-4ece-9457-4b94d8d0e502',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:20.874] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:20.874] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 09:40:23.358] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d951cbd4f00 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:23Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d951cbd4f00 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:23Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:23Z',
+  traceId: '6b524931-a9a8-4035-90ae-3d951cbd4f00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:23.358] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:23.358] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 09:40:23.358] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d951cbd4f00 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:23Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 6b524931-a9a8-4035-90ae-3d951cbd4f00 Correlation ID: ab899ea1-742b-4303-a8c9-32f522601af9 Timestamp: 2026-11-09 14:40:23Z',
+  subError: 'bad_token',
+  correlationId: 'ab899ea1-742b-4303-a8c9-32f522601af9',
+  timestamp: '2026-11-09 14:40:23Z',
+  traceId: '6b524931-a9a8-4035-90ae-3d951cbd4f00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 09:40:23.359] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 09:40:23.359] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 09:40:25.358] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 09:40:25.364] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 09:55:30.802] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.refreshItem (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:13231)
+    at async NodeHelper.prepareShowPhoto (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:497:19) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '53ddfffd-0e31-436d-a7b2-4bc980beb4ad'
+}
+[2026-11-09 09:55:30.802] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.refreshItem (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:13231)
+    at async NodeHelper.prepareShowPhoto (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:497:19) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '53ddfffd-0e31-436d-a7b2-4bc980beb4ad'
+}
+[2026-11-09 09:55:30.802] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 09:55:30.803] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 09:55:30.803] [ERROR] [lib] Error in render function in IntervalRunner:
+[2026-11-09 09:55:30.803] [ERROR] [lib] ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.refreshItem (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:13231)
+    at async NodeHelper.prepareShowPhoto (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:497:19) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '53ddfffd-0e31-436d-a7b2-4bc980beb4ad'
+}
+[2026-11-09 10:36:50.800] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: abca57ae-65c9-4701-a3bc-64cc6a1e6603 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:50Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: abca57ae-65c9-4701-a3bc-64cc6a1e6603 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:50Z',
+  subError: 'bad_token',
+  correlationId: 'b3c87055-413d-4bad-bd47-28b998f20ee9',
+  timestamp: '2026-11-09 15:36:50Z',
+  traceId: 'abca57ae-65c9-4701-a3bc-64cc6a1e6603',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:36:50.800] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:36:50.800] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 10:36:53.220] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 80fec181-ec7b-4597-9ef8-de41da2e6803 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:53Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 80fec181-ec7b-4597-9ef8-de41da2e6803 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:53Z',
+  subError: 'bad_token',
+  correlationId: 'b3c87055-413d-4bad-bd47-28b998f20ee9',
+  timestamp: '2026-11-09 15:36:53Z',
+  traceId: '80fec181-ec7b-4597-9ef8-de41da2e6803',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:36:53.220] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:36:53.220] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 10:36:55.897] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 40908b14-1ef1-4cb1-9b44-09d950081603 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:55Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 40908b14-1ef1-4cb1-9b44-09d950081603 Correlation ID: b3c87055-413d-4bad-bd47-28b998f20ee9 Timestamp: 2026-11-09 15:36:55Z',
+  subError: 'bad_token',
+  correlationId: 'b3c87055-413d-4bad-bd47-28b998f20ee9',
+  timestamp: '2026-11-09 15:36:55Z',
+  traceId: '40908b14-1ef1-4cb1-9b44-09d950081603',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:36:55.897] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:36:55.897] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 10:36:57.897] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 10:40:18.325] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 10:40:18.332] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 10:40:18.339] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 10:51:59.902] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'b3c87055-413d-4bad-bd47-28b998f20ee9'
+}
+[2026-11-09 10:51:59.902] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'b3c87055-413d-4bad-bd47-28b998f20ee9'
+}
+[2026-11-09 10:51:59.902] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 10:51:59.903] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 10:51:59.903] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+[2026-11-09 10:51:59.903] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 10:52:00.281] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ca0ebf58-bc1e-49e3-82e2-02031a985e00 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:00Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: ca0ebf58-bc1e-49e3-82e2-02031a985e00 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:00Z',
+  subError: 'bad_token',
+  correlationId: 'db4ce920-ca01-4cfa-8dba-afcdce563bd8',
+  timestamp: '2026-11-09 15:52:00Z',
+  traceId: 'ca0ebf58-bc1e-49e3-82e2-02031a985e00',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:52:00.282] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:52:00.282] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 10:52:02.610] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 20ec84ce-cec2-40be-ac7c-195b6e84d702 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:02Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 20ec84ce-cec2-40be-ac7c-195b6e84d702 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:02Z',
+  subError: 'bad_token',
+  correlationId: 'db4ce920-ca01-4cfa-8dba-afcdce563bd8',
+  timestamp: '2026-11-09 15:52:02Z',
+  traceId: '20ec84ce-cec2-40be-ac7c-195b6e84d702',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:52:02.610] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:52:02.610] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 10:52:04.925] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 20ec84ce-cec2-40be-ac7c-195b6086d702 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:04Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 20ec84ce-cec2-40be-ac7c-195b6086d702 Correlation ID: db4ce920-ca01-4cfa-8dba-afcdce563bd8 Timestamp: 2026-11-09 15:52:04Z',
+  subError: 'bad_token',
+  correlationId: 'db4ce920-ca01-4cfa-8dba-afcdce563bd8',
+  timestamp: '2026-11-09 15:52:04Z',
+  traceId: '20ec84ce-cec2-40be-ac7c-195b6086d702',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 10:52:04.925] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 10:52:04.925] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 10:52:06.925] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 11:07:12.855] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'db4ce920-ca01-4cfa-8dba-afcdce563bd8'
+}
+[2026-11-09 11:07:12.856] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: 'db4ce920-ca01-4cfa-8dba-afcdce563bd8'
+}
+[2026-11-09 11:07:12.856] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 11:07:12.856] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 11:07:12.856] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+[2026-11-09 11:07:12.856] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+/home/cgrymala/MagicMirror/node_modules/electron/dist/electron exited with signal SIGINT
+[2026-11-09 11:59:47.824] [ERROR] [app] Error when loading newsfeed: Cannot find module 'feedparser'
+Require stack:
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/newsfeedfetcher.js
+- /home/cgrymala/MagicMirror/defaultmodules/newsfeed/node_helper.js
+- /home/cgrymala/MagicMirror/js/app.js
+- /home/cgrymala/MagicMirror/js/electron.js
+[2026-11-09 11:59:48.112] [ERROR] [unknown] (node:103675) [SharpElectronLinux] Warning: Binaries provided by Electron for use on Linux may be incompatible with sharp - see https://sharp.pixelplumbing.com/install#electron-and-linux
+(Use `electron --trace-warnings ...` to show where the warning was created)
+[103842:1109/115948.461824:ERROR:media/gpu/vaapi/vaapi_wrapper.cc:1658] vaInitialize failed: unknown libva error
+[2026-11-09 11:59:49.299] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] Not ready to render UI. No photos in list.
+[2026-11-09 12:54:56.673] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 5ca1df5a-ce25-463d-bf58-d8d726e92103 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:54:56Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 5ca1df5a-ce25-463d-bf58-d8d726e92103 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:54:56Z',
+  subError: 'bad_token',
+  correlationId: '3d1e5db5-c243-4ebd-a332-48797ef15853',
+  timestamp: '2026-11-09 17:54:56Z',
+  traceId: '5ca1df5a-ce25-463d-bf58-d8d726e92103',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 12:54:56.674] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 12:54:56.674] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 12:54:58.977] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: abca57ae-65c9-4701-a3bc-64cc152f8503 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:54:58Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: abca57ae-65c9-4701-a3bc-64cc152f8503 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:54:58Z',
+  subError: 'bad_token',
+  correlationId: '3d1e5db5-c243-4ebd-a332-48797ef15853',
+  timestamp: '2026-11-09 17:54:58Z',
+  traceId: 'abca57ae-65c9-4701-a3bc-64cc152f8503',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 12:54:58.977] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 12:54:58.977] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 12:55:01.452] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 180288e4-c816-4539-aa9a-b83a595c0403 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:55:01Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+    at async NodeHelper.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:260:17) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 180288e4-c816-4539-aa9a-b83a595c0403 Correlation ID: 3d1e5db5-c243-4ebd-a332-48797ef15853 Timestamp: 2026-11-09 17:55:01Z',
+  subError: 'bad_token',
+  correlationId: '3d1e5db5-c243-4ebd-a332-48797ef15853',
+  timestamp: '2026-11-09 17:55:01Z',
+  traceId: '180288e4-c816-4539-aa9a-b83a595c0403',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 12:55:01.453] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 12:55:01.453] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 12:55:03.454] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
+[2026-11-09 12:59:49.706] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 12:59:49.710] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 12:59:49.721] [ERROR] [MMM-EnphaseSolar] MMM-EnphaseSolar: data request error: 401
+[2026-11-09 13:10:06.664] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Failed to getTokenDeviceCode.  ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '3d1e5db5-c243-4ebd-a332-48797ef15853'
+}
+[2026-11-09 13:10:06.664] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] onAuthReady error ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098) {
+  errorCode: 'device_code_expired',
+  errorMessage: 'See https://aka.ms/msal.js.errors#device_code_expired for details',
+  subError: '',
+  correlationId: '3d1e5db5-c243-4ebd-a332-48797ef15853'
+}
+[2026-11-09 13:10:06.664] [WARN]  [lib] [MMM-OneDrive] [OneDrivePhotos] Retrying onAuthReady, retry count: 0
+[2026-11-09 13:10:06.665] [ERROR] [lib] [MMM-OneDrive] [OneDrivePhotos] Not retrying onAuthReady due to unknown error
+[2026-11-09 13:10:06.665] [ERROR] [MMM-OneDrive] [MMM-OneDrive] [node_helper] device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+stack:
+ClientAuthError: device_code_expired: See https://aka.ms/msal.js.errors#device_code_expired for details
+    at createClientAuthError (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:26:330)
+    at DeviceCodeClient.continuePolling (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:3527)
+    at DeviceCodeClient.acquireTokenWithDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:4124)
+    at async DeviceCodeClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:210:193)
+    at async PublicClientApplication.acquireTokenByDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:212:1212)
+    at async AuthProvider.getTokenDeviceCode (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:3249)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1967)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getAlbumLoop (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9201)
+    at async OneDrivePhotos.getAlbums (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:9098)
+[2026-11-09 13:10:06.665] [WARN]  [MMM-OneDrive] [MMM-OneDrive] [node_helper] No albums found in your OneDrive. Re-use the old album list.
+[2026-11-09 13:10:07.068] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e9b6f538-bbd8-4ff2-b37c-1aa075cd5103 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:07Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: e9b6f538-bbd8-4ff2-b37c-1aa075cd5103 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:07Z',
+  subError: 'bad_token',
+  correlationId: '95da114a-b3dd-401b-8cad-14aaee6d5bcd',
+  timestamp: '2026-11-09 18:10:07Z',
+  traceId: 'e9b6f538-bbd8-4ff2-b37c-1aa075cd5103',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 13:10:07.069] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 13:10:07.069] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 1/3.
+[2026-11-09 13:10:09.525] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 3f8e3535-ca83-4b45-b82f-415685450d03 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:09Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 3f8e3535-ca83-4b45-b82f-415685450d03 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:09Z',
+  subError: 'bad_token',
+  correlationId: '95da114a-b3dd-401b-8cad-14aaee6d5bcd',
+  timestamp: '2026-11-09 18:10:09Z',
+  traceId: '3f8e3535-ca83-4b45-b82f-415685450d03',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 13:10:09.526] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 13:10:09.526] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 2/3.
+[2026-11-09 13:10:11.829] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] InteractionRequiredAuthError: invalid_grant: AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 333b44c2-310b-4fed-b501-5c00346a4403 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:11Z
+    at ResponseHandler.validateTokenResponse (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:127:1871)
+    at RefreshTokenClient.acquireToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:1052)
+    at process.processTicksAndRejections (node:internal/process/task_queues:104:5)
+    at async RefreshTokenClient.acquireTokenWithCachedRefreshToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:145:3823)
+    at async AuthProvider.getTokenSilent (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:2392)
+    at async AuthProvider.getToken (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:1846)
+    at async OneDrivePhotos.onAuthReady (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:7118)
+    at async OneDrivePhotos.getImageFromAlbum (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/lib/OneDrivePhotos.js:234:10719)
+    at async NodeHelper.getImageList (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:447:22)
+    at async NodeHelper.scanJob (/home/cgrymala/MagicMirror/modules/MMM-OneDrive/node_helper.js:344:9) {
+  errorCode: 'invalid_grant',
+  errorMessage: 'AADSTS70000: The user could not be authenticated as the grant is expired. The user must sign in again. Trace ID: 333b44c2-310b-4fed-b501-5c00346a4403 Correlation ID: 95da114a-b3dd-401b-8cad-14aaee6d5bcd Timestamp: 2026-11-09 18:10:11Z',
+  subError: 'bad_token',
+  correlationId: '95da114a-b3dd-401b-8cad-14aaee6d5bcd',
+  timestamp: '2026-11-09 18:10:11Z',
+  traceId: '333b44c2-310b-4fed-b501-5c00346a4403',
+  claims: '',
+  errorNo: 70000
+}
+[2026-11-09 13:10:11.829] [ERROR] [lib] [MMM-OneDrive] [AuthProvider] Silent token acquisition failed
+[2026-11-09 13:10:11.829] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] getTokenSilent failed, attempt 3/3.
+[2026-11-09 13:10:13.830] [WARN]  [lib] [MMM-OneDrive] [AuthProvider] Failed to call getTokenSilent
