@@ -100,7 +100,8 @@ export class OneDrivePhotos extends EventEmitter {
         correlationId: crypto.randomUUID(),
       };
       try {
-        const tokenResponse = await this.getAuthProvider().getToken(tokenRequest, (r) => this.deviceCodeCallback(r));
+        const authProvider = this.getAuthProvider();
+        const tokenResponse = await authProvider.getToken(tokenRequest, (r) => this.deviceCodeCallback(r));
         if (!tokenResponse?.accessToken) {
           this.logError("No access token returned from AuthProvider.getToken");
           throw new Error("No access token returned from AuthProvider.getToken");
@@ -120,7 +121,7 @@ export class OneDrivePhotos extends EventEmitter {
           throw err;
         }
         this.#userId = userId;
-        this.log(`onAuthReady done, retry count: ${attempt}`);
+        this.log(`onAuthReady done, retry count: ${attempt}.` + authProvider.getRefreshTokenLogSuffix());
         this.emit("authSuccess");
         return;
       } catch (err) {

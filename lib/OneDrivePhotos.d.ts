@@ -5,6 +5,7 @@ import { DriveItem } from "@microsoft/microsoft-graph-types";
 declare class AuthProvider {
   clientApplication: PublicClientApplication;
   account: AccountInfo | undefined;
+  private pendingTokenRequest;
   constructor(msalConfig: Configuration);
   logDebug(...args: any[]): void;
   logInfo(...args: any[]): void;
@@ -12,7 +13,9 @@ declare class AuthProvider {
   logWarn(...args: any[]): void;
   logout(): Promise<void>;
   getToken(request: Omit<SilentFlowRequest, "account">, deviceCodeCallback: ((response: DeviceCodeResponse) => void)): Promise<AuthenticationResult | null>;
+  private acquireToken;
   private getTokenSilent;
+  getRefreshTokenLogSuffix(): string;
   private getTokenDeviceCode;
   /**
    * Calls getAllAccounts and determines the correct account to sign into, currently defaults to first account found in cache.

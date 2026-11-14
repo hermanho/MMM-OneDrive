@@ -1,5 +1,19 @@
 # MMM-OneDrive Change Log
 
+**`[1.9.5] - 2026/11/13`**
+- Fixed: prevent concurrent OneDrive authentication attempts from starting multiple device-code sign-ins
+- Fixed: skip redundant retries when silent authentication requires user interaction
+- Feat: log short SHA-256 fingerprints of cached refresh tokens to help diagnose token-cache updates without exposing token values
+
+**`[1.9.4] - 2026/11/06`**
+- Feat: migrate the build pipeline from Rollup to Rolldown
+- Feat: migrate linting from ESLint to Oxlint
+- Build(deps): update dependencies, including MSAL Node, Babel, Oxlint, and Vitest
+- Chore: use the project Node.js version file in CI workflows
+
+**`[1.9.3] - 2026/10/15`**
+- Build(deps): dependency update (#47)
+
 **`[1.8.1] - 2025/11/10`**
 - Fixed: photo loading animation effect
 - Feat: remove progressive jpg when convert from heic for better image quality

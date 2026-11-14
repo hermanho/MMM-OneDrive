@@ -11,7 +11,7 @@ import { OneDrivePhotos } from "./OneDrivePhotos";
 
 describe("OneDrivePhotos", () => {
   let photos: any;
-  let mockAuthProvider: { getToken: any };
+  let mockAuthProvider: { getToken: any; getRefreshTokenLogSuffix: any };
   let initSpy: MockInstance<typeof Client.init>;
 
   const createPhotos = () => new (OneDrivePhotos as any)({
@@ -31,6 +31,7 @@ describe("OneDrivePhotos", () => {
   beforeEach(() => {
     photos = createPhotos();
     mockAuthProvider = {
+      getRefreshTokenLogSuffix: vi.fn(() => " refresh_token_hex: sha256:0123456789abcdef"),
       getToken: (vi.fn() as any).mockResolvedValue({
         accessToken: "token",
         expiresOn: new Date(Date.now() + 60 * 60 * 1000),
@@ -44,6 +45,11 @@ describe("OneDrivePhotos", () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it("appends the cached refresh-token fingerprint to authentication readiness", async () => {
+    await photos.onAuthReady();
+    expect(logger.info).toHaveBeenCalledWith("[MMM-OneDrive] [OneDrivePhotos]", "onAuthReady done, retry count: 0. refresh_token_hex: sha256:0123456789abcdef");
   });
 
   describe("getImageFromAlbum", () => {
