@@ -54,7 +54,7 @@ export default [
       input: `./src/backend/${file}.ts`,
       external: [...backendExternal, /^@azure\//, /^@microsoft\//],
       platform: "node",
-      plugins: [dts({ tsconfig: "./src/backend/tsconfig.json", emitDtsOnly: true })],
+      plugins: [dts({ tsconfig: "./src/backend/tsconfig.json", dtsOnly: true })],
       output: { dir: "./lib", format: "es", codeSplitting: false },
     },
   ]),
